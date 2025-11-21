@@ -7,7 +7,8 @@ import { cn } from "@/lib/utils";
 const items = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/artworks", label: "Artworks" },
-  // kasnije: artists, categories, settings...
+  { href: "/admin/artists", label: "Artists" },
+  // later: categories, settings...
 ];
 
 export function AdminSidebar() {
