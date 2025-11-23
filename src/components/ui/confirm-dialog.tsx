@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 
 interface ConfirmDialogProps {
-  children: ReactNode; 
+  children: ReactNode;
   title: string;
   description?: string;
   confirmLabel?: string;
@@ -57,7 +57,7 @@ export function ConfirmDialog({
             <AlertDialog.Action asChild>
               <Button
                 size="sm"
-                variant={isDestructive ? "destructive" : "default"}
+                variant={isDestructive ? "destructive" : "primary"}
                 onClick={onConfirm}
               >
                 {confirmLabel}
