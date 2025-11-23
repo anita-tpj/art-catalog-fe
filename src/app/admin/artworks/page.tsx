@@ -6,10 +6,21 @@ import { Card } from "@/components/ui/card";
 import { useArtworks } from "@/hooks/artworks/useArtworks";
 import { useRemoveArtwork } from "@/hooks/artworks/useRemoveArtwork";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export default function AdminArtworksPage() {
   const { data, isLoading, error } = useArtworks();
   const removeArtwork = useRemoveArtwork();
+
+  if (!data?.length) {
+    return (
+      <EmptyState
+        message="No artwork yet."
+        actionHref="/admin/artists/new"
+        actionLabel="Create artist"
+      />
+    );
+  }
 
   return (
     <section className="space-y-4">
@@ -33,12 +44,6 @@ export default function AdminArtworksPage() {
         {error && (
           <div className="p-4 text-sm text-red-500">
             {(error as Error).message}
-          </div>
-        )}
-
-        {data && data.length === 0 && !isLoading && !error && (
-          <div className="p-4 text-sm text-zinc-500">
-            No artworks yet. Create your first one.
           </div>
         )}
 
