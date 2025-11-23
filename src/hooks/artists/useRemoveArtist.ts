@@ -1,6 +1,8 @@
+import { showErrorToast } from "@/lib/toast";
 import { Artist, artistsService } from "@/services/artists";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export function useRemoveArtist() {
   const queryClient = useQueryClient();
@@ -10,7 +12,11 @@ export function useRemoveArtist() {
     mutationFn: artistsService.remove,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["artists"] });
+      toast.success("Artist deleted");
       router.push("/admin/artists");
+    },
+    onError: (error) => {
+      showErrorToast(error, "Failed to delete artist");
     },
   });
 }

@@ -3,6 +3,7 @@
 import { PropsWithChildren } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
 
 export function Providers({ children }: PropsWithChildren) {
   const queryClient = new QueryClient({
@@ -18,6 +19,28 @@ export function Providers({ children }: PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            fontSize: "0.875rem",
+            padding: "0.5rem 0.75rem",
+            borderRadius: "0.5rem",
+          },
+          success: {
+            iconTheme: {
+              primary: "#16a34a",
+              secondary: "#f0fdf4",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#dc2626",
+              secondary: "#fef2f2",
+            },
+          },
+        }}
+      />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
