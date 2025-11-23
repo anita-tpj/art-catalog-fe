@@ -1,13 +1,13 @@
-import { get, post } from "@/lib/api-client";
+import { del, get, getById, post, put } from "@/lib/api-client";
 import { z } from "zod";
 
 export interface Artist {
   id: number;
   name: string;
-  bio?: string;
-  country?: string;
-  birthYear?: number;
-  deathYear?: number;
+  bio: string | null;
+  country: string | null;
+  birthYear: number | null;
+  deathYear: number | null;
 }
 
 const optionalYear = z.preprocess(
@@ -40,6 +40,10 @@ export type CreateArtistDTO = z.infer<typeof createArtistSchema>;
 
 export const artistsService = {
   getAll: () => get<Artist[]>("/api/artists"),
+  getOne: (id: number) => getById<Artist>("/api/artists", id),
   create: (data: CreateArtistDTO) =>
     post<Artist, CreateArtistDTO>("/api/artists", data),
+  update: (id: number, data: CreateArtistDTO) =>
+    put<Artist, CreateArtistDTO>("/api/artists", id, data),
+  remove: (id: number) => del<Artist>("/api/artists", id),
 };

@@ -3,11 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useArtists } from "@/hooks/artists/useArtists";
+import { useRemoveArtist } from "@/hooks/artists/useRemoveArtist";
 import Link from "next/link";
 import React from "react";
 
 const AdminArtistsPage = () => {
   const { data, error, isLoading } = useArtists();
+  const removeArtist = useRemoveArtist();
 
   return (
     <section className="space-y-4">
@@ -75,6 +77,14 @@ const AdminArtistsPage = () => {
                       <Link href={`/admin/artists/${artist.id}/edit`}>
                         Edit
                       </Link>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="px-2 text-xs"
+                      onClick={() => removeArtist.mutate(artist.id)}
+                    >
+                      Remove
                     </Button>
                   </td>
                 </tr>

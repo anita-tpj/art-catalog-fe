@@ -1,15 +1,16 @@
-import { Artist, artistsService, CreateArtistDTO } from "@/services/artists";
+import { Artist, artistsService } from "@/services/artists";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-export function useCreateArtist() {
+export function useRemoveArtist() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation<Artist, Error, CreateArtistDTO>({
-    mutationFn: artistsService.create,
+  return useMutation<Artist, Error, number>({
+    mutationFn: artistsService.remove,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["artists"] });
+      router.push("/admin/artists");
     },
   });
 }

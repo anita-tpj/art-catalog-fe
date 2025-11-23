@@ -32,11 +32,16 @@ export async function get<T>(path: string): Promise<T> {
   return handleResponse<T>(res);
 }
 
+export async function getById<T>(path: string, id: number): Promise<T> {
+  const res = await fetch(`${API_BASE_URL}${path}/${id}`);
+
+  return handleResponse<T>(res);
+}
+
 export async function post<TResponse, TBody = unknown>(
   path: string,
   body: TBody
 ): Promise<TResponse> {
-  console.log("POST →", path, body);
   const res = await fetch(`${API_BASE_URL}${path}`, {
     method: "POST",
     headers: {
@@ -44,7 +49,33 @@ export async function post<TResponse, TBody = unknown>(
     },
     body: JSON.stringify(body),
   });
-  console.log("POST done, status:", res.status);
 
   return handleResponse<TResponse>(res);
+}
+
+export async function put<TResponse, TBody = unknown>(
+  path: string,
+  id: number,
+  body: TBody
+): Promise<TResponse> {
+  const res = await fetch(`${API_BASE_URL}${path}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  return handleResponse<TResponse>(res);
+}
+
+export async function del<T>(path: string, id: number): Promise<T> {
+  const res = await fetch(`${API_BASE_URL}${path}/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return handleResponse<T>(res);
 }

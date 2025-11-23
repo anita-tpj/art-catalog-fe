@@ -4,9 +4,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useArtworks } from "@/hooks/artworks/useArtworks";
+import { useRemoveArtwork } from "@/hooks/artworks/useRemoveArtwork";
 
 export default function AdminArtworksPage() {
   const { data, isLoading, error } = useArtworks();
+  const removeArtwork = useRemoveArtwork();
 
   return (
     <section className="space-y-4">
@@ -68,6 +70,14 @@ export default function AdminArtworksPage() {
                       <Link href={`/admin/artworks/${artwork.id}/edit`}>
                         Edit
                       </Link>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="px-2 text-xs"
+                      onClick={() => removeArtwork.mutate(artwork.id)}
+                    >
+                      Remove
                     </Button>
                   </td>
                 </tr>
