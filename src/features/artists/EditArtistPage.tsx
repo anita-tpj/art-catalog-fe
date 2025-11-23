@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CountrySelect } from "@/components/ui/country-select";
 import { useArtist } from "@/hooks/artists/useArtist";
 import { useUpdateArtist } from "@/hooks/artists/useUpdateArtist";
 import { CreateArtistDTO, createArtistSchema } from "@/services/artists";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { Resolver, useForm } from "react-hook-form";
+import { Resolver, useForm, Controller } from "react-hook-form";
 
 interface EditArtistPageProps {
   id: number;
@@ -22,6 +23,7 @@ const EditArtistPage = ({ id }: EditArtistPageProps) => {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<CreateArtistDTO>({
     resolver: zodResolver(createArtistSchema) as Resolver<CreateArtistDTO>,
@@ -104,17 +106,18 @@ const EditArtistPage = ({ id }: EditArtistPageProps) => {
 
           {/* Country */}
           <div className="space-y-1">
-            <div className="space-y-1">
-              <Label htmlFor="country">Country</Label>
-              <Input
-                id="country"
-                {...register("country")}
-                placeholder="Type country"
-              />
-              {errors.country && (
-                <p className="text-xs text-red-500">{errors.country.message}</p>
+            <Label htmlFor="country">Country</Label>
+            <Controller
+              name="country"
+              control={control}
+              render={({ field }) => (
+                <CountrySelect
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  error={errors.country?.message}
+                />
               )}
-            </div>
+            />
           </div>
 
           {/* Bio */}
