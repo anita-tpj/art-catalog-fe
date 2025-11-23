@@ -11,6 +11,7 @@ import { CreateArtistDTO, createArtistSchema } from "@/services/artists";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Resolver, useForm, Controller } from "react-hook-form";
+import { Spinner } from "@/components/ui/spinner";
 
 interface EditArtistPageProps {
   id: number;
@@ -144,6 +145,7 @@ const EditArtistPage = ({ id }: EditArtistPageProps) => {
 
           <div className="pt-2">
             <Button type="submit" disabled={isBusy}>
+              {isBusy && <Spinner size="sm" className="mr-2" />}
               {isBusy ? "Updating..." : "Update artist"}
             </Button>
           </div>

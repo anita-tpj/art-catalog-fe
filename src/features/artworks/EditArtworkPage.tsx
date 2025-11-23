@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { useArtwork } from "@/hooks/artworks/useArtwork";
 import { useUpdateArtwork } from "@/hooks/artworks/useUpdateArtwork";
 import { CreateArtworkDTO, CreateArtworkSchema } from "@/services/artworks";
@@ -162,7 +163,8 @@ const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
 
           <div className="pt-2">
             <Button type="submit" disabled={isBusy}>
-              {isBusy ? "Saving..." : "Save artwork"}
+              {isBusy && <Spinner size="sm" className="mr-2" />}
+              {isBusy ? "Updating..." : "Update artwork"}
             </Button>
           </div>
         </form>

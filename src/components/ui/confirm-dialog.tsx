@@ -3,6 +3,7 @@
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 interface ConfirmDialogProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ interface ConfirmDialogProps {
   cancelLabel?: string;
   onConfirm: () => void;
   isDestructive?: boolean;
+  isLoading?: boolean;
 }
 
 export function ConfirmDialog({
@@ -22,6 +24,7 @@ export function ConfirmDialog({
   cancelLabel = "Cancel",
   onConfirm,
   isDestructive = true,
+  isLoading = false,
 }: ConfirmDialogProps) {
   return (
     <AlertDialog.Root>
@@ -60,7 +63,8 @@ export function ConfirmDialog({
                 variant={isDestructive ? "destructive" : "primary"}
                 onClick={onConfirm}
               >
-                {confirmLabel}
+                {isLoading && <Spinner size="sm" className="mr-2" />}
+                {isLoading ? "Deleting..." : confirmLabel}
               </Button>
             </AlertDialog.Action>
           </div>

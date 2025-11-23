@@ -83,6 +83,7 @@ const AdminArtistsPage = () => {
                       title="Delete artist"
                       description="This action cannot be undone. This will permanently delete the artist."
                       onConfirm={() => removeArtist.mutate(artist.id)}
+                      isLoading={removeArtist.isPending}
                     >
                       <Button
                         variant="ghost"

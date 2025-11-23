@@ -76,6 +76,7 @@ export default function AdminArtworksPage() {
                       title="Delete artwork"
                       description="This action cannot be undone. This will permanently delete the artwork."
                       onConfirm={() => removeArtwork.mutate(artwork.id)}
+                      isLoading={removeArtwork.isPending}
                     >
                       <Button
                         variant="ghost"
