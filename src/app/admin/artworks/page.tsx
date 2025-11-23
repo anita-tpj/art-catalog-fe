@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useArtworks } from "@/hooks/artworks/useArtworks";
 import { useRemoveArtwork } from "@/hooks/artworks/useRemoveArtwork";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export default function AdminArtworksPage() {
   const { data, isLoading, error } = useArtworks();
@@ -71,14 +72,19 @@ export default function AdminArtworksPage() {
                         Edit
                       </Link>
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="px-2 text-xs"
-                      onClick={() => removeArtwork.mutate(artwork.id)}
+                    <ConfirmDialog
+                      title="Delete artwork"
+                      description="This action cannot be undone. This will permanently delete the artwork."
+                      onConfirm={() => removeArtwork.mutate(artwork.id)}
                     >
-                      Remove
-                    </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="px-2 text-xs text-red-600 hover:text-red-700"
+                      >
+                        Remove
+                      </Button>
+                    </ConfirmDialog>
                   </td>
                 </tr>
               ))}

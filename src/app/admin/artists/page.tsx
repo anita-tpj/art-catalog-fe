@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { useArtists } from "@/hooks/artists/useArtists";
 import { useRemoveArtist } from "@/hooks/artists/useRemoveArtist";
 import Link from "next/link";
@@ -78,14 +79,19 @@ const AdminArtistsPage = () => {
                         Edit
                       </Link>
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="px-2 text-xs"
-                      onClick={() => removeArtist.mutate(artist.id)}
+                    <ConfirmDialog
+                      title="Delete artist"
+                      description="This action cannot be undone. This will permanently delete the artist."
+                      onConfirm={() => removeArtist.mutate(artist.id)}
                     >
-                      Remove
-                    </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="px-2 text-xs text-red-600 hover:text-red-700"
+                      >
+                        Remove
+                      </Button>
+                    </ConfirmDialog>
                   </td>
                 </tr>
               ))}

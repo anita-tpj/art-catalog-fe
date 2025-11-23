@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
-  variant?: "primary" | "outline" | "ghost";
+  variant?: "primary" | "outline" | "ghost" | "destructive";
   size?: "sm" | "md";
 }
 
@@ -29,6 +29,8 @@ export function Button({
           "border border-zinc-300 bg-transparent hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800",
         variant === "ghost" &&
           "bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800",
+        variant === "destructive" &&
+          "bg-red-600 text-white hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800",
         size === "sm" && "h-8 px-3",
         size === "md" && "h-9 px-4",
         className
