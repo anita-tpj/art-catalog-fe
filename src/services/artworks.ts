@@ -1,5 +1,5 @@
 import { del, get, getById, post, put } from "@/lib/api-client";
-import { PaginatedResult } from "@/types/api";
+import { PaginatedResult, PaginatedRequest } from "@/types/api";
 import { z } from "zod";
 
 export enum ArtworkCategory {
@@ -18,6 +18,9 @@ export interface Artwork {
   year: number | null;
   category: ArtworkCategory;
   artistId: number;
+  artist: {
+    name: string;
+  };
 }
 
 export const CreateArtworkSchema = z.object({
@@ -37,7 +40,7 @@ export const CreateArtworkSchema = z.object({
   description: z.string().max(2000, "Description is too long").optional(),
   artistId: z.number().int().positive({ message: "Artist is required" }),
 
-  category: z.enum(ArtworkCategory, {
+  category: z.enum(Object.values(ArtworkCategory) as [string, ...string[]], {
     message: "Category is required",
   }),
 });
@@ -47,10 +50,18 @@ export type CreateArtworkDTO = z.infer<typeof CreateArtworkSchema>;
 export const artworksService = {
   //getAll: () => get<Artwork[]>("/api/artworks"),
   //getById: (id: number) => get<Artwork>(`/api/artworks/${id}`),
-  getAll: (page = 1, pageSize = 10) =>
-    get<PaginatedResult<Artwork>>(
-      `/api/artworks?page=${page}&pageSize=${pageSize}`
-    ),
+  getAll: ({ page, pageSize, search }: PaginatedRequest) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      pageSize: String(pageSize),
+    });
+
+    if (search && search.trim() !== "") {
+      params.set("search", search.trim());
+    }
+
+    return get<PaginatedResult<Artwork>>(`/api/artworks?${params.toString()}`);
+  },
   getOne: (id: number) => getById<Artwork>("/api/artworks", id),
   create: (data: CreateArtworkDTO) =>
     post<Artwork, CreateArtworkDTO>("/api/artworks", data),

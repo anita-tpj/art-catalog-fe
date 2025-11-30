@@ -1,5 +1,5 @@
 import { del, get, getById, post, put } from "@/lib/api-client";
-import { PaginatedResult } from "@/types/api";
+import { PaginatedResult, PaginatedRequest } from "@/types/api";
 import { z } from "zod";
 
 export interface Artist {
@@ -41,10 +41,24 @@ export type CreateArtistDTO = z.infer<typeof createArtistSchema>;
 
 export const artistsService = {
   // getAll: () => get<Artist[]>("/api/artists"),
-  getAll: (page = 1, pageSize = 10) =>
-    get<PaginatedResult<Artist>>(
-      `/api/artists?page=${page}&pageSize=${pageSize}`
-    ),
+  // getAll: (page = 1, pageSize = 10) =>
+  //   get<PaginatedResult<Artist>>(
+  //     `/api/artists?page=${page}&pageSize=${pageSize}`
+  //   ),
+
+  getAll: ({ page, pageSize, search }: PaginatedRequest) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      pageSize: String(pageSize),
+    });
+
+    if (search && search.trim() !== "") {
+      params.set("search", search.trim());
+    }
+
+    return get<PaginatedResult<Artist>>(`/api/artists?${params.toString()}`);
+  },
+
   getOne: (id: number) => getById<Artist>("/api/artists", id),
   create: (data: CreateArtistDTO) =>
     post<Artist, CreateArtistDTO>("/api/artists", data),

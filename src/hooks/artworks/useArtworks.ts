@@ -1,11 +1,13 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Artwork, artworksService } from "@/services/artworks";
-import { PaginatedResult } from "@/types/api";
+import { PaginatedResult, PaginatedRequest } from "@/types/api";
 
-export function useArtworks(page: number, pageSize = 10) {
-  return useQuery<PaginatedResult<Artwork>, Error>({
-    queryKey: ["artworks", { page, pageSize }],
-    queryFn: () => artworksService.getAll(page, pageSize),
+const ARTWorks_QUERY_KEY = "artworks";
+
+export function useArtworks(params: PaginatedRequest) {
+  return useQuery<PaginatedResult<Artwork>>({
+    queryKey: [ARTWorks_QUERY_KEY, params],
+    queryFn: () => artworksService.getAll(params),
     placeholderData: keepPreviousData,
   });
 }

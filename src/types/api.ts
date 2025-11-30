@@ -5,7 +5,14 @@ export interface PaginationMeta {
   pageSize: number;
 }
 
+export interface PaginatedRequest {
+  page: number;
+  pageSize: number;
+  search?: string;
+}
+
 export interface PaginatedResult<T> {
   items: T[];
   meta: PaginationMeta;
 }
+
