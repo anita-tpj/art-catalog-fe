@@ -11,16 +11,24 @@ import { TbTrashX } from "react-icons/tb";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineAdd } from "react-icons/md";
 import { ResponsiveList } from "@/components/admin/ResponsiveList";
+import { Pagination } from "@/components/ui/pagination";
+import { PageSizeSelector } from "@/components/ui/page-size-selector";
+import { useTableParams } from "@/hooks/useTableParams";
 
 export default function AdminArtistsPage() {
-  const { data, error, isError, isLoading } = useArtists();
+  const { page, pageSize, changePage, changePageSize } = useTableParams(2);
+  const { data, error, isError, isLoading } = useArtists(page, pageSize);
   const removeArtist = useRemoveArtist();
 
   // Throw to global error boundary
   if (isError && error) throw error;
 
+  const items = data?.items ?? [];
+  const total = data?.meta.total ?? 0;
+  const totalPages = data ? Math.ceil(total / data.meta.pageSize) : 0;
+
   // Empty state
-  if (!data?.length && !isLoading) {
+  if (!items.length && !isLoading) {
     return (
       <EmptyState
         message="No artists yet."
@@ -50,7 +58,7 @@ export default function AdminArtistsPage() {
       </header>
 
       <ResponsiveList
-        items={data ?? []}
+        items={items}
         isLoading={isLoading}
         loadingContent={
           <Card className="p-4 text-sm text-zinc-500">Loading artists…</Card>
@@ -141,6 +149,21 @@ export default function AdminArtistsPage() {
           </>
         )}
       />
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between gap-3 pt-4 text-xs">
+          <PageSizeSelector
+            value={pageSize}
+            onChange={changePageSize}
+            options={[1, 2, 5]}
+          />
+
+          <Pagination
+            page={data?.meta.page ?? page}
+            totalPages={totalPages}
+            onPageChange={changePage}
+          />
+        </div>
+      )}
     </section>
   );
 }

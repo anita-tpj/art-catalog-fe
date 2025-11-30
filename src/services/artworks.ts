@@ -1,4 +1,5 @@
 import { del, get, getById, post, put } from "@/lib/api-client";
+import { PaginatedResult } from "@/types/api";
 import { z } from "zod";
 
 export enum ArtworkCategory {
@@ -44,8 +45,12 @@ export const CreateArtworkSchema = z.object({
 export type CreateArtworkDTO = z.infer<typeof CreateArtworkSchema>;
 
 export const artworksService = {
-  getAll: () => get<Artwork[]>("/api/artworks"),
+  //getAll: () => get<Artwork[]>("/api/artworks"),
   //getById: (id: number) => get<Artwork>(`/api/artworks/${id}`),
+  getAll: (page = 1, pageSize = 10) =>
+    get<PaginatedResult<Artwork>>(
+      `/api/artworks?page=${page}&pageSize=${pageSize}`
+    ),
   getOne: (id: number) => getById<Artwork>("/api/artworks", id),
   create: (data: CreateArtworkDTO) =>
     post<Artwork, CreateArtworkDTO>("/api/artworks", data),

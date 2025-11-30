@@ -11,18 +11,26 @@ import { TbTrashX } from "react-icons/tb";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineAdd } from "react-icons/md";
 import { ResponsiveList } from "@/components/admin/ResponsiveList";
+import { Pagination } from "@/components/ui/pagination";
+import { useTableParams } from "@/hooks/useTableParams";
+import { PageSizeSelector } from "@/components/ui/page-size-selector";
 
 export default function AdminArtworksPage() {
-  const { data, isLoading, isError, error } = useArtworks();
+  const { page, pageSize, changePage, changePageSize } = useTableParams(10);
+  const { data, isLoading, isError, error } = useArtworks(page, pageSize);
   const removeArtwork = useRemoveArtwork();
 
- // Throw to global error boundary
+  // Throw to global error boundary
   if (isError && error) {
     throw error;
   }
 
+  const items = data?.items ?? [];
+  const total = data?.meta.total ?? 0;
+  const totalPages = data ? Math.ceil(total / data.meta.pageSize) : 0;
+
   // Empty state
-  if (!data?.length && !isLoading) {
+  if (!items.length && !isLoading) {
     return (
       <EmptyState
         message="No artworks yet."
@@ -52,7 +60,7 @@ export default function AdminArtworksPage() {
       </header>
 
       <ResponsiveList
-        items={data ?? []}
+        items={items}
         isLoading={isLoading}
         loadingContent={
           <Card className="p-4 text-sm text-zinc-500">Loading artworks…</Card>
@@ -144,6 +152,21 @@ export default function AdminArtworksPage() {
           </>
         )}
       />
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between gap-3 pt-4 text-xs">
+          <PageSizeSelector
+            value={pageSize}
+            onChange={changePageSize}
+            options={[10, 20, 30, 50]}
+          />
+
+          <Pagination
+            page={data?.meta.page ?? page}
+            totalPages={totalPages}
+            onPageChange={changePage}
+          />
+        </div>
+      )}
     </section>
   );
 }
