@@ -15,6 +15,7 @@ export interface Artwork {
   title: string;
   description: string | null;
   imageUrl: string | null;
+  imagePublicId?: string | null;
   year: number | null;
   category: ArtworkCategory;
   artistId: number;
@@ -34,12 +35,10 @@ export const CreateArtworkSchema = z.object({
       message: "Year cannot be in the future",
     })
     .optional(),
-
   imageUrl: z.string().url("Must be a valid URL").optional(),
-
+  imagePublicId: z.string().optional(),
   description: z.string().max(2000, "Description is too long").optional(),
   artistId: z.number().int().positive({ message: "Artist is required" }),
-
   category: z.enum(Object.values(ArtworkCategory) as [string, ...string[]], {
     message: "Category is required",
   }),

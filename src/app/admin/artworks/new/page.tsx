@@ -1,37 +1,61 @@
 "use client";
 
-import { CreateArtworkDTO, CreateArtworkSchema } from "@/services/artworks";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { useArtworkImageUpload } from "@/hooks/artworks/useArtworkImageUpload";
 import { useCreateArtwork } from "@/hooks/artworks/useCreateArtwork";
+import { CreateArtworkDTO, CreateArtworkSchema } from "@/services/artworks";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import { useForm } from "react-hook-form";
 
 export default function NewArtworkPage() {
+  const createArtwork = useCreateArtwork();
+
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<CreateArtworkDTO>({
     resolver: zodResolver(CreateArtworkSchema),
     defaultValues: {
       title: "",
       year: undefined,
-      imageUrl: "",
+      imageUrl: undefined,
+      imagePublicId: undefined,
       description: "",
       category: "OTHER",
     },
   });
 
-  const createArtwork = useCreateArtwork();
+  const imageUrl = watch("imageUrl");
+
+  const {
+    uploading,
+    error: uploadError,
+    handleFileChange,
+  } = useArtworkImageUpload({
+    onUploaded: ({ url, publicId }) => {
+      setValue("imageUrl", url, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+      setValue("imagePublicId", publicId, {
+        shouldDirty: true,
+        shouldValidate: false,
+      });
+    },
+  });
 
   const onSubmit = (data: CreateArtworkDTO) => {
     createArtwork.mutate(data);
   };
 
-  const isBusy = isSubmitting || createArtwork.isPending;
+  const isBusy = isSubmitting || createArtwork.isPending || uploading;
 
   return (
     <section className="space-y-4">
@@ -65,18 +89,60 @@ export default function NewArtworkPage() {
             )}
           </div>
 
-          {/* Image URL */}
+          {/* Image upload (Cloudinary) */}
           <div className="space-y-1">
-            <Label htmlFor="imageUrl">Image URL</Label>
+            <Label htmlFor="imageFile">Artwork image</Label>
+            <input
+              id="imageFile"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <Button
+              type="button"
+              size="xs"
+              className="text-xs ml-5"
+              onClick={() => document.getElementById("imageFile")?.click()}
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : "Upload image"}
+            </Button>
+
+            {uploadError && (
+              <p className="text-xs text-red-500 mt-1">{uploadError}</p>
+            )}
+
+            {imageUrl && (
+              <p className="text-xs text-green-600">Image uploaded ✓</p>
+            )}
+          </div>
+          <div className="space-y-1 hidden">
+            <Label htmlFor="imageUrl">Image URL (Cloudinary)</Label>
             <Input
               id="imageUrl"
               {...register("imageUrl")}
               placeholder="https://..."
+              readOnly
             />
             {errors.imageUrl && (
               <p className="text-xs text-red-500">{errors.imageUrl.message}</p>
             )}
           </div>
+
+          {/* Image preview */}
+          {imageUrl && (
+            <div className="space-y-1">
+              <p className="mb-1 text-xs text-zinc-500">Preview:</p>
+              <Image
+                src={imageUrl}
+                alt="Artwork preview"
+                width={400}
+                height={400}
+                className="h-40 w-auto object-contain border border-zinc-200 p-1"
+              />
+            </div>
+          )}
 
           {/* Description */}
           <div className="space-y-1">
