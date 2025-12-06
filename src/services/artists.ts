@@ -9,6 +9,8 @@ export interface Artist {
   country: string | null;
   birthYear: number | null;
   deathYear: number | null;
+  avatarUrl?: string | null;
+  avatarPublicId?: string | null;
 }
 
 const optionalYear = z.preprocess(
@@ -35,6 +37,8 @@ export const createArtistSchema = z.object({
   country: z.string().optional(),
   birthYear: optionalYear,
   deathYear: optionalYear,
+  avatarUrl: z.string().url("Must be a valid URL").optional(),
+  avatarPublicId: z.string().optional(),
 });
 
 export type CreateArtistDTO = z.infer<typeof createArtistSchema>;

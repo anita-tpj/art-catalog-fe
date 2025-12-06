@@ -3,13 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { useArtwork } from "@/hooks/artworks/useArtwork";
+import { useArtworkImageUpload } from "@/hooks/artworks/useArtworkImageUpload";
 import { useUpdateArtwork } from "@/hooks/artworks/useUpdateArtwork";
 import { CreateArtworkDTO, CreateArtworkSchema } from "@/services/artworks";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@radix-ui/react-label";
-import React, { useEffect } from "react";
+import Image from "next/image";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface EditArtworkPageProps {
@@ -18,30 +20,46 @@ interface EditArtworkPageProps {
 
 const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
   const { data: artwork, isLoading } = useArtwork(id);
+  const updateArtwork = useUpdateArtwork();
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<CreateArtworkDTO>({
     resolver: zodResolver(CreateArtworkSchema),
     defaultValues: {
       title: "",
       year: undefined,
-      imageUrl: "",
+      imageUrl: undefined,
+      imagePublicId: undefined,
       description: "",
+      artistId: undefined as unknown as number,
       category: "OTHER",
     },
   });
 
-  const updateArtwork = useUpdateArtwork();
+  const imageUrl = watch("imageUrl");
 
-  const onSubmit = (data: CreateArtworkDTO) => {
-    updateArtwork.mutate({ data, id });
-  };
-
-  const isBusy = isSubmitting || updateArtwork.isPending;
+  const {
+    uploading,
+    error: uploadError,
+    handleFileChange,
+  } = useArtworkImageUpload({
+    onUploaded: ({ url, publicId }) => {
+      setValue("imageUrl", url, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+      setValue("imagePublicId", publicId, {
+        shouldDirty: true,
+        shouldValidate: false,
+      });
+    },
+  });
 
   useEffect(() => {
     if (!artwork) return;
@@ -49,22 +67,37 @@ const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
     reset({
       title: artwork.title ?? "",
       year: artwork.year ?? undefined,
-      imageUrl: artwork.imageUrl ?? "",
+      imageUrl: artwork.imageUrl ?? undefined,
+      imagePublicId: artwork.imagePublicId ?? undefined,
       description: artwork.description ?? "",
-      artistId: artwork.artistId ?? undefined,
+      artistId: artwork.artistId,
       category: artwork.category ?? "OTHER",
     });
   }, [artwork, reset]);
 
+  const onSubmit = (data: CreateArtworkDTO) => {
+    updateArtwork.mutate({ data, id });
+  };
+
+  const isBusy = isSubmitting || updateArtwork.isPending || uploading;
+
   if (isLoading && !artwork) {
-    return <p className="text-sm text-zinc-500">Loading artist details…</p>;
+    return <p className="text-sm text-zinc-500">Loading artwork details…</p>;
+  }
+
+  if (!artwork) {
+    return (
+      <p className="text-sm text-red-500">
+        Artwork not found or failed to load.
+      </p>
+    );
   }
 
   return (
     <section className="space-y-4">
-      <h1 className="text-xl font-semibold tracking-tight">Create artwork</h1>
+      <h1 className="text-xl font-semibold tracking-tight">Edit artwork</h1>
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
-        Add a new artwork to the catalog.
+        Update artwork details and image.
       </p>
 
       <Card className="border border-dashed border-zinc-300 p-4 text-sm dark:border-zinc-700">
@@ -92,16 +125,59 @@ const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
             )}
           </div>
 
-          {/* Image URL */}
+          {/* Image upload + preview (Cloudinary) */}
           <div className="space-y-1">
-            <Label htmlFor="imageUrl">Image URL</Label>
-            <Input
-              id="imageUrl"
-              {...register("imageUrl")}
-              placeholder="https://..."
+            <Label htmlFor="imageFile">Artwork image</Label>
+            <input
+              id="imageFile"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
             />
-            {errors.imageUrl && (
-              <p className="text-xs text-red-500">{errors.imageUrl.message}</p>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="xs"
+              className="text-xs ml-5"
+              onClick={() => document.getElementById("imageFile")?.click()}
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : "Replace image"}
+            </Button>
+            {uploadError && (
+              <p className="text-xs text-red-500 mt-1">{uploadError}</p>
+            )}
+            <div className="space-y-1 hidden">
+              <Label htmlFor="imageUrl">Image URL (Cloudinary)</Label>
+              <Input
+                id="imageUrl"
+                {...register("imageUrl")}
+                placeholder="https://..."
+                readOnly
+              />
+              {errors.imageUrl && (
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.imageUrl.message}
+                </p>
+              )}
+            </div>
+
+            {/* Image preview */}
+            {imageUrl && (
+              <div className="space-y-1">
+                <p className="mb-1 text-xs text-zinc-500">Preview:</p>
+                <div className="relative h-40 w-full max-w-xs">
+                  <Image
+                    src={imageUrl}
+                    alt="Artwork preview"
+                    width={400}
+                    height={400}
+                    className="h-40 w-auto object-contain border border-zinc-200 p-1"
+                  />
+                </div>
+              </div>
             )}
           </div>
 
@@ -121,6 +197,7 @@ const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
               </p>
             )}
           </div>
+
           {/* Artist */}
           <div className="space-y-1">
             <Label htmlFor="artistId">Artist ID</Label>

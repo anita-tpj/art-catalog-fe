@@ -6,7 +6,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
   variant?: "primary" | "outline" | "ghost" | "destructive";
-  size?: "sm" | "md";
+  size?: "xs" | "sm" | "md";
 }
 
 export function Button({
@@ -31,6 +31,7 @@ export function Button({
           "bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800",
         variant === "destructive" &&
           "bg-red-600 text-white hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800",
+        size === "xs" && "h-7 px-2",
         size === "sm" && "h-8 px-3",
         size === "md" && "h-9 px-4",
         className

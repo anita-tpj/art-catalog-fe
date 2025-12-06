@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -45,7 +46,7 @@ export default function AdminArtistsPage() {
 
   // Extract data
   const items = data?.items ?? [];
-  const total = data?.meta.total ?? 0; // artists API has no meta, uses totalCount directly
+  const total = data?.meta.total ?? 0;
   const totalPages = data ? Math.ceil(total / data.meta.pageSize) : 0;
 
   // State logic
@@ -111,7 +112,7 @@ export default function AdminArtistsPage() {
                 <table className="w-full border-t border-zinc-200 text-sm dark:border-zinc-800">
                   <thead className="bg-zinc-50 text-left text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
                     <tr>
-                      <th className="px-4 py-2">Name</th>
+                      <th className="px-4 py-2">Artist</th>
                       <th className="px-4 py-2">Country</th>
                       <th className="px-4 py-2 text-right">Actions</th>
                     </tr>
@@ -122,12 +123,36 @@ export default function AdminArtistsPage() {
                         key={artist.id}
                         className="border-t border-zinc-100 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
                       >
-                        <td className="px-4 py-2">{artist.name}</td>
+                        {/* Avatar + name */}
+                        <td className="px-4 py-2">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+                              {artist.avatarUrl ? (
+                                <Image
+                                  src={artist.avatarUrl}
+                                  alt={artist.name}
+                                  width={32}
+                                  height={32}
+                                  className="h-8 w-8 object-cover"
+                                />
+                              ) : (
+                                <span className="text-[10px] text-zinc-400">
+                                  NA
+                                </span>
+                              )}
+                            </div>
+                            <span className="font-medium">{artist.name}</span>
+                          </div>
+                        </td>
+
+                        {/* Country */}
                         <td className="px-4 py-2">
                           {artist.country || (
                             <span className="text-zinc-400">—</span>
                           )}
                         </td>
+
+                        {/* Actions */}
                         <td className="px-4 py-2">
                           <div className="flex items-center justify-end gap-3">
                             <Link href={`/admin/artists/${artist.id}/edit`}>
@@ -159,15 +184,34 @@ export default function AdminArtistsPage() {
             renderCards={(items) => (
               <>
                 {items.map((artist) => (
-                  <Card key={artist.id} className="p-3">
+                  <Card key={artist.id} className="p-3 text-sm">
                     <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <div className="font-medium">{artist.name}</div>
-                        <div className="text-xs text-zinc-500">
-                          {artist.country || "Unknown country"}
+                      {/* Avatar + name + country */}
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+                          {artist.avatarUrl ? (
+                            <Image
+                              src={artist.avatarUrl}
+                              alt={artist.name}
+                              width={40}
+                              height={40}
+                              className="h-10 w-10 object-cover"
+                            />
+                          ) : (
+                            <span className="text-[10px] text-zinc-400">
+                              NA
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-medium">{artist.name}</div>
+                          <div className="text-xs text-zinc-500">
+                            {artist.country || "Unknown country"}
+                          </div>
                         </div>
                       </div>
 
+                      {/* Actions */}
                       <div className="flex items-center gap-2">
                         <Link href={`/admin/artists/${artist.id}/edit`}>
                           <FiEdit
