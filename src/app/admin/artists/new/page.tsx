@@ -5,12 +5,12 @@ import { Card } from "@/components/ui/card";
 import { CountrySelect } from "@/components/ui/country-select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useArtistAvatarUpload } from "@/hooks/artists/useArtistAvatarUpload";
 import { useCreateArtist } from "@/hooks/artists/useCreateArtist";
 import { CreateArtistDTO, createArtistSchema } from "@/services/artists";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, Resolver, useForm } from "react-hook-form";
-import { useArtistAvatarUpload } from "@/hooks/artists/useArtistAvatarUpload";
 import Image from "next/image";
+import { Controller, Resolver, useForm } from "react-hook-form";
 
 const NewArtistPage = () => {
   const createArtist = useCreateArtist();

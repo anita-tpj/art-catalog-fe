@@ -1,26 +1,26 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { ResponsiveList } from "@/components/admin/ResponsiveList";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageSizeSelector } from "@/components/ui/page-size-selector";
 import { Pagination } from "@/components/ui/pagination";
-import { ResponsiveList } from "@/components/admin/ResponsiveList";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { FiEdit } from "react-icons/fi";
-import { TbTrashX } from "react-icons/tb";
 import { MdOutlineAdd } from "react-icons/md";
+import { TbTrashX } from "react-icons/tb";
 
-import { useArtworks } from "@/hooks/artworks/useArtworks";
-import { useRemoveArtwork } from "@/hooks/artworks/useRemoveArtwork";
-import { useTableParams } from "@/hooks/useTableParams";
-import { useDebouncedValue } from "@/hooks/artists/useDebouncedValue";
 import { SearchEmptyState } from "@/components/ui/search-empty-state";
 import { SearchInput } from "@/components/ui/search-input";
+import { useDebouncedValue } from "@/hooks/artists/useDebouncedValue";
+import { usePaginatedArtworks } from "@/hooks/artworks/useArtworks";
+import { useRemoveArtwork } from "@/hooks/artworks/useRemoveArtwork";
+import { useTableParams } from "@/hooks/useTableParams";
 
 export default function AdminArtworksPage() {
   const { page, pageSize, changePage, changePageSize } = useTableParams(10);
@@ -28,7 +28,7 @@ export default function AdminArtworksPage() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 400);
 
-  const { data, isLoading, isError, error } = useArtworks({
+  const { data, isLoading, isError, error } = usePaginatedArtworks({
     page,
     pageSize,
     search: debouncedSearch || undefined,
@@ -206,9 +206,7 @@ export default function AdminArtworksPage() {
                       <div className="flex flex-1 flex-col gap-1">
                         <div className="flex items-start justify-between gap-2">
                           <div>
-                            <div className="font-medium">
-                              {artwork.title}
-                            </div>
+                            <div className="font-medium">{artwork.title}</div>
                             <div className="text-xs text-zinc-500">
                               {artwork.artist.name}
                             </div>

@@ -2,18 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { CountrySelect } from "@/components/ui/country-select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CountrySelect } from "@/components/ui/country-select";
+import { Spinner } from "@/components/ui/spinner";
 import { useArtist } from "@/hooks/artists/useArtist";
-import { useUpdateArtist } from "@/hooks/artists/useUpdateArtist";
 import { useArtistAvatarUpload } from "@/hooks/artists/useArtistAvatarUpload";
+import { useUpdateArtist } from "@/hooks/artists/useUpdateArtist";
 import { CreateArtistDTO, createArtistSchema } from "@/services/artists";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import { Resolver, useForm, Controller } from "react-hook-form";
-import { Spinner } from "@/components/ui/spinner";
 import Image from "next/image";
+import { useEffect } from "react";
+import { Controller, Resolver, useForm } from "react-hook-form";
 
 interface EditArtistPageProps {
   id: number;
