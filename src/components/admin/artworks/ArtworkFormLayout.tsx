@@ -11,6 +11,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { TextInputField } from "@/components/ui/text-input-field";
 import { TextareaField } from "@/components/ui/textarea-field";
 import { YearSelector } from "@/components/ui/year-selector";
+import {
+  ArtworkFieldKey,
+  CATEGORY_FIELD_CONFIG,
+} from "@/config/artwork-category-field-config";
 
 import {
   ArtworkCategory,
@@ -56,6 +60,11 @@ export function ArtworkFormLayout({
     setValue,
     formState: { errors },
   } = form;
+
+  const category = form.watch("category");
+  const config = CATEGORY_FIELD_CONFIG[category];
+  const show = (k: ArtworkFieldKey) => config?.visible.includes(k);
+  const isReq = (k: ArtworkFieldKey) => config?.required.includes(k);
 
   return (
     <section className="space-y-4">
@@ -106,58 +115,71 @@ export function ArtworkFormLayout({
                 </h2>
 
                 <div className="grid gap-4 lg:grid-cols-2">
-                  <EnumSelectField<CreateArtworkDTO, ArtworkTechnique>
-                    control={control}
-                    name="technique"
-                    label="Technique"
-                    placeholder="Select technique"
-                    enumObject={ArtworkTechnique}
-                    labels={ArtworkTechniqueLabels}
-                  />
+                  {show("technique") && (
+                    <EnumSelectField<CreateArtworkDTO, ArtworkTechnique>
+                      control={control}
+                      name="technique"
+                      //label={`Technique${isReq("technique") ? " *" : ""}`}
+                      label="Technique"
+                      placeholder="Select technique"
+                      enumObject={ArtworkTechnique}
+                      labels={ArtworkTechniqueLabels}
+                    />
+                  )}
 
-                  <EnumSelectField<CreateArtworkDTO, ArtworkStyle>
-                    control={control}
-                    name="style"
-                    label="Style"
-                    placeholder="Select style"
-                    enumObject={ArtworkStyle}
-                    labels={ArtworkStyleLabels}
-                  />
+                  {show("style") && (
+                    <EnumSelectField<CreateArtworkDTO, ArtworkStyle>
+                      control={control}
+                      name="style"
+                      label="Style"
+                      placeholder="Select style"
+                      enumObject={ArtworkStyle}
+                      labels={ArtworkStyleLabels}
+                    />
+                  )}
 
-                  <EnumSelectField<CreateArtworkDTO, ArtworkMotive>
-                    control={control}
-                    name="motive"
-                    label="Motive"
-                    placeholder="Select motive"
-                    enumObject={ArtworkMotive}
-                    labels={ArtworkMotiveLabels}
-                  />
+                  {show("motive") && (
+                    <EnumSelectField<CreateArtworkDTO, ArtworkMotive>
+                      control={control}
+                      name="motive"
+                      label="Motive"
+                      placeholder="Select motive"
+                      enumObject={ArtworkMotive}
+                      labels={ArtworkMotiveLabels}
+                    />
+                  )}
 
-                  <EnumSelectField<CreateArtworkDTO, ArtworkOrientation>
-                    control={control}
-                    name="orientation"
-                    label="Orientation"
-                    placeholder="Select orientation"
-                    enumObject={ArtworkOrientation}
-                    labels={ArtworkOrientationLabels}
-                  />
+                  {show("orientation") && (
+                    <EnumSelectField<CreateArtworkDTO, ArtworkOrientation>
+                      control={control}
+                      name="orientation"
+                      label="Orientation"
+                      placeholder="Select orientation"
+                      enumObject={ArtworkOrientation}
+                      labels={ArtworkOrientationLabels}
+                    />
+                  )}
 
-                  <EnumSelectField<CreateArtworkDTO, ArtworkStandardSize>
-                    control={control}
-                    name="size"
-                    label="Size"
-                    placeholder="Select size"
-                    enumObject={ArtworkStandardSize}
-                    labels={ArtworkStandardSizeLabels}
-                  />
+                  {show("size") && (
+                    <EnumSelectField<CreateArtworkDTO, ArtworkStandardSize>
+                      control={control}
+                      name="size"
+                      label="Size"
+                      placeholder="Select size"
+                      enumObject={ArtworkStandardSize}
+                      labels={ArtworkStandardSizeLabels}
+                    />
+                  )}
 
-                  <BooleanRadioField<CreateArtworkDTO>
-                    control={control}
-                    name="framed"
-                    label="Framed"
-                    trueLabel="Yes"
-                    falseLabel="No"
-                  />
+                  {show("framed") && (
+                    <BooleanRadioField<CreateArtworkDTO>
+                      control={control}
+                      name="framed"
+                      label="Framed"
+                      trueLabel="Yes"
+                      falseLabel="No"
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -181,13 +203,14 @@ export function ArtworkFormLayout({
                   {...register("description")}
                 />
               </div>
-
-              <YearSelector<CreateArtworkDTO>
-                control={control}
-                name="year"
-                label="Year"
-                placeholder="Select year"
-              />
+              <div className="w-1/2">
+                <YearSelector<CreateArtworkDTO>
+                  control={control}
+                  name="year"
+                  label="Year"
+                  placeholder="Select year"
+                />
+              </div>
             </div>
           </div>
 

@@ -4,16 +4,19 @@ import { AvatarUploadField } from "@/components/ui/avatar-upload-field";
 import { Button } from "@/components/ui/button";
 import { CancelButton } from "@/components/ui/cancel-button";
 import { Card } from "@/components/ui/card";
-import { CountrySelect } from "@/components/ui/country-select";
+import { CountrySelect, CountrySelector } from "@/components/ui/country-selector";
+import { EnumSelectField } from "@/components/ui/enum-select-field";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { TextInputField } from "@/components/ui/text-input-field";
 import { TextareaField } from "@/components/ui/textarea-field";
 import { YearSelector } from "@/components/ui/year-selector";
+import { useCountryOptions } from "@/hooks/useCountries";
 
 import { CreateArtistDTO } from "@/services/artists";
+import { ArtworkCategory, ArtworkCategoryLabels } from "@/services/artworks";
 
-import { Controller, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 
 interface ArtistFormLayoutProps {
   form: UseFormReturn<CreateArtistDTO>;
@@ -34,6 +37,7 @@ export function ArtistFormLayout({
   isBusy = false,
   apiError,
 }: ArtistFormLayoutProps) {
+
   const {
     register,
     control,
@@ -41,6 +45,8 @@ export function ArtistFormLayout({
     setValue,
     formState: { errors },
   } = form;
+
+  const countryOptions = useCountryOptions();
 
   return (
     <section className="space-y-4">
@@ -78,34 +84,24 @@ export function ArtistFormLayout({
               <div className="flex gap-4">
                 {/* Country */}
                 <div className="space-y-1 w-1/2">
-                  <Label htmlFor="country">Country</Label>
-                  <Controller
-                    name="country"
+                  <CountrySelector<CreateArtistDTO>
                     control={control}
-                    render={({ field }) => (
-                      <CountrySelect
-                        key={field.value ?? "empty"}
-                        value={field.value ?? ""}
-                        onChange={field.onChange}
-                        error={errors.country?.message}
-                      />
-                    )}
+                    name="country"
+                    label="Country"
+                    placeholder="Select country"
+                    options={countryOptions}
                   />
                 </div>
-                {/* Artist ptimary category */}
+                {/* Artist primary category */}
                 <div className="space-y-1 w-1/2">
-                  {/* <Label htmlFor="country">Artist category</Label>
-                  <Controller
-                    name="country"
+                  <EnumSelectField<CreateArtistDTO, ArtworkCategory>
                     control={control}
-                    render={({ field }) => (
-                      <CountrySelect
-                        value={field.value ?? ""}
-                        onChange={field.onChange}
-                        error={errors.country?.message}
-                      />
-                    )}
-                  /> */}
+                    name="primaryCategory"
+                    label="Primary category"
+                    placeholder="Select category"
+                    enumObject={ArtworkCategory}
+                    labels={ArtworkCategoryLabels}
+                  />
                 </div>
               </div>
             </div>

@@ -1,7 +1,15 @@
 import { countries } from "countries-list";
 
-export function useCountries() {
+export type CountryOption = {
+  value: string;
+  label: string;
+};
+
+export function useCountryOptions(): CountryOption[] {
   return Object.values(countries)
-    .map((c) => c.name)
-    .sort((a, b) => a.localeCompare(b));
+    .map((c) => ({
+      value: c.name,
+      label: c.name,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 }

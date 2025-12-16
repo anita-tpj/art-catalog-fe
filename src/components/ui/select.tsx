@@ -13,13 +13,13 @@ export const SelectTrigger = React.forwardRef<
 >(({ className = "", children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
-    className={`flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+    className={`flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white pl-3 pr-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
     {...props}
   >
     {children}
     {/* fallback chevron icon */}
     <svg
-      className="ml-2 h-4 w-4 opacity-60"
+      className="ml-1 h-4 w-4 opacity-60"
       viewBox="0 0 20 20"
       fill="currentColor"
     >
