@@ -1,27 +1,27 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
+import { ResponsiveList } from "@/components/admin/ResponsiveList";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageSizeSelector } from "@/components/ui/page-size-selector";
 import { Pagination } from "@/components/ui/pagination";
-import { ResponsiveList } from "@/components/admin/ResponsiveList";
 
 import { FiEdit } from "react-icons/fi";
-import { TbTrashX } from "react-icons/tb";
 import { MdOutlineAdd } from "react-icons/md";
+import { TbTrashX } from "react-icons/tb";
 
-import { useArtists } from "@/hooks/artists/useArtists";
-import { useRemoveArtist } from "@/hooks/artists/useRemoveArtist";
-import { useTableParams } from "@/hooks/useTableParams";
-import { useDebouncedValue } from "@/hooks/artists/useDebouncedValue";
 import { SearchEmptyState } from "@/components/ui/search-empty-state";
 import { SearchInput } from "@/components/ui/search-input";
+import { usePaginatedArtists } from "@/hooks/artists/useArtists";
+import { useDebouncedValue } from "@/hooks/artists/useDebouncedValue";
+import { useRemoveArtist } from "@/hooks/artists/useRemoveArtist";
+import { useTableParams } from "@/hooks/useTableParams";
 
 export default function AdminArtistsPage() {
   const { page, pageSize, changePage, changePageSize } = useTableParams(10);
@@ -29,7 +29,7 @@ export default function AdminArtistsPage() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 400);
 
-  const { data, error, isError, isLoading } = useArtists({
+  const { data, error, isError, isLoading } = usePaginatedArtists({
     page,
     pageSize,
     search: debouncedSearch || undefined,
