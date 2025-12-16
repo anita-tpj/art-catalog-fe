@@ -46,8 +46,11 @@ export function YearSelector<TFieldValues extends FieldValues>({
         render={({ field, fieldState }) => (
           <div className="space-y-1">
             <Select
-              value={field.value ? String(field.value) : ""}
-              onValueChange={(value) => field.onChange(Number(value))}
+              key={field.value ?? "empty"}
+              value={field.value == null ? "" : String(field.value)}
+              onValueChange={(value) =>
+                field.onChange(value === "" ? undefined : Number(value))
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder={placeholder} />

@@ -45,7 +45,7 @@ export const SelectContent = React.forwardRef<
       position={position}
       {...props}
     >
-      <SelectPrimitive.Viewport className="p-1">
+      <SelectPrimitive.Viewport className="max-h-64 overflow-y-auto p-1">
         {children}
       </SelectPrimitive.Viewport>
     </SelectPrimitive.Content>
@@ -60,17 +60,31 @@ export const SelectItem = React.forwardRef<
 >(({ className = "", children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
-    className={`relative flex cursor-pointer select-none items-center rounded-sm px-3 py-1.5 text-sm outline-none hover:bg-gray-100 ${className}`}
+    className={` relative
+    flex cursor-pointer select-none items-center
+    rounded-sm
+    py-1.5
+    pl-8
+    pr-2
+    text-sm
+    outline-none
+    focus:bg-zinc-100
+    data-[state=checked]:bg-zinc-50
+    dark:focus:bg-zinc-800
+    dark:data-[state=checked]:bg-zinc-900 ${className}`}
     {...props}
   >
-    <SelectPrimitive.ItemIndicator>
-      {/* simple check dot */}
+    <SelectPrimitive.ItemIndicator className="absolute left-2 inline-flex items-center justify-center">
       <svg
-        className="absolute left-1.5 h-2.5 w-2.5 text-blue-500"
-        fill="currentColor"
-        viewBox="0 0 20 20"
+        viewBox="0 0 24 24"
+        className="h-4 w-4 text-zinc-400"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       >
-        <circle cx="10" cy="10" r="10" />
+        <polyline points="20 6 9 17 4 12" />
       </svg>
     </SelectPrimitive.ItemIndicator>
 

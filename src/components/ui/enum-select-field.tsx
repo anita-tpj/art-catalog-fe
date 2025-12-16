@@ -49,6 +49,7 @@ export function EnumSelectField<
         render={({ field, fieldState }) => (
           <div className="space-y-1">
             <Select
+              key={field.value ?? "empty"}
               value={field.value ?? ""}
               onValueChange={(value) => field.onChange(value as TEnumValue)}
             >

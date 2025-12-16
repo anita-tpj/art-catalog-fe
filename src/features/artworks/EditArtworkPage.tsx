@@ -19,21 +19,6 @@ const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
 
   const form = useForm<CreateArtworkDTO>({
     resolver: zodResolver(CreateArtworkSchema),
-    defaultValues: {
-      title: "",
-      year: undefined,
-      imageUrl: undefined,
-      imagePublicId: undefined,
-      description: "",
-      category: undefined,
-      technique: undefined,
-      style: undefined,
-      motive: undefined,
-      orientation: undefined,
-      size: undefined,
-      framed: false,
-      artistId: undefined as unknown as number,
-    },
   });
 
   const {
@@ -60,7 +45,7 @@ const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
       framed: artwork.framed,
     });
   }, [artwork, reset]);
-
+  console.log("after reset", form.getValues());
   if (isLoading && !artwork) {
     return <p className="text-sm text-zinc-500">Loading artwork details…</p>;
   }

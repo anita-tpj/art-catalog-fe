@@ -46,6 +46,7 @@ export function ArtistSelector<TFieldValues extends FieldValues>({
         render={({ field, fieldState }) => (
           <div className="space-y-1">
             <Select
+              key={field.value ?? "empty"}
               value={field.value ? String(field.value) : ""}
               onValueChange={(value) => field.onChange(Number(value))}
               disabled={isDisabled}

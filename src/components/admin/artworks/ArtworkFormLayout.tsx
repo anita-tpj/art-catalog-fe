@@ -3,6 +3,7 @@
 import { ArtistSelector } from "@/components/ui/artist-selector";
 import { BooleanRadioField } from "@/components/ui/boolean-radio-field";
 import { Button } from "@/components/ui/button";
+import { CancelButton } from "@/components/ui/cancel-button";
 import { Card } from "@/components/ui/card";
 import { EnumSelectField } from "@/components/ui/enum-select-field";
 import { ImageUploadField } from "@/components/ui/image-upload-field";
@@ -72,7 +73,7 @@ export function ArtworkFormLayout({
           noValidate
         >
           <div className="grid gap-6 lg:grid-cols-[minmax(0,57fr)_minmax(0,43fr)] lg:divide-x lg:divide-zinc-300">
-            <div className="space-y-6 pr-5">
+            <div className="space-y-6 lg:pr-5">
               <div className="space-y-4">
                 <TextInputField
                   label="Title"
@@ -196,11 +197,12 @@ export function ArtworkFormLayout({
             </p>
           )}
 
-          <div className="pt-2">
+          <div className="pt-2 flex gap-4">
             <Button type="submit" disabled={isBusy}>
               {isBusy && <Spinner size="sm" className="mr-2" />}
               {submitLabel}
             </Button>
+            <CancelButton back />
           </div>
         </form>
       </Card>
