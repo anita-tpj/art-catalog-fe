@@ -6,17 +6,27 @@ import { z } from "zod";
 export enum ArtworkCategory {
   PAINTING = "PAINTING",
   SCULPTURE = "SCULPTURE",
-  DIGITAL = "DIGITAL",
   PHOTOGRAPHY = "PHOTOGRAPHY",
+  DRAWING_ILLUSTRATION = "DRAWING_ILLUSTRATION",
+  PRINTMAKING = "PRINTMAKING",
+  DIGITAL_ART = "DIGITAL_ART",
+  MIXED_MEDIA = "MIXED_MEDIA",
+  TEXTILE_FIBER_ART = "TEXTILE_FIBER_ART",
+  CERAMICS = "CERAMICS",
   OTHER = "OTHER",
 }
 
 export const ArtworkCategoryLabels: Record<ArtworkCategory, string> = {
-  PAINTING: "Painting",
-  SCULPTURE: "Sculpture",
-  DIGITAL: "Digital",
-  PHOTOGRAPHY: "Photography",
-  OTHER: "Other",
+  [ArtworkCategory.PAINTING]: "Painting",
+  [ArtworkCategory.SCULPTURE]: "Sculpture",
+  [ArtworkCategory.PHOTOGRAPHY]: "Photography",
+  [ArtworkCategory.DRAWING_ILLUSTRATION]: "Drawing & Illustration",
+  [ArtworkCategory.PRINTMAKING]: "Printmaking",
+  [ArtworkCategory.DIGITAL_ART]: "Digital Art",
+  [ArtworkCategory.MIXED_MEDIA]: "Mixed Media",
+  [ArtworkCategory.TEXTILE_FIBER_ART]: "Textile & Fiber Art",
+  [ArtworkCategory.CERAMICS]: "Ceramics",
+  [ArtworkCategory.OTHER]: "Other",
 };
 
 export enum ArtworkTechnique {

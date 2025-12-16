@@ -18,15 +18,6 @@ const EditArtistPage = ({ id }: EditArtistPageProps) => {
 
   const form = useForm<CreateArtistDTO>({
     resolver: zodResolver(createArtistSchema) as Resolver<CreateArtistDTO>,
-    defaultValues: {
-      name: "",
-      country: undefined,
-      bio: "",
-      birthYear: undefined,
-      deathYear: undefined,
-      avatarUrl: undefined,
-      avatarPublicId: undefined,
-    },
   });
 
   const {
@@ -45,6 +36,7 @@ const EditArtistPage = ({ id }: EditArtistPageProps) => {
       deathYear: artist.deathYear ?? undefined,
       avatarUrl: artist.avatarUrl ?? undefined,
       avatarPublicId: artist.avatarPublicId ?? undefined,
+      primaryCategory: artist.primaryCategory ?? undefined,
     });
   }, [artist, reset]);
 

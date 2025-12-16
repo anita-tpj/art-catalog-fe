@@ -2,6 +2,7 @@ import { del, get, getById, post, put } from "@/lib/api-client";
 import { CURRENT_YEAR, DEFAULT_MIN_YEAR } from "@/lib/year-options";
 import { PaginatedRequest, PaginatedResult } from "@/types/api";
 import { z } from "zod";
+import { ArtworkCategory } from "./artworks";
 
 export interface Artist {
   id: number;
@@ -12,6 +13,7 @@ export interface Artist {
   deathYear: number | null;
   avatarUrl: string | null;
   avatarPublicId: string | null;
+  primaryCategory: ArtworkCategory;
 }
 
 const optionalYear = z.preprocess(
@@ -59,6 +61,9 @@ export const createArtistSchema = z.object({
     .optional(),
   avatarUrl: z.string().url("Must be a valid URL").optional(),
   avatarPublicId: z.string().optional(),
+  primaryCategory: z.nativeEnum(ArtworkCategory, {
+    error: "Category is required",
+  }),
 });
 
 export const UpdateArtistSchema = createArtistSchema.partial();
