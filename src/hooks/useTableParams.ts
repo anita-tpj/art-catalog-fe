@@ -1,22 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
+type Init = number | { page?: number; pageSize?: number };
 
-export function useTableParams(defaultPageSize = 10) {
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(defaultPageSize);
+export function useTableParams(init: Init = 10) {
+  const initialPageSize = typeof init === "number" ? init : init.pageSize ?? 10;
+  const initialPage = typeof init === "number" ? 1 : init.page ?? 1;
 
-  const changePage = (p: number) => setPage(p);
+  const [page, setPage] = useState(initialPage);
+  const [pageSize, setPageSize] = useState(initialPageSize);
 
-  const changePageSize = (size: number) => {
+  const changePage = useCallback((p: number) => setPage(p), []);
+  const changePageSize = useCallback((size: number) => {
     setPageSize(size);
-    setPage(1); // reset page when page size changes
-  };
+    setPage(1);
+  }, []);
 
-  return {
-    page,
-    pageSize,
-    changePage,
-    changePageSize,
-  };
+  return { page, pageSize, changePage, changePageSize };
 }
+

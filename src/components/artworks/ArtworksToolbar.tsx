@@ -1,0 +1,88 @@
+"use client";
+
+import { CategorySelect } from "@/components/ui/category-select";
+import { SearchInput } from "@/components/ui/search-input";
+import { FilterChip } from "@/components/ui/filter-chip";
+import {
+  ALL_CATEGORIES_VALUE,
+  artworkCategoryOptions,
+} from "@/services/artwork-category-options";
+import { ArtworkCategoryLabels } from "@/services/artworks";
+
+type Props = {
+  search: string;
+  onSearchChange: (v: string) => void;
+  onClearSearch: () => void;
+
+  category: string;
+  onCategoryChange: (v: string) => void;
+  onClearCategory: () => void;
+
+  onClearFilters: () => void;
+};
+
+export function ArtworksToolbar({
+  search,
+  onSearchChange,
+  onClearSearch,
+  category,
+  onCategoryChange,
+  onClearCategory,
+  onClearFilters,
+}: Props) {
+  const hasSearch = search.trim() !== "";
+  const hasCategory = category !== ALL_CATEGORIES_VALUE;
+
+  return (
+    <section className="mt-4">
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div className="md:w-[55%]">
+          <SearchInput
+            value={search}
+            onChange={onSearchChange}
+            placeholder="Search artworks..."
+          />
+        </div>
+
+        <div className="md:w-72">
+          <CategorySelect
+            value={category}
+            onChange={onCategoryChange}
+            options={artworkCategoryOptions}
+            placeholder="All categories"
+          />
+        </div>
+      </div>
+
+      {(hasSearch || hasCategory) && (
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          {hasSearch && (
+            <FilterChip
+              label={`Search: ${search.trim()}`}
+              onRemove={onClearSearch}
+            />
+          )}
+
+          {hasCategory && (
+            <FilterChip
+              label={`Category: ${
+                ArtworkCategoryLabels[
+                  category as keyof typeof ArtworkCategoryLabels
+                ] ?? category
+              }`}
+              onRemove={onClearCategory}
+            />
+          )}
+
+          <button
+            type="button"
+            onClick={onClearFilters}
+            className="ml-auto text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
+    </section>
+  );
+}

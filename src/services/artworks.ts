@@ -230,14 +230,18 @@ export type UpdateArtworkDTO = z.infer<typeof UpdateArtworkSchema>;
 export const artworksService = {
   getAll: () => get<Artwork[]>("/api/artworks/all"),
   //getById: (id: number) => get<Artwork>(`/api/artworks/${id}`),
-  getPaginated: ({ page, pageSize, search }: PaginatedRequest) => {
+  getPaginated: ({ page, pageSize, search, category }: PaginatedRequest) => {
     const params = new URLSearchParams({
       page: String(page),
       pageSize: String(pageSize),
     });
 
-    if (search && search.trim() !== "") {
+    if (search?.trim()) {
       params.set("search", search.trim());
+    }
+
+    if (category) {
+      params.set("category", category);
     }
 
     return get<PaginatedResult<Artwork>>(`/api/artworks?${params.toString()}`);
