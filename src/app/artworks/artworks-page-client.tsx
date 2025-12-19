@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { ArtworkCard } from "@/components/artworks/ArtworkCard";
@@ -49,6 +49,7 @@ export function ArtworksPageClient({
   const [category, setCategory] = useState<string>(initialCategory);
   const [search, setSearch] = useState(initialSearch);
   const debouncedSearch = useDebouncedValue(search, 400);
+  const prevDebouncedSearch = useRef(debouncedSearch);
 
   const apiCategory = category === ALL_CATEGORIES_VALUE ? undefined : category;
 
@@ -104,17 +105,6 @@ export function ArtworksPageClient({
     [debouncedSearch, category, page, pageSize, pathname, DEFAULT_PAGE_SIZE]
   );
 
-  // Search → reset page + replace URL (guarded)
-  useEffect(() => {
-    if (page !== 1) changePage(1);
-
-    const nextUrl = buildUrl({ search: debouncedSearch, page: 1 });
-    const currentQs = sp.toString();
-    const currentUrl = currentQs ? `${pathname}?${currentQs}` : pathname;
-
-    if (nextUrl !== currentUrl) router.replace(nextUrl);
-  }, [debouncedSearch, page, changePage, router, buildUrl, sp, pathname]);
-
   // Handlers (push URL for deliberate user actions)
   const onCategoryChange = (v: string) => {
     setCategory(v);
@@ -155,6 +145,23 @@ export function ArtworksPageClient({
     router.push(buildUrl({ pageSize: s, page: 1 }));
   };
 
+  // Search → reset page + replace URL (guarded)
+useEffect(() => {
+  const searchChanged = prevDebouncedSearch.current !== debouncedSearch;
+  prevDebouncedSearch.current = debouncedSearch;
+
+  if (!searchChanged) return; // ✅ don't run on pagination changes
+
+  // reset page on search change
+  if (page !== 1) changePage(1);
+
+  const nextUrl = buildUrl({ search: debouncedSearch, page: 1 });
+  const currentQs = sp.toString();
+  const currentUrl = currentQs ? `${pathname}?${currentQs}` : pathname;
+
+  if (nextUrl !== currentUrl) router.replace(nextUrl);
+}, [debouncedSearch, page, changePage, router, buildUrl, sp, pathname]);
+
   return (
     <>
       <div className="mb-2 space-y-2">
@@ -170,8 +177,8 @@ export function ArtworksPageClient({
         category={category}
         onCategoryChange={onCategoryChange}
         onClearFilters={onClearFilters}
+        onClearSearch={onClearSearch}
         onClearCategory={onClearCategory}
-        onClearFilters={onClearFilters}
       />
 
       {isLoading ? (
