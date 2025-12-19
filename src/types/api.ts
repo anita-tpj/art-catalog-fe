@@ -9,6 +9,7 @@ export interface PaginatedRequest {
   page: number;
   pageSize: number;
   search?: string;
+  category?: string;
 }
 
 export interface PaginatedResult<T> {
