@@ -3,19 +3,19 @@
 import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { ArtworkCard } from "@/features/artworks/components/ArtworkCard";
-import { ArtworkCardSkeleton } from "@/features/artworks/components/ArtworkCardSkeleton";
 import { ErrorState } from "@/components/ui/error-state";
 import { PageSizeSelector } from "@/components/ui/page-size-selector";
 import { Pagination } from "@/components/ui/pagination";
 
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
-import { usePaginatedArtworks } from "@/hooks/artworks/useArtworks";
 import { useTableParams } from "@/hooks/useTableParams";
 
+import { usePaginatedArtists } from "@/hooks/artists/useArtists";
+import { ArtistCardSkeleton } from "@/features/artists/components/ArtistCardSkeleton";
+import { ArtistCard } from "@/features/artists/components/ArtistCard";
 import { ALL_CATEGORIES_VALUE } from "@/services/artwork-category-options";
-import { ListingToolbar } from "@/features/listing/components/ListingToolbar";
 import { useListingUrlState } from "@/features/listing/hooks/useListingUrlState";
+import { ListingToolbar } from "@/features/listing/components/ListingToolbar";
 
 type Props = {
   initialSearch: string;
@@ -24,7 +24,7 @@ type Props = {
   initialPageSize: number;
 };
 
-export function ArtworksPageClient({
+export function ArtistsPageClient({
   initialSearch,
   initialCategory,
   initialPage,
@@ -47,11 +47,11 @@ export function ArtworksPageClient({
 
   const apiCategory = category === ALL_CATEGORIES_VALUE ? undefined : category;
 
-  const { data, isLoading, isError, error, refetch } = usePaginatedArtworks({
+  const { data, isLoading, isError, error, refetch } = usePaginatedArtists({
     page,
     pageSize,
     search: debouncedSearch || undefined,
-    category: apiCategory,
+    primaryCategory: apiCategory,
   });
 
   const items = data?.items ?? [];
@@ -72,15 +72,16 @@ export function ArtworksPageClient({
     changePageSize,
     defaultPageSize: DEFAULT_PAGE_SIZE,
     allCategoriesValue: ALL_CATEGORIES_VALUE,
-    keys: { categoryKey: "category" },
+    keys: { categoryKey: "primaryCategory" },
   });
 
   return (
     <>
       <div className="mb-2 space-y-2">
-        <h1 className="text-3xl font-semibold">Artworks</h1>
+        <h1 className="text-3xl font-semibold">Artists</h1>
         <p className="text-sm text-muted-foreground">
-          Browse the gallery. Use search + category to filter.
+          Browse artists. Use search to filter + primary artist&apos;s category
+          to filter.
         </p>
       </div>
 
@@ -97,23 +98,23 @@ export function ArtworksPageClient({
       {isLoading ? (
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: pageSize }).map((_, i) => (
-            <ArtworkCardSkeleton key={i} />
+            <ArtistCardSkeleton key={i} />
           ))}
         </div>
       ) : isError ? (
         <ErrorState
-          title="Couldn’t load artworks"
+          title="Couldn’t load artists"
           message={error instanceof Error ? error.message : "Please try again."}
           onRetry={() => refetch()}
         />
       ) : items.length === 0 ? (
         <div className="mt-10 rounded-lg border p-8 text-center text-sm text-muted-foreground">
-          No artworks found.
+          No artists found.
         </div>
       ) : (
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((artwork) => (
-            <ArtworkCard key={artwork.id} artwork={artwork} />
+          {items.map((artist) => (
+            <ArtistCard key={artist.id} artist={artist} />
           ))}
         </div>
       )}

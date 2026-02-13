@@ -19,7 +19,7 @@ import { TbTrashX } from "react-icons/tb";
 import { SearchEmptyState } from "@/components/ui/search-empty-state";
 import { SearchInput } from "@/components/ui/search-input";
 import { usePaginatedArtists } from "@/hooks/artists/useArtists";
-import { useDebouncedValue } from "@/hooks/artists/useDebouncedValue";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useRemoveArtist } from "@/hooks/artists/useRemoveArtist";
 import { useTableParams } from "@/hooks/useTableParams";
 
