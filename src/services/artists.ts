@@ -14,6 +14,7 @@ export interface Artist {
   avatarUrl: string | null;
   avatarPublicId: string | null;
   primaryCategory: ArtworkCategory;
+  artworksCount: number | null;
 }
 
 const optionalYear = z.preprocess(
@@ -31,7 +32,7 @@ const optionalYear = z.preprocess(
     .max(new Date().getFullYear(), {
       message: "Year cannot be in the future",
     })
-    .optional()
+    .optional(),
 );
 
 export const createArtistSchema = z.object({
@@ -79,7 +80,7 @@ export const artistsService = {
   //     `/api/artists?page=${page}&pageSize=${pageSize}`
   //   ),
 
-  getPaginated: ({ page, pageSize, search }: PaginatedRequest) => {
+  getPaginated: ({ page, pageSize, search, primaryCategory }: PaginatedRequest) => {
     const params = new URLSearchParams({
       page: String(page),
       pageSize: String(pageSize),
@@ -88,6 +89,8 @@ export const artistsService = {
     if (search && search.trim() !== "") {
       params.set("search", search.trim());
     }
+
+    if (primaryCategory) params.set("primaryCategory", primaryCategory);
 
     return get<PaginatedResult<Artist>>(`/api/artists?${params.toString()}`);
   },

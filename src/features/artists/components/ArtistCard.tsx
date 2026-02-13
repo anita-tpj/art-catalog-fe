@@ -1,27 +1,27 @@
-import { Artwork } from "@/services/artworks";
+import { Artist } from "@/services/artists";
+import { ArtworkCategoryLabels } from "@/services/artworks";
 import Image from "next/image";
 import Link from "next/link";
 
-interface ArtworkCardProps {
-  artwork: Artwork;
+interface ArtistCardProps {
+  artist: Artist;
 }
 
-export const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
+export const ArtistCard = ({ artist }: ArtistCardProps) => {
   return (
-    <Link href={`/artworks/${artwork.id}`} className="block focus:outline-none">
+    <Link href={`/artists/${artist.id}`} className="block focus:outline-none">
       <article
-        key={artwork.id}
         className="
-        group overflow-hidden rounded-2xl border bg-background
-        transition-all duration-200
-        hover:-translate-y-0.5 hover:shadow-md hover:border-muted-foreground/30
-      "
+          group overflow-hidden rounded-2xl border bg-background
+          transition-all duration-200
+          hover:-translate-y-0.5 hover:shadow-md hover:border-muted-foreground/30
+        "
       >
         <div className="relative aspect-4/3 bg-muted overflow-hidden">
-          {artwork.imageUrl ? (
+          {artist.avatarUrl ? (
             <Image
-              src={artwork.imageUrl}
-              alt={artwork.title}
+              src={artist.avatarUrl}
+              alt={artist.name}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
               sizes="(max-width: 1024px) 100vw, 33vw"
@@ -38,27 +38,27 @@ export const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
         <div className="space-y-2 p-4">
           <div className="flex items-start justify-between gap-3">
             <h3 className="line-clamp-2 text-base font-semibold leading-snug group-hover:underline underline-offset-4">
-              {artwork.title}
+              {artist.name}
             </h3>
-            {artwork.year ? (
+
+            {artist.primaryCategory ? (
+              <span className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
+                {ArtworkCategoryLabels[artist.primaryCategory]}
+              </span>
+            ) : null}
+
+            {typeof artist.artworksCount === "number" ? (
               <span className="shrink-0 text-xs text-muted-foreground">
-                {artwork.year}
+                {artist.artworksCount}
               </span>
             ) : null}
           </div>
 
-          <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-            {artwork.category ? (
-              <span className="rounded-full border px-2 py-0.5">
-                {artwork.category}
-              </span>
-            ) : null}
-            {artwork.artist ? (
-              <span className="rounded-full border px-2 py-0.5">
-                {artwork.artist.name}
-              </span>
-            ) : null}
-          </div>
+          {artist.bio ? (
+            <p className="line-clamp-2 text-sm text-muted-foreground">
+              {artist.bio}
+            </p>
+          ) : null}
         </div>
       </article>
     </Link>

@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MdArrowBack } from "react-icons/md";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
 import type { Artwork } from "@/services/artworks";
 import {
@@ -13,39 +13,14 @@ import {
   ArtworkOrientationLabels,
   ArtworkStandardSizeLabels,
 } from "@/services/artworks";
+import { parseIdOrNotFound } from "@/lib/utils";
+import { getById } from "@/lib/api-client";
 
 export const revalidate = 60;
 
 type PageProps = { params: Promise<{ id: string }> };
 
 type DetailItem = { label: string; value: string };
-
-function parseIdOrNotFound(idParam: string) {
-  const id = Number(idParam);
-  if (!Number.isFinite(id)) notFound();
-  return id;
-}
-
-function getApiBaseUrlOrThrow() {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "");
-  if (!base) {
-    throw new Error("NEXT_PUBLIC_API_BASE_URL is not set");
-  }
-  return base;
-}
-
-async function fetchArtworkOrNull(id: number): Promise<Artwork | null> {
-  const apiBase = getApiBaseUrlOrThrow();
-  const url = `${apiBase}/api/artworks/${id}`;
-
-  const res = await fetch(url, {
-    next: { revalidate },
-    headers: { accept: "application/json" },
-  });
-
-  if (!res.ok) return null;
-  return (await res.json()) as Artwork;
-}
 
 function getArtistName(artwork: Artwork) {
   return artwork.artist?.name ?? "Unknown artist";
@@ -97,28 +72,37 @@ export async function generateMetadata({ params }: PageProps) {
   const id = Number(idParam);
   if (!Number.isFinite(id)) return { title: "Artwork not found" };
 
-  const artwork = await fetchArtworkOrNull(id);
-  if (!artwork) return { title: "Artwork not found" };
+  try {
+    const artwork = await getById<Artwork>("/api/artworks", id, { revalidate });
+    const title = `${artwork.title} — ${artwork.artist?.name ?? "Unknown artist"}`;
 
-  const title = `${artwork.title} — ${artwork.artist.name}`;
-
-  return {
-    title,
-    description: artwork.description ?? undefined,
-    openGraph: {
+    return {
       title,
       description: artwork.description ?? undefined,
-      images: artwork.imageUrl ? [{ url: artwork.imageUrl }] : undefined,
-    },
-  };
+      openGraph: {
+        title,
+        description: artwork.description ?? undefined,
+        images: artwork.imageUrl ? [{ url: artwork.imageUrl }] : undefined,
+      },
+    };
+  } catch {
+    return { title: "Artwork not found" };
+  }
 }
 
 export default async function ArtworkDetailPage({ params }: PageProps) {
   const { id: idParam } = await params;
   const id = parseIdOrNotFound(idParam);
 
-  const artwork = await fetchArtworkOrNull(id);
-  if (!artwork) notFound();
+  let artwork: Artwork;
+
+  try {
+    artwork = await getById<Artwork>("/api/artworks", id, {
+      revalidate: 60,
+    });
+  } catch {
+    notFound();
+  }
 
   const subtitle = getSubtitle(artwork);
   const details = getDetails(artwork);
@@ -213,12 +197,15 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
                 Contact about this artwork
               </Link>
 
-              <Link
-                className="inline-flex h-10 items-center justify-center rounded-md border px-4 text-sm font-medium"
-                href="/artworks"
-              >
-                View all artworks
-              </Link>
+              {artwork.artistId ? (
+                <Link
+                  href={`/artists/${artwork.artistId}`}
+                  className="inline-flex h-10 items-center gap-0.5 justify-center rounded-md border px-4 text-sm font-medium"
+                >
+                  More from this artist
+                  <MdArrowForward />
+                </Link>
+              ) : null}
             </div>
           </div>
         </aside>

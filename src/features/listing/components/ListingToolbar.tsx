@@ -21,7 +21,7 @@ type Props = {
   onClearFilters: () => void;
 };
 
-export function ArtworksToolbar({
+export function ListingToolbar({
   search,
   onSearchChange,
   onClearSearch,

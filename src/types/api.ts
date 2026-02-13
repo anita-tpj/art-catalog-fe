@@ -10,6 +10,8 @@ export interface PaginatedRequest {
   pageSize: number;
   search?: string;
   category?: string;
+  artistId?: number;
+  primaryCategory?: string;
 }
 
 export interface PaginatedResult<T> {
