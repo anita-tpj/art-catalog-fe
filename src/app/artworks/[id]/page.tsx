@@ -15,6 +15,7 @@ import {
 } from "@/services/artworks";
 import { parseIdOrNotFound } from "@/lib/utils";
 import { getById } from "@/lib/api-client";
+import { Button } from "@/components/ui/button";
 
 export const revalidate = 60;
 
@@ -188,23 +189,27 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <Link
-                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
-                href={`/contact?artworkId=${encodeURIComponent(
-                  String(artwork.id),
-                )}`}
-              >
-                Contact about this artwork
-              </Link>
+              <Button asChild>
+                <Link
+                  className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
+                  href={`/contact?artworkId=${encodeURIComponent(
+                    String(artwork.id),
+                  )}&from=artwork`}
+                >
+                  Contact about this artwork
+                </Link>
+              </Button>
 
               {artwork.artistId ? (
-                <Link
-                  href={`/artists/${artwork.artistId}`}
-                  className="inline-flex h-10 items-center gap-0.5 justify-center rounded-md border px-4 text-sm font-medium"
-                >
-                  More from this artist
-                  <MdArrowForward />
-                </Link>
+                <Button asChild variant="outline">
+                  <Link
+                    href={`/artists/${artwork.artistId}`}
+                    className="inline-flex h-10 items-center gap-0.5 justify-center rounded-md border px-4 text-sm font-medium"
+                  >
+                    More from this artist
+                    <MdArrowForward />
+                  </Link>
+                </Button>
               ) : null}
             </div>
           </div>

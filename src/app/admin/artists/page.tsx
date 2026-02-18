@@ -21,10 +21,10 @@ import { SearchInput } from "@/components/ui/search-input";
 import { usePaginatedArtists } from "@/hooks/artists/useArtists";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useRemoveArtist } from "@/hooks/artists/useRemoveArtist";
-import { useTableParams } from "@/hooks/useTableParams";
+import { usePaginationState } from "@/hooks/usePaginationState";
 
 export default function AdminArtistsPage() {
-  const { page, pageSize, changePage, changePageSize } = useTableParams(10);
+  const { page, pageSize, changePage, changePageSize } = usePaginationState(10);
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 400);
