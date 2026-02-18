@@ -14,6 +14,7 @@ import {
 } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useUpdateInquiryStatus } from "@/hooks/inquiries/useUpdateStatusInquiryStatus";
+import toast from "react-hot-toast";
 
 type Props = {
   initialInquiry: Inquiry;
@@ -63,6 +64,16 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
     }
   }, [inquiry.createdAt]);
 
+  const statusPill =
+    inquiry.status === "NEW"
+      ? "border-primary/30 bg-primary/10 text-primary"
+      : "text-muted-foreground";
+
+  async function setStatus(next: InquiryStatus) {
+    await updateStatus({ id: inquiry.id, status: next });
+    setInquiry((prev) => ({ ...prev, status: next }));
+  }
+
   // auto mark READ if NEW
   useEffect(() => {
     if (inquiry.status !== "NEW") return;
@@ -71,16 +82,6 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
       .then(() => setInquiry((prev) => ({ ...prev, status: "READ" })))
       .catch(() => {});
   }, [inquiry.id, inquiry.status, updateStatus]);
-
-  async function setStatus(next: InquiryStatus) {
-    await updateStatus({ id: inquiry.id, status: next });
-    setInquiry((prev) => ({ ...prev, status: next }));
-  }
-
-  const statusPill =
-    inquiry.status === "NEW"
-      ? "border-primary/30 bg-primary/10 text-primary"
-      : "text-muted-foreground";
 
   return (
     <div>
@@ -115,11 +116,18 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
 
                 {/* Copy email */}
                 <Button
-                  type="button"
                   variant="link"
                   size="xs"
-                  title="Copy email"
-                  onClick={() => navigator.clipboard.writeText(inquiry.email)}
+                  title="Copy"
+                  onClick={async () => {
+                    navigator.clipboard.writeText(inquiry.email);
+                    try {
+                      await navigator.clipboard.writeText(inquiry.email);
+                      toast.success("Email copied");
+                    } catch {
+                      toast.error("Couldn’t copy email");
+                    }
+                  }}
                 >
                   <MdOutlineContentCopy size="20" />
                 </Button>
@@ -134,6 +142,7 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                     await setStatus("NEW");
                     router.push("/admin/inquiries");
                     router.refresh();
+                    toast.success("Marked as unread");
                   }}
                 >
                   <MdOutlineMarkEmailUnread size="20" />
@@ -150,6 +159,7 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                     await setStatus("ARCHIVED");
                     router.push("/admin/inquiries");
                     router.refresh();
+                    toast.success("Marked as archived");
                   }}
                 >
                   <MdOutlineArchive size="20" />
