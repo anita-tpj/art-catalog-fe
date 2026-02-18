@@ -14,6 +14,7 @@ import { PiEnvelopeSimpleOpen } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { useInquiryStats } from "@/hooks/inquiries/useInquiryStats";
 import { useUpdateInquiryStatus } from "@/hooks/inquiries/useUpdateStatusInquiryStatus";
+import toast from "react-hot-toast";
 
 type Props = {
   initialSearch: string;
@@ -69,6 +70,15 @@ export function InquiriesPageClient({
   const { mutateAsync: updateStatus, isPending: isUpdating } =
     useUpdateInquiryStatus();
 
+  const emptyMessage =
+    status === "NEW"
+      ? "No new inquiries."
+      : status === "READ"
+        ? "No read inquiries."
+        : status === "ARCHIVED"
+          ? "No archived inquiries."
+          : "No inquiries yet.";
+
   return (
     <>
       <div className="mb-2 space-y-2">
@@ -102,7 +112,7 @@ export function InquiriesPageClient({
         />
       ) : items.length === 0 ? (
         <div className="mt-10 rounded-2xl border p-8 text-center text-sm text-muted-foreground">
-          No inquiries found.
+          {emptyMessage}
         </div>
       ) : (
         <div className="mt-6 space-y-3">
@@ -161,9 +171,11 @@ export function InquiriesPageClient({
                       <Button
                         variant="link"
                         disabled={isUpdating}
-                        onClick={() =>
-                          updateStatus({ id: i.id, status: "READ" })
-                        }
+                        title="Mark as read"
+                        onClick={() => {
+                          updateStatus({ id: i.id, status: "READ" });
+                          toast.success("Marked as read");
+                        }}
                       >
                         <PiEnvelopeSimpleOpen size="20" />
                       </Button>
@@ -173,15 +185,17 @@ export function InquiriesPageClient({
                       <Button
                         variant="link"
                         disabled={isUpdating}
-                        onClick={() =>
-                          updateStatus({ id: i.id, status: "ARCHIVED" })
-                        }
+                        title="Mark as archived"
+                        onClick={() => {
+                          updateStatus({ id: i.id, status: "ARCHIVED" });
+                          toast.success("Marked as archived");
+                        }}
                       >
                         <MdOutlineArchive size="20" />
                       </Button>
                     )}
 
-                    <Link href={`/admin/inquiries/${i.id}`}>
+                    <Link title="Open" href={`/admin/inquiries/${i.id}`}>
                       <MdArrowForward size="20" />
                     </Link>
                   </div>
