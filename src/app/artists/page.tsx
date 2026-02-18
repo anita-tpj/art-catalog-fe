@@ -34,7 +34,7 @@ export default async function ArtistsPage({ searchParams }: PageProps) {
   const initialSearch = sp.search ?? "";
   const initialCategory = sp.primaryCategory ?? ALL_CATEGORIES_VALUE;
   const initialPage = toPositiveInt(sp.page, 1);
-  const initialPageSize = toPositiveInt(sp.pageSize, 12);
+  const initialPageSize = toPositiveInt(sp.pageSize, 6);
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">

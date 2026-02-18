@@ -8,7 +8,7 @@ import { PageSizeSelector } from "@/components/ui/page-size-selector";
 import { Pagination } from "@/components/ui/pagination";
 
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
-import { useTableParams } from "@/hooks/useTableParams";
+import { usePaginationState } from "@/hooks/usePaginationState";
 
 import { usePaginatedArtists } from "@/hooks/artists/useArtists";
 import { ArtistCardSkeleton } from "@/features/artists/components/ArtistCardSkeleton";
@@ -36,7 +36,7 @@ export function ArtistsPageClient({
 
   const DEFAULT_PAGE_SIZE = 6;
 
-  const { page, pageSize, changePage, changePageSize } = useTableParams({
+  const { page, pageSize, changePage, changePageSize } = usePaginationState({
     page: initialPage,
     pageSize: initialPageSize,
   });

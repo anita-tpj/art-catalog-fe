@@ -11,7 +11,7 @@ import { Pagination } from "@/components/ui/pagination";
 
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { usePaginatedArtworks } from "@/hooks/artworks/useArtworks";
-import { useTableParams } from "@/hooks/useTableParams";
+import { usePaginationState } from "@/hooks/usePaginationState";
 
 import { ALL_CATEGORIES_VALUE } from "@/services/artwork-category-options";
 import { ListingToolbar } from "@/features/listing/components/ListingToolbar";
@@ -36,7 +36,7 @@ export function ArtworksPageClient({
 
   const DEFAULT_PAGE_SIZE = 6;
 
-  const { page, pageSize, changePage, changePageSize } = useTableParams({
+  const { page, pageSize, changePage, changePageSize } = usePaginationState({
     page: initialPage,
     pageSize: initialPageSize,
   });

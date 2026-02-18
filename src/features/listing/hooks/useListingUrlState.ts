@@ -132,7 +132,7 @@ export function useListingUrlState({
   const onClearFilters = () => {
     setSearch("");
     setCategory(allCategoriesValue);
-    changePageSize(defaultPageSize); // implies page=1 in your useTableParams
+    changePageSize(defaultPageSize); // implies page=1 in your usePaginationState
     router.push(pathname); // clean URL
   };
 

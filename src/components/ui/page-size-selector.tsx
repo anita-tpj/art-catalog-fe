@@ -12,7 +12,7 @@ interface PageSizeSelectorProps {
 export function PageSizeSelector({
   value,
   onChange,
-  options = [1, 2, 5],
+  options = [6, 12, 24, 48, 96],
 }: PageSizeSelectorProps) {
   return (
     <div className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400">

@@ -33,7 +33,7 @@ export default async function ArtworksPage({ searchParams }: PageProps) {
   const initialSearch = sp.search ?? "";
   const initialCategory = sp.category ?? ALL_CATEGORIES_VALUE;
   const initialPage = toPositiveInt(sp.page, 1);
-  const initialPageSize = toPositiveInt(sp.pageSize, 5);
+  const initialPageSize = toPositiveInt(sp.pageSize, 6);
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">

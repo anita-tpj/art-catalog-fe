@@ -8,6 +8,7 @@ import type { Artist } from "@/services/artists";
 import { ArtworkCategoryLabels } from "@/services/artworks";
 import { parseIdOrNotFound } from "@/lib/utils";
 import { get, getById } from "@/lib/api-client";
+import { Button } from "@/components/ui/button";
 
 export const revalidate = 60;
 
@@ -189,19 +190,23 @@ export default async function ArtistDetailPage({ params }: PageProps) {
           )}
 
           <div className="flex flex-col gap-2 sm:flex-row">
-            <Link
-              className="inline-flex h-10 items-center justify-center rounded-md bg-primary text-sm font-medium text-primary-foreground"
-              href={`/contact?artistId=${encodeURIComponent(String(id))}`}
-            >
-              Contact about this artist
-            </Link>
+            <Button asChild>
+              <Link
+                className="inline-flex h-10 items-center justify-center text-sm font-medium text-primary-foreground"
+                href={`/contact?artistId=${encodeURIComponent(String(id))}&from=artist`}
+              >
+                Contact about this artist
+              </Link>
+            </Button>
 
-            <Link
-              className="inline-flex h-10 items-center justify-center rounded-md border px-4 text-sm font-medium"
-              href={`/artworks?search=${encodeURIComponent(artist.name)}`}
-            >
-              View related artworks
-            </Link>
+            <Button asChild variant="outline">
+              <Link
+                className="inline-flex h-10 items-center justify-center text-sm font-medium"
+                href={`/artworks?search=${encodeURIComponent(artist.name)}`}
+              >
+                View related artworks
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

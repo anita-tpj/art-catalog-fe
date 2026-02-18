@@ -3,9 +3,10 @@
 import { useCallback, useState } from "react";
 type Init = number | { page?: number; pageSize?: number };
 
-export function useTableParams(init: Init = 10) {
-  const initialPageSize = typeof init === "number" ? init : init.pageSize ?? 10;
-  const initialPage = typeof init === "number" ? 1 : init.page ?? 1;
+export function usePaginationState(init: Init = 10) {
+  const initialPageSize =
+    typeof init === "number" ? init : (init.pageSize ?? 10);
+  const initialPage = typeof init === "number" ? 1 : (init.page ?? 1);
 
   const [page, setPage] = useState(initialPage);
   const [pageSize, setPageSize] = useState(initialPageSize);
@@ -18,4 +19,3 @@ export function useTableParams(init: Init = 10) {
 
   return { page, pageSize, changePage, changePageSize };
 }
-

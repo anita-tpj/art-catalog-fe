@@ -20,10 +20,10 @@ import { SearchInput } from "@/components/ui/search-input";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { usePaginatedArtworks } from "@/hooks/artworks/useArtworks";
 import { useRemoveArtwork } from "@/hooks/artworks/useRemoveArtwork";
-import { useTableParams } from "@/hooks/useTableParams";
+import { usePaginationState } from "@/hooks/usePaginationState";
 
 export default function AdminArtworksPage() {
-  const { page, pageSize, changePage, changePageSize } = useTableParams(10);
+  const { page, pageSize, changePage, changePageSize } = usePaginationState(10);
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search, 400);
