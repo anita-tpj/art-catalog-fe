@@ -9,7 +9,7 @@ const items = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/artworks", label: "Artworks" },
   { href: "/admin/artists", label: "Artists" },
-  { href: "/admin/inquiries", label: "Admin" },
+  { href: "/admin/inquiries", label: "Inbox" },
   // later: categories, settings...
 ];
 
