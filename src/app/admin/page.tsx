@@ -1,18 +1,27 @@
-import { Card } from "@/components/ui/card";
+"use client";
+
+import { AdminDashboardStats } from "@/features/admin/components/AdminDashboardStats";
+import { useDashboardStats } from "@/hooks/admin/useDashboardStats";
 
 export default function AdminDashboardPage() {
+  const { data, isLoading, isError, error } = useDashboardStats();
+
   return (
     <section className="space-y-4">
-      <h1 className="text-2xl font-semibold tracking-tight">Admin dashboard</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
-        Quick overview of your catalog.
+        Overview of activity and content.
       </p>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>Artworks count (soon)</Card>
-        <Card>Artists count (soon)</Card>
-        <Card>Categories count (soon)</Card>
-      </div>
+      {isError ? (
+        <div className="rounded-2xl border p-4 text-sm text-muted-foreground">
+          {error instanceof Error
+            ? error.message
+            : "Failed to load dashboard stats."}
+        </div>
+      ) : (
+        <AdminDashboardStats data={data} isLoading={isLoading} />
+      )}
     </section>
   );
 }
