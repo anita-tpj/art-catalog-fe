@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui";
+import { Input } from "@/components/ui";
 
 type TextInputFieldProps = {
   label: string;
@@ -15,7 +15,7 @@ export const TextInputField = React.forwardRef<
   TextInputFieldProps
 >(function TextInputField(
   { label, error, containerClassName, id, ...inputProps },
-  ref
+  ref,
 ) {
   const inputId = id ?? inputProps.name;
 

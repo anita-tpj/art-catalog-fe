@@ -1,10 +1,9 @@
+import { Inquiry } from "@/features/inquiries/types";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
-import type { Inquiry } from "@/services/inquiries";
-import { InquiryDetailClient } from "./inquiry-detail-client";
 import { MdArrowBack } from "react-icons/md";
+import { InquiryDetailClient } from "./inquiry-detail-client";
 
 export const dynamic = "force-dynamic"; // admin → always fresh
 

@@ -4,24 +4,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { ResponsiveList } from "@/components/admin/ResponsiveList";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import { EmptyState } from "@/components/ui/empty-state";
-import { PageSizeSelector } from "@/components/ui/page-size-selector";
-import { Pagination } from "@/components/ui/pagination";
+import { Button } from "@/components/ui";
+import { Card } from "@/components/ui";
+import { ConfirmDialog } from "@/components/ui";
+import { EmptyState } from "@/components/ui";
+import { PageSizeSelector } from "@/components/ui";
+import { Pagination } from "@/components/ui";
 
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineAdd } from "react-icons/md";
 import { TbTrashX } from "react-icons/tb";
 
-import { SearchEmptyState } from "@/components/ui/search-empty-state";
-import { SearchInput } from "@/components/ui/search-input";
-import { usePaginatedArtists } from "@/hooks/artists/useArtists";
+import { SearchEmptyState } from "@/components/ui";
+import { SearchInput } from "@/components/ui";
+import { AdminResponsiveList } from "@/features/admin";
+import { useRemoveArtist } from "@/features/artists/hooks/useRemoveArtist";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
-import { useRemoveArtist } from "@/hooks/artists/useRemoveArtist";
 import { usePaginationState } from "@/hooks/usePaginationState";
+import { usePaginatedArtists } from "@/features/artists/hooks/useArtists";
 
 export default function AdminArtistsPage() {
   const { page, pageSize, changePage, changePageSize } = usePaginationState(10);
@@ -99,7 +99,7 @@ export default function AdminArtistsPage() {
       ) : (
         <>
           {/* ===== Responsive table/cards ===== */}
-          <ResponsiveList
+          <AdminResponsiveList
             items={items}
             isLoading={isLoading}
             loadingContent={

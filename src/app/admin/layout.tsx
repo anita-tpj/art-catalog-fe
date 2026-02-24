@@ -1,6 +1,6 @@
+import { AdminMobileNav } from "@/features/admin/components/AdminMobileNav";
+import { AdminSidebar } from "@/features/admin/components/AdminSidebar";
 import { PropsWithChildren } from "react";
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
-import { AdminMobileNav } from "@/components/admin/AdminMobileNav";
 
 export default function AdminLayout({ children }: PropsWithChildren) {
   return (

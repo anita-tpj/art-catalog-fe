@@ -1,14 +1,14 @@
 "use client";
 
 import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui";
 import {
   getYearOptions,
   DEFAULT_MIN_YEAR,

@@ -12,11 +12,9 @@ export default async function ContactPage({ searchParams }: PageProps) {
   const artistId = sp.artistId ? Number(sp.artistId) : undefined;
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-8">
-      <ContactPageClient
-        artworkId={Number.isFinite(artworkId) ? artworkId : undefined}
-        artistId={Number.isFinite(artistId) ? artistId : undefined}
-      />
-    </main>
+    <ContactPageClient
+      artworkId={Number.isFinite(artworkId) ? artworkId : undefined}
+      artistId={Number.isFinite(artistId) ? artistId : undefined}
+    />
   );
 }

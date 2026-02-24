@@ -1,21 +1,20 @@
 // app/artworks/[id]/page.tsx
+import { Button } from "@/components/ui";
+import {
+  Artwork,
+  ArtworkCategoryLabels,
+  ArtworkMotiveLabels,
+  ArtworkOrientationLabels,
+  ArtworkStandardSizeLabels,
+  ArtworkStyleLabels,
+  ArtworkTechniqueLabels,
+} from "@/features/artworks/types";
+import { getById } from "@/lib/api-client";
+import { parseIdOrNotFound } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
-
-import type { Artwork } from "@/services/artworks";
-import {
-  ArtworkCategoryLabels,
-  ArtworkTechniqueLabels,
-  ArtworkStyleLabels,
-  ArtworkMotiveLabels,
-  ArtworkOrientationLabels,
-  ArtworkStandardSizeLabels,
-} from "@/services/artworks";
-import { parseIdOrNotFound } from "@/lib/utils";
-import { getById } from "@/lib/api-client";
-import { Button } from "@/components/ui/button";
 
 export const revalidate = 60;
 

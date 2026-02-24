@@ -1,8 +1,8 @@
 "use client";
 
-import { ArtistFormLayout } from "@/components/admin/artists/ArtistFormLayout";
-import { useCreateArtist } from "@/hooks/artists/useCreateArtist";
-import { CreateArtistDTO, createArtistSchema } from "@/services/artists";
+import { ArtistFormLayout } from "@/features/artists/components/admin/ArtistFormLayout";
+import { useCreateArtist } from "@/features/artists/hooks/useCreateArtist";
+import { CreateArtistDTO, createArtistSchema } from "@/features/artists/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 

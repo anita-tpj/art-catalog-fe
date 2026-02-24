@@ -1,6 +1,6 @@
+import { toPositiveInt } from "@/lib/utils";
 import type { Metadata } from "next";
 import { InquiriesPageClient } from "./inquiries-page-client";
-import { toPositiveInt } from "@/lib/utils";
 
 type PageProps = {
   searchParams: Promise<Record<string, string | undefined>>;

@@ -1,11 +1,9 @@
 "use client";
 
-import { SearchInput } from "@/components/ui/search-input";
+import { Button } from "@/components/ui";
+import { SearchInput } from "@/components/ui";
 import clsx from "clsx";
-import type { InquiryStats, InquiryStatus } from "@/services/inquiries";
-import { Button } from "@/components/ui/button";
-
-export type InboxStatus = InquiryStatus | "ALL";
+import { InboxStatus, InquiryStats } from "../types";
 
 type Props = {
   status: InboxStatus;

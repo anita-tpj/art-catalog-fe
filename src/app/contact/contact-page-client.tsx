@@ -1,26 +1,39 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { artworksService } from "@/services/artworks";
-import { artistsService } from "@/services/artists";
-import { inquiriesService } from "@/services/inquiries";
-import { Button } from "@/components/ui/button";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Button } from "@/components/ui";
+import { Card } from "@/components/ui";
+import { TextInputField } from "@/components/ui";
+import { TextareaField } from "@/components/ui";
+
+import { artistsService } from "@/features/artists";
+import { artworksService } from "@/features/artworks";
+import { inquiriesService } from "@/features/inquiries";
 
 type Props = {
   artworkId?: number;
   artistId?: number;
 };
 
-export function ContactPageClient({ artworkId, artistId }: Props) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+const contactSchema = z.object({
+  name: z.string().min(1, "Name is required").max(120, "Name is too long"),
+  email: z.string().min(1, "Email is required").email("Enter a valid email"),
+  message: z
+    .string()
+    .min(10, "Message is too short")
+    .max(4000, "Message is too long"),
+});
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+type ContactFormValues = z.infer<typeof contactSchema>;
+
+export function ContactPageClient({ artworkId, artistId }: Props) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -51,72 +64,90 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
       ? `/artists/${artistId}`
       : "/";
 
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
+    mode: "onTouched",
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    getValues,
+    setValue,
+    reset,
+  } = form;
+
   // Prefill message once (don’t overwrite user typing)
   useEffect(() => {
     if (!contextLine) return;
-    setMessage((prev) => {
-      if (prev.trim()) return prev;
-      return `Hi,\n\nI’m interested in ${contextLine}.\nCould you share availability and pricing?\n\nThanks!`;
-    });
-  }, [contextLine]);
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+    const current = getValues("message");
+    if (current.trim()) return;
 
+    setValue(
+      "message",
+      `Hi,\n\nI’m interested in ${contextLine}.\nCould you share availability and pricing?\n\nThanks!`,
+      { shouldDirty: false, shouldTouch: false, shouldValidate: false },
+    );
+  }, [contextLine, getValues, setValue]);
+
+  const onSubmit = handleSubmit(async (values) => {
     setSubmitError(null);
-    setIsSubmitting(true);
 
     try {
       await inquiriesService.create({
-        name,
-        email,
-        message,
+        ...values,
         artworkId,
         artistId,
       });
 
       setIsSuccess(true);
-      // optional: clear fields
-      // setName(""); setEmail(""); setMessage("");
+
+      // optional: clear for another message
+      // reset({ name: "", email: "", message: "" });
     } catch (err) {
       const msg =
         err instanceof Error
           ? err.message
           : "Something went wrong. Please try again.";
       setSubmitError(msg);
-    } finally {
-      setIsSubmitting(false);
     }
-  }
+  });
 
   return (
-    <>
-      <div className="mb-6">
+    <section className="space-y-6">
+      <header className="space-y-1">
         <h1 className="text-3xl font-semibold">Contact</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Send an inquiry and we’ll get back to you.
         </p>
+      </header>
 
-        {contextLine ? (
-          <div className="mt-4 rounded-2xl border p-4 text-sm">
-            <div className="font-medium">Regarding</div>
-            <div className="text-muted-foreground">{contextLine}</div>
+      {contextLine ? (
+        <Card className="rounded-2xl p-4">
+          <div className="text-sm font-medium">Regarding</div>
+          <div className="text-sm text-muted-foreground">{contextLine}</div>
 
-            <div className="mt-2">
-              <Link
-                className="text-sm underline underline-offset-4 flex items-center gap-0.5"
-                href={backHref}
-              >
-                View related page
-                <MdArrowForward />
-              </Link>
-            </div>
+          <div className="mt-2">
+            <Link
+              className="inline-flex items-center gap-1 text-sm underline underline-offset-4"
+              href={backHref}
+            >
+              View related page
+              <MdArrowForward />
+            </Link>
           </div>
-        ) : null}
-      </div>
+        </Card>
+      ) : null}
 
       {isSuccess ? (
-        <div className="rounded-2xl border p-6">
+        <Card className="rounded-2xl p-6">
           <div className="text-lg font-semibold">Inquiry sent ✅</div>
           <p className="mt-1 text-sm text-muted-foreground">
             Thanks! We received your message and will get back to you soon.
@@ -124,77 +155,65 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
 
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <Button asChild variant="outline">
-              <Link
-                href={backHref}
-                className="inline-flex h-10 items-center gap-0.5 justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground"
-              >
+              <Link href={backHref} className="inline-flex items-center gap-1">
                 <MdArrowBack />
                 Back
               </Link>
             </Button>
 
             <Button asChild>
-              <Link
-                href="/artworks"
-                className="inline-flex h-10 items-center justify-center rounded-md border px-4 text-sm font-medium"
-              >
-                Browse artworks
-              </Link>
+              <Link href="/artworks">Browse artworks</Link>
             </Button>
           </div>
-        </div>
+        </Card>
       ) : (
-        <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border p-6">
-          <div className="space-y-1">
-            <label className="text-sm font-medium">Name</label>
-            <input
-              className="h-10 w-full rounded-md border bg-background px-3 text-sm"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
+        <Card className="rounded-2xl p-6">
+          <form onSubmit={onSubmit} className="space-y-4" noValidate>
+            <TextInputField
+              label="Name"
+              placeholder="Your name"
+              error={errors.name?.message}
               disabled={isSubmitting}
+              {...register("name")}
             />
-          </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium">Email</label>
-            <input
-              className="h-10 w-full rounded-md border bg-background px-3 text-sm"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+            <TextInputField
+              label="Email"
+              placeholder="you@example.com"
               type="email"
-              required
+              error={errors.email?.message}
               disabled={isSubmitting}
+              {...register("email")}
             />
-          </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium">Message</label>
-            <textarea
-              className="min-h-[140px] w-full rounded-md border bg-background px-3 py-2 text-sm"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              required
+            <TextareaField
+              label="Message"
+              placeholder="Write your message…"
+              rows={6}
+              error={errors.message?.message}
               disabled={isSubmitting}
+              {...register("message")}
             />
-          </div>
 
-          {submitError ? (
-            <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-950/40 dark:text-red-200">
-              {submitError}
+            {submitError ? (
+              <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-950/40 dark:text-red-200">
+                {submitError}
+              </div>
+            ) : null}
+
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Sending…" : "Send inquiry"}
+              </Button>
+
+              <p className="text-xs text-muted-foreground">
+                By sending this inquiry, you agree we may contact you back via
+                email.
+              </p>
             </div>
-          ) : null}
-
-          <Button disabled={isSubmitting}>
-            {isSubmitting ? "Sending…" : "Send inquiry"}
-          </Button>
-
-          <p className="text-xs text-muted-foreground">
-            By sending this inquiry, you agree we may contact you back via
-            email.
-          </p>
-        </form>
+          </form>
+        </Card>
       )}
-    </>
+    </section>
   );
 }

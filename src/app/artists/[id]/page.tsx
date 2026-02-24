@@ -1,23 +1,17 @@
 // app/artists/[id]/page.tsx
+import { Button } from "@/components/ui";
+import { Artist } from "@/features/artists/types";
+import { ArtworkCategoryLabels } from "@/features/artworks/types";
+import { get, getById } from "@/lib/api-client";
+import { parseIdOrNotFound } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
-import type { Artist } from "@/services/artists";
-import { ArtworkCategoryLabels } from "@/services/artworks";
-import { parseIdOrNotFound } from "@/lib/utils";
-import { get, getById } from "@/lib/api-client";
-import { Button } from "@/components/ui/button";
-
 export const revalidate = 60;
 
 type PageProps = { params: Promise<{ id: string }> };
-
-type PaginatedResult<T> = {
-  items: T[];
-  total: number;
-};
 
 type ArtworkCardItem = {
   id: number;

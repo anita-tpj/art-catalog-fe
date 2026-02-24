@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 import {
-  TriangleLeftIcon,
-  TriangleRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
+  TriangleLeftIcon,
+  TriangleRightIcon,
 } from "@radix-ui/react-icons";
 
 interface PaginationProps {

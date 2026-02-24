@@ -1,13 +1,13 @@
 "use client";
 
-import { CategorySelect } from "@/components/ui/category-select";
-import { SearchInput } from "@/components/ui/search-input";
-import { FilterChip } from "@/components/ui/filter-chip";
+import { CategorySelect } from "@/components/ui";
+import { FilterChip } from "@/components/ui";
+import { SearchInput } from "@/components/ui";
+import { ArtworkCategoryLabels } from "@/features/artworks/types";
 import {
   ALL_CATEGORIES_VALUE,
   artworkCategoryOptions,
-} from "@/services/artwork-category-options";
-import { ArtworkCategoryLabels } from "@/services/artworks";
+} from "../services/artwork-category-options";
 
 type Props = {
   search: string;

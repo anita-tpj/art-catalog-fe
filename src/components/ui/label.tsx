@@ -1,6 +1,6 @@
-import * as React from "react";
-import * as RadixLabel from "@radix-ui/react-label";
 import { cn } from "@/lib/utils";
+import * as RadixLabel from "@radix-ui/react-label";
+import * as React from "react";
 
 export const Label = React.forwardRef<
   React.ElementRef<typeof RadixLabel.Root>,
@@ -10,7 +10,7 @@ export const Label = React.forwardRef<
     ref={ref}
     className={cn(
       "text-sm font-medium text-zinc-700 dark:text-zinc-300",
-      className
+      className,
     )}
     {...props}
   />

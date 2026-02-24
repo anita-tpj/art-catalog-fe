@@ -1,12 +1,11 @@
 "use client";
 
-import { ResponsiveList } from "@/components/admin/ResponsiveList";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import { EmptyState } from "@/components/ui/empty-state";
-import { PageSizeSelector } from "@/components/ui/page-size-selector";
-import { Pagination } from "@/components/ui/pagination";
+import { Button } from "@/components/ui";
+import { Card } from "@/components/ui";
+import { ConfirmDialog } from "@/components/ui";
+import { EmptyState } from "@/components/ui";
+import { PageSizeSelector } from "@/components/ui";
+import { Pagination } from "@/components/ui";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -15,11 +14,12 @@ import { FiEdit } from "react-icons/fi";
 import { MdOutlineAdd } from "react-icons/md";
 import { TbTrashX } from "react-icons/tb";
 
-import { SearchEmptyState } from "@/components/ui/search-empty-state";
-import { SearchInput } from "@/components/ui/search-input";
+import { SearchEmptyState } from "@/components/ui";
+import { SearchInput } from "@/components/ui";
+import { AdminResponsiveList } from "@/features/admin";
+import { useRemoveArtwork } from "@/features/artworks/hooks/useRemoveArtwork";
+import { usePaginatedArtworks } from "@/features/artworks/hooks/useArtworks";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
-import { usePaginatedArtworks } from "@/hooks/artworks/useArtworks";
-import { useRemoveArtwork } from "@/hooks/artworks/useRemoveArtwork";
 import { usePaginationState } from "@/hooks/usePaginationState";
 
 export default function AdminArtworksPage() {
@@ -98,7 +98,7 @@ export default function AdminArtworksPage() {
       ) : (
         <>
           {/* ===== Responsive table/cards ===== */}
-          <ResponsiveList
+          <AdminResponsiveList
             items={items}
             isLoading={isLoading}
             loadingContent={
