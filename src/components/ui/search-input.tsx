@@ -1,6 +1,6 @@
 "use client";
 
-import { MagnifyingGlassIcon, Cross2Icon } from "@radix-ui/react-icons";
+import { Cross2Icon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 interface SearchInputProps {
   value: string;

@@ -1,7 +1,7 @@
-import { Artist } from "@/services/artists";
-import { ArtworkCategoryLabels } from "@/services/artworks";
+import { ArtworkCategoryLabels } from "@/features/artworks/types";
 import Image from "next/image";
 import Link from "next/link";
+import { Artist } from "../types";
 
 interface ArtistCardProps {
   artist: Artist;

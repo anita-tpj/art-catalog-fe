@@ -1,7 +1,7 @@
 // app/artworks/page.tsx
-import { ArtworksPageClient } from "./artworks-page-client";
-import { ALL_CATEGORIES_VALUE } from "@/services/artwork-category-options";
+import { ALL_CATEGORIES_VALUE } from "@/features/listing/services/artwork-category-options";
 import { humanizeEnum, toPositiveInt } from "@/lib/utils";
+import { ArtworksPageClient } from "./artworks-page-client";
 
 type PageProps = {
   searchParams: Promise<Record<string, string | undefined>>;

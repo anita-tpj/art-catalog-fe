@@ -2,19 +2,21 @@
 
 import Link from "next/link";
 
-import { ErrorState } from "@/components/ui/error-state";
-import { PageSizeSelector } from "@/components/ui/page-size-selector";
-import { Pagination } from "@/components/ui/pagination";
+import { ErrorState } from "@/components/ui";
+import { PageSizeSelector } from "@/components/ui";
+import { Pagination } from "@/components/ui";
 
-import { InquiriesToolbar } from "@/features/inquiries/components/InquiriesToolbar";
-import { useInquiriesUrlState } from "@/hooks/inquiries/useInquiriesUrlState";
-import { usePaginatedInquiries } from "@/hooks/inquiries/useInquiries";
+import { Button } from "@/components/ui";
+import {
+  InquiriesToolbar,
+  useInquiriesUrlState,
+  useInquiryStats,
+  usePaginatedInquiries,
+} from "@/features/inquiries";
+import { useUpdateInquiryStatus } from "@/features/inquiries/hooks/useUpdateInquiryStatus";
+import toast from "react-hot-toast";
 import { MdArrowForward, MdOutlineArchive } from "react-icons/md";
 import { PiEnvelopeSimpleOpen } from "react-icons/pi";
-import { Button } from "@/components/ui/button";
-import { useInquiryStats } from "@/hooks/inquiries/useInquiryStats";
-import { useUpdateInquiryStatus } from "@/hooks/inquiries/useUpdateStatusInquiryStatus";
-import toast from "react-hot-toast";
 
 type Props = {
   initialSearch: string;

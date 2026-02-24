@@ -1,5 +1,6 @@
 // app/admin/artists/[id]/edit/page.tsx
-import EditArtistPage from "@/features/artists/EditArtistPage";
+
+import { EditArtistPage } from "@/features/artists/components/admin/EditArtistPage";
 
 interface PageProps {
   params: Promise<{ id: string }>;

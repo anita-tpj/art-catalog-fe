@@ -1,16 +1,16 @@
 "use client";
 
-import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useArtists } from "@/hooks/artists/useArtists";
-import type { Artist } from "@/services/artists";
+} from "@/components/ui";
+import { useArtists } from "@/features/artists/hooks/useArtists";
+import { Artist } from "@/features/artists/types";
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 
 type ArtistSelectorProps<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
@@ -30,10 +30,10 @@ export function ArtistSelector<TFieldValues extends FieldValues>({
   const effectivePlaceholder = isLoading
     ? "Loading artists..."
     : isError
-    ? "Error loading artists"
-    : artists.length === 0
-    ? "No artists available"
-    : placeholder;
+      ? "Error loading artists"
+      : artists.length === 0
+        ? "No artists available"
+        : placeholder;
 
   const isDisabled = isLoading || isError || artists.length === 0;
 

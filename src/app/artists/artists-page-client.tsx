@@ -1,21 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
-import { ErrorState } from "@/components/ui/error-state";
-import { PageSizeSelector } from "@/components/ui/page-size-selector";
-import { Pagination } from "@/components/ui/pagination";
+import { ErrorState } from "@/components/ui";
+import { PageSizeSelector } from "@/components/ui";
+import { Pagination } from "@/components/ui";
 
+import {
+  ArtistCard,
+  ArtistCardSkeleton,
+  usePaginatedArtists,
+} from "@/features/artists";
+import { ListingToolbar } from "@/features/listing/components/ListingToolbar";
+import { useListingUrlState } from "@/features/listing/hooks/useListingUrlState";
+import { ALL_CATEGORIES_VALUE } from "@/features/listing/services/artwork-category-options";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { usePaginationState } from "@/hooks/usePaginationState";
-
-import { usePaginatedArtists } from "@/hooks/artists/useArtists";
-import { ArtistCardSkeleton } from "@/features/artists/components/ArtistCardSkeleton";
-import { ArtistCard } from "@/features/artists/components/ArtistCard";
-import { ALL_CATEGORIES_VALUE } from "@/services/artwork-category-options";
-import { useListingUrlState } from "@/features/listing/hooks/useListingUrlState";
-import { ListingToolbar } from "@/features/listing/components/ListingToolbar";
 
 type Props = {
   initialSearch: string;

@@ -1,8 +1,8 @@
 // src/features/listing/hooks/useListingUrlState.ts
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
 import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useCallback, useEffect, useRef } from "react";
 
 type BuildUrlKeys = {
   searchKey?: string; // default "search"

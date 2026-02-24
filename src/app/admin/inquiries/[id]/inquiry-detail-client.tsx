@@ -1,20 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui";
+import { useUpdateInquiryStatus } from "@/features/inquiries/hooks/useUpdateInquiryStatus";
+import { Inquiry, InquiryStatus } from "@/features/inquiries/types";
 import Link from "next/link";
-
-import type { Inquiry, InquiryStatus } from "@/services/inquiries";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 import {
   MdArrowForward,
   MdOutlineArchive,
+  MdOutlineContentCopy,
   MdOutlineMarkEmailUnread,
   MdOutlineReply,
-  MdOutlineContentCopy,
 } from "react-icons/md";
-import { useRouter } from "next/navigation";
-import { useUpdateInquiryStatus } from "@/hooks/inquiries/useUpdateStatusInquiryStatus";
-import toast from "react-hot-toast";
 
 type Props = {
   initialInquiry: Inquiry;

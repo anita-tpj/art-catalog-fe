@@ -1,18 +1,18 @@
 "use client";
 
-import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui";
+import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 
 type EnumSelectFieldProps<
   TFieldValues extends FieldValues,
-  TEnumValue extends string
+  TEnumValue extends string,
 > = {
   control: Control<TFieldValues>;
   name: FieldPath<TFieldValues>;
@@ -27,7 +27,7 @@ type EnumSelectFieldProps<
 
 export function EnumSelectField<
   TFieldValues extends FieldValues,
-  TEnumValue extends string
+  TEnumValue extends string,
 >({
   control,
   name,

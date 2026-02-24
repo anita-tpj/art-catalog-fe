@@ -1,21 +1,23 @@
 "use client";
 
-import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
-import { ArtworkCard } from "@/features/artworks/components/ArtworkCard";
-import { ArtworkCardSkeleton } from "@/features/artworks/components/ArtworkCardSkeleton";
-import { ErrorState } from "@/components/ui/error-state";
-import { PageSizeSelector } from "@/components/ui/page-size-selector";
-import { Pagination } from "@/components/ui/pagination";
+import { ErrorState } from "@/components/ui";
+import { PageSizeSelector } from "@/components/ui";
+import { Pagination } from "@/components/ui";
 
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
-import { usePaginatedArtworks } from "@/hooks/artworks/useArtworks";
 import { usePaginationState } from "@/hooks/usePaginationState";
 
-import { ALL_CATEGORIES_VALUE } from "@/services/artwork-category-options";
+import {
+  ArtworkCard,
+  ArtworkCardSkeleton,
+  usePaginatedArtworks,
+} from "@/features/artworks";
 import { ListingToolbar } from "@/features/listing/components/ListingToolbar";
 import { useListingUrlState } from "@/features/listing/hooks/useListingUrlState";
+import { ALL_CATEGORIES_VALUE } from "@/features/listing/services/artwork-category-options";
 
 type Props = {
   initialSearch: string;

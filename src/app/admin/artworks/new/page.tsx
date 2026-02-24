@@ -1,8 +1,11 @@
 "use client";
 
-import { ArtworkFormLayout } from "@/components/admin/artworks/ArtworkFormLayout";
-import { useCreateArtwork } from "@/hooks/artworks/useCreateArtwork";
-import { CreateArtworkDTO, CreateArtworkSchema } from "@/services/artworks";
+import { ArtworkFormLayout } from "@/features/artworks/components/admin/ArtworkFormLayout";
+import { useCreateArtwork } from "@/features/artworks/hooks/useCreateArtwork";
+import {
+  CreateArtworkDTO,
+  CreateArtworkSchema,
+} from "@/features/artworks/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 

@@ -1,7 +1,7 @@
 "use client";
 
+import { Label } from "@/components/ui";
 import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
-import { Label } from "@/components/ui/label";
 
 type BooleanRadioFieldProps<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;

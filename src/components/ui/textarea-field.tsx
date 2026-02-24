@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/components/ui";
 
 type TextareaFieldProps = {
   label: string;
@@ -14,7 +14,7 @@ export const TextareaField = React.forwardRef<
   TextareaFieldProps
 >(function TextareaField(
   { label, error, containerClassName, id, className, ...textareaProps },
-  ref
+  ref,
 ) {
   const textareaId = id ?? textareaProps.name;
 

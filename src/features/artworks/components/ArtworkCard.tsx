@@ -1,6 +1,6 @@
-import { Artwork, ArtworkCategoryLabels } from "@/services/artworks";
 import Image from "next/image";
 import Link from "next/link";
+import { Artwork, ArtworkCategoryLabels } from "../types";
 
 interface ArtworkCardProps {
   artwork: Artwork;

@@ -1,7 +1,6 @@
 "use client";
 
-import { AdminDashboardStats } from "@/features/admin/components/AdminDashboardStats";
-import { useDashboardStats } from "@/hooks/admin/useDashboardStats";
+import { AdminDashboardStats, useDashboardStats } from "@/features/admin";
 
 export default function AdminDashboardPage() {
   const { data, isLoading, isError, error } = useDashboardStats();

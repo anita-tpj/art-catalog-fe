@@ -1,9 +1,9 @@
 "use client";
 
+import { Button } from "@/components/ui";
+import { Spinner } from "@/components/ui";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 
 interface ConfirmDialogProps {
   children: ReactNode;
