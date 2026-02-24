@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useAdminLogout } from "@/features/admin/hooks/useAdminLogout";
 import { useInquiryStats } from "@/features/inquiries/hooks/useInquiryStats";
 
 const links = [
@@ -16,6 +17,7 @@ const links = [
 export function AdminMobileNav() {
   const pathname = usePathname();
   const { data } = useInquiryStats();
+  const logout = useAdminLogout();
 
   const unread = data?.newCount ?? 0;
 
@@ -55,6 +57,18 @@ export function AdminMobileNav() {
           </Link>
         );
       })}
+      <button
+        type="button"
+        onClick={() => logout.mutate()}
+        disabled={logout.isPending}
+        className={cn(
+          "whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium border",
+          "bg-zinc-100 text-zinc-700 border-zinc-200 hover:bg-zinc-200 disabled:opacity-50",
+          "dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-700 dark:hover:bg-zinc-800",
+        )}
+      >
+        {logout.isPending ? "..." : "Logout"}
+      </button>
     </div>
   );
 }

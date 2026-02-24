@@ -1,5 +1,6 @@
 "use client";
 
+import { useAdminLogout } from "@/features/admin/hooks/useAdminLogout";
 import { useInquiryStats } from "@/features/inquiries/hooks/useInquiryStats";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -16,6 +17,7 @@ const items = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const { data } = useInquiryStats();
+  const logout = useAdminLogout();
 
   const unread = data?.newCount ?? 0;
 
@@ -57,6 +59,18 @@ export function AdminSidebar() {
           );
         })}
       </nav>
+      <div className="mt-6 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+        <button
+          type="button"
+          onClick={() => logout.mutate()}
+          disabled={logout.isPending}
+          className={cn(
+            "w-full rounded-md px-2 py-2.5 text-left text-sm text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-50 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
+          )}
+        >
+          {logout.isPending ? "Logging out..." : "Logout"}
+        </button>
+      </div>
     </aside>
   );
 }
