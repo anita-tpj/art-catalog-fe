@@ -1,10 +1,13 @@
 // lib/api-client.ts
+
+import { toast } from "react-hot-toast";
+
 type FetchOpts = {
   // Next.js fetch options
   revalidate?: number;
-  // if you want tags later:
+  // If you want tags later:
   tags?: string[];
-  // normal fetch init extras
+  // Normal fetch init extras
   headers?: Record<string, string>;
 };
 
@@ -13,25 +16,103 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ??
   "http://localhost:5000";
 
+/**
+ * Error type carrying HTTP status.
+ * Enables global auth handling (401 redirect).
+ */
+class ApiError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
+/**
+ * Best-effort logout to clear server session & cookie.
+ * We do not block redirect if this fails.
+ */
+async function bestEffortLogout() {
+  if (typeof window === "undefined") return;
+
+  try {
+    await fetch(`${API_BASE_URL}/api/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+      headers: { accept: "application/json" },
+    });
+  } catch {
+    // ignore network errors
+  }
+}
+
+let isRedirectingForAuth = false;
+
+/**
+ * Handle expired/invalid session globally.
+ * Shows toast, logs out, and redirects to login.
+ */
+function maybeRedirectOn401(error: unknown) {
+  if (typeof window === "undefined") return;
+
+  const status =
+    error instanceof ApiError
+      ? error.status
+      : typeof (error as any)?.status === "number"
+        ? (error as any).status
+        : undefined;
+
+  if (status !== 401) return;
+
+  // Avoid redirect loop if already on login page
+  if (window.location.pathname === "/admin/login") return;
+
+  // Prevent multiple redirects & duplicate toasts
+  if (isRedirectingForAuth) return;
+  isRedirectingForAuth = true;
+
+  // Notify user
+  toast.error("Session expired. Please sign in again.");
+
+  // Attempt backend logout (non-blocking)
+  void bestEffortLogout();
+
+  const next = encodeURIComponent(
+    window.location.pathname + window.location.search,
+  );
+
+  window.location.href = `/admin/login?next=${next}`;
+}
+
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
     let message = `Request failed with status ${res.status}`;
 
     try {
       const errorData = await res.json();
-      if (errorData && typeof errorData === "object" && "message" in errorData) {
+      if (
+        errorData &&
+        typeof errorData === "object" &&
+        "message" in errorData
+      ) {
         message = String((errorData as any).message);
       }
     } catch {}
 
-    throw new Error(message);
+    throw new ApiError(message, res.status);
   }
 
   if (res.status === 204) return undefined as T;
   return (await res.json()) as T;
 }
 
-function buildInit(method?: string, opts?: FetchOpts, body?: unknown): RequestInit {
+function buildInit(
+  method?: string,
+  opts?: FetchOpts,
+  body?: unknown,
+): RequestInit {
   const headers: Record<string, string> = {
     accept: "application/json",
     ...(body ? { "Content-Type": "application/json" } : {}),
@@ -41,10 +122,11 @@ function buildInit(method?: string, opts?: FetchOpts, body?: unknown): RequestIn
   const init: RequestInit = {
     method,
     headers,
+    credentials: "include", // cookie session auth
     ...(body ? { body: JSON.stringify(body) } : {}),
   };
 
-  // Next.js: only meaningful in server fetch, harmless otherwise
+  // Next.js server fetch options (harmless on client)
   if (opts?.revalidate || opts?.tags) {
     (init as any).next = {
       ...(opts?.revalidate ? { revalidate: opts.revalidate } : {}),
@@ -56,13 +138,33 @@ function buildInit(method?: string, opts?: FetchOpts, body?: unknown): RequestIn
 }
 
 export async function get<T>(path: string, opts?: FetchOpts): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${path}`, buildInit(undefined, opts));
-  return handleResponse<T>(res);
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}${path}`,
+      buildInit(undefined, opts),
+    );
+    return await handleResponse<T>(res);
+  } catch (error) {
+    maybeRedirectOn401(error);
+    throw error;
+  }
 }
 
-export async function getById<T>(path: string, id: number, opts?: FetchOpts): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${path}/${id}`, buildInit(undefined, opts));
-  return handleResponse<T>(res);
+export async function getById<T>(
+  path: string,
+  id: number,
+  opts?: FetchOpts,
+): Promise<T> {
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}${path}/${id}`,
+      buildInit(undefined, opts),
+    );
+    return await handleResponse<T>(res);
+  } catch (error) {
+    maybeRedirectOn401(error);
+    throw error;
+  }
 }
 
 export async function post<TResponse, TBody = unknown>(
@@ -70,8 +172,16 @@ export async function post<TResponse, TBody = unknown>(
   body: TBody,
   opts?: FetchOpts,
 ): Promise<TResponse> {
-  const res = await fetch(`${API_BASE_URL}${path}`, buildInit("POST", opts, body));
-  return handleResponse<TResponse>(res);
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}${path}`,
+      buildInit("POST", opts, body),
+    );
+    return await handleResponse<TResponse>(res);
+  } catch (error) {
+    maybeRedirectOn401(error);
+    throw error;
+  }
 }
 
 export async function put<TResponse, TBody = unknown>(
@@ -80,11 +190,31 @@ export async function put<TResponse, TBody = unknown>(
   body: TBody,
   opts?: FetchOpts,
 ): Promise<TResponse> {
-  const res = await fetch(`${API_BASE_URL}${path}/${id}`, buildInit("PUT", opts, body));
-  return handleResponse<TResponse>(res);
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}${path}/${id}`,
+      buildInit("PUT", opts, body),
+    );
+    return await handleResponse<TResponse>(res);
+  } catch (error) {
+    maybeRedirectOn401(error);
+    throw error;
+  }
 }
 
-export async function del<T>(path: string, id: number, opts?: FetchOpts): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${path}/${id}`, buildInit("DELETE", opts));
-  return handleResponse<T>(res);
+export async function del<T>(
+  path: string,
+  id: number,
+  opts?: FetchOpts,
+): Promise<T> {
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}${path}/${id}`,
+      buildInit("DELETE", opts),
+    );
+    return await handleResponse<T>(res);
+  } catch (error) {
+    maybeRedirectOn401(error);
+    throw error;
+  }
 }
