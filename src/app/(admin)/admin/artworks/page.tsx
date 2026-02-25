@@ -89,7 +89,7 @@ export default function AdminArtworksPage() {
         <Card className="p-4 text-sm text-zinc-500">Loading artworks…</Card>
       ) : isEmptyDb ? (
         <EmptyState
-          message="No artworks yet."
+          message="No artworks available yet."
           actionHref="/admin/artworks/new"
           actionLabel="Create Artwork"
         />

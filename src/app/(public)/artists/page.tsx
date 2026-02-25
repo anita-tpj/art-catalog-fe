@@ -7,7 +7,11 @@ type PageProps = {
   searchParams: Promise<Record<string, string | undefined>>;
 };
 
-export async function generateMetadata({ searchParams }: PageProps) {
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
   const sp = await searchParams;
   const primaryCategory = sp.primaryCategory;
   const search = sp.search;
@@ -20,8 +24,9 @@ export async function generateMetadata({ searchParams }: PageProps) {
   const title = parts.join(" – ");
 
   return {
-    title,
-    description: "Browse artists by primary category.",
+    title: `${title} | ArtCatalog`,
+    description:
+      "Discover artists featured in ArtCatalog and explore their work across categories and styles.",
     alternates: {
       canonical: "/artists",
     },

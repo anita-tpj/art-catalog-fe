@@ -1,5 +1,6 @@
 import { Inquiry } from "@/features/inquiries/types";
-import type { Metadata } from "next";
+import { API_BASE_URL } from "@/lib/config";
+import { parseIdOrNotFound } from "@/lib/utils";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MdArrowBack } from "react-icons/md";
@@ -9,20 +10,8 @@ export const dynamic = "force-dynamic"; // admin → always fresh
 
 type PageProps = { params: Promise<{ id: string }> };
 
-function getApiBaseUrlOrThrow() {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "");
-  if (!base) throw new Error("NEXT_PUBLIC_API_BASE_URL is not set");
-  return base;
-}
-
-function parseIdOrNotFound(idParam: string) {
-  const id = Number(idParam);
-  if (!Number.isFinite(id) || id <= 0) notFound();
-  return id;
-}
-
 async function fetchInquiryOrNull(id: number): Promise<Inquiry | null> {
-  const apiBase = getApiBaseUrlOrThrow();
+  const apiBase = API_BASE_URL;
 
   const res = await fetch(`${apiBase}/api/inquiries/${id}`, {
     cache: "no-store",
@@ -31,23 +20,6 @@ async function fetchInquiryOrNull(id: number): Promise<Inquiry | null> {
 
   if (!res.ok) return null;
   return (await res.json()) as Inquiry;
-}
-
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const { id: idParam } = await params;
-  const id = Number(idParam);
-  if (!Number.isFinite(id)) return { title: "Inquiry not found" };
-
-  const inquiry = await fetchInquiryOrNull(id);
-  if (!inquiry) return { title: "Inquiry not found" };
-
-  return {
-    title: `Inquiry #${inquiry.id} — ${inquiry.name}`,
-    description: `Inquiry from ${inquiry.email}`,
-    alternates: { canonical: `/admin/inquiries/${inquiry.id}` },
-  };
 }
 
 export default async function InquiryDetailPage({ params }: PageProps) {

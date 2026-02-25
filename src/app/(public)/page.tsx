@@ -1,12 +1,9 @@
-import { FeaturedArtists } from "@/components/home/FeaturedArtists";
-import { FeaturedArtworks } from "@/components/home/FeaturedArtworks";
-import { HomeCTA } from "@/components/home/HomeCTA";
-import { HomeHero } from "@/components/home/HomeHero";
-
-const API_BASE_URL =
-  process.env.API_BASE_URL ??
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  "http://localhost:5000";
+import { FeaturedArtists } from "@/features/home/components/FeaturedArtists";
+import { FeaturedArtworks } from "@/features/home/components/FeaturedArtworks";
+import { HomeCTA } from "@/features/home/components/HomeCTA";
+import { HomeHero } from "@/features/home/components/HomeHero";
+import { API_BASE_URL } from "@/lib/config";
+import { Metadata } from "next";
 
 type Artwork = {
   id: string;
@@ -66,6 +63,24 @@ async function getFeaturedArtists(): Promise<Artist[]> {
     return [];
   }
 }
+
+export const metadata: Metadata = {
+  title: "ArtCatalog",
+  description:
+    "Explore contemporary artworks and discover artists in a curated online gallery.",
+  openGraph: {
+    title: "ArtCatalog",
+    description:
+      "Explore contemporary artworks and discover artists in a curated online gallery.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ArtCatalog",
+    description:
+      "Explore contemporary artworks and discover artists in a curated online gallery.",
+  },
+};
 
 export default async function HomePage() {
   const [artworks, artists] = await Promise.all([

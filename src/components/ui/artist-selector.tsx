@@ -32,7 +32,7 @@ export function ArtistSelector<TFieldValues extends FieldValues>({
     : isError
       ? "Error loading artists"
       : artists.length === 0
-        ? "No artists available"
+        ? "No artists available yet"
         : placeholder;
 
   const isDisabled = isLoading || isError || artists.length === 0;
@@ -70,7 +70,7 @@ export function ArtistSelector<TFieldValues extends FieldValues>({
 
             {!isLoading && !isError && artists.length === 0 && (
               <p className="text-xs text-zinc-500">
-                No artists yet. Add an artist first.
+                No artists available yet. Add an artist first.
               </p>
             )}
           </div>

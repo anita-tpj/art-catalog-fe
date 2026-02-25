@@ -1,12 +1,12 @@
 "use client";
 
 import { AdminTopBar } from "@/components/admin/AdminTopBar";
-import { AdminMobileNav } from "@/features/admin/components/AdminMobileNav";
-import { AdminSidebar } from "@/features/admin/components/AdminSidebar";
+import { AdminMobileNav } from "@/components/shell/AdminMobileNav";
+import { AdminSidebar } from "@/components/shell/AdminSidebar";
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { usePathname } from "next/navigation";
 import { PropsWithChildren } from "react";
-import AdminGuard from "./AdminGuard";
+import AdminGuard from "../../../features/admin/components/AdminGuard";
 
 export default function AdminLayout({ children }: PropsWithChildren) {
   const pathname = usePathname();

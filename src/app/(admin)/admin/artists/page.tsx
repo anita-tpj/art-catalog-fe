@@ -4,24 +4,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui";
-import { Card } from "@/components/ui";
-import { ConfirmDialog } from "@/components/ui";
-import { EmptyState } from "@/components/ui";
-import { PageSizeSelector } from "@/components/ui";
-import { Pagination } from "@/components/ui";
+import {
+  Button,
+  Card,
+  ConfirmDialog,
+  EmptyState,
+  PageSizeSelector,
+  Pagination,
+} from "@/components/ui";
 
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineAdd } from "react-icons/md";
 import { TbTrashX } from "react-icons/tb";
 
-import { SearchEmptyState } from "@/components/ui";
-import { SearchInput } from "@/components/ui";
+import { SearchEmptyState, SearchInput } from "@/components/ui";
 import { AdminResponsiveList } from "@/features/admin";
+import { usePaginatedArtists } from "@/features/artists/hooks/useArtists";
 import { useRemoveArtist } from "@/features/artists/hooks/useRemoveArtist";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { usePaginationState } from "@/hooks/usePaginationState";
-import { usePaginatedArtists } from "@/features/artists/hooks/useArtists";
 
 export default function AdminArtistsPage() {
   const { page, pageSize, changePage, changePageSize } = usePaginationState(10);
@@ -90,7 +91,7 @@ export default function AdminArtistsPage() {
         <Card className="p-4 text-sm text-zinc-500">Loading artists…</Card>
       ) : isEmptyDb ? (
         <EmptyState
-          message="No artists yet."
+          message="No artists available yet."
           actionHref="/admin/artists/new"
           actionLabel="Create Artist"
         />

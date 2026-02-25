@@ -31,7 +31,7 @@ export function FeaturedArtists({ artists }: { artists: Artist[] }) {
 
       {artists.length === 0 ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-300">
-          No artists yet (or API not connected). Once you add artists, they’ll
+          No artists available yet (or API not connected). Once you add artists, they’ll
           appear here automatically.
         </div>
       ) : (

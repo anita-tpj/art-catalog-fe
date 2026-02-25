@@ -1,6 +1,6 @@
-import clsx from "clsx";
 import Link from "next/link";
 import { MdArrowForward } from "react-icons/md";
+import { cn } from "@/lib/utils";
 
 export function StatCard({
   title,
@@ -20,7 +20,7 @@ export function StatCard({
   children?: React.ReactNode;
 }) {
   const inner = (
-    <div className={clsx("rounded-2xl border p-5", className)}>
+    <div className={cn("rounded-2xl border p-5", className)}>
       <div className="flex items-center gap-1.5">
         <div className="text-muted-foreground">{icon}</div>
         <div className="text-sm text-muted-foreground">{title}</div>

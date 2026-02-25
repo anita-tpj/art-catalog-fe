@@ -6,14 +6,8 @@ import * as React from "react";
 
 import { useAdminLogout } from "@/features/admin/hooks/useAdminLogout";
 import { useInquiryStats } from "@/features/inquiries/hooks/useInquiryStats";
-import { cn } from "@/lib/utils";
-
-const links = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/artworks", label: "Artworks" },
-  { href: "/admin/artists", label: "Artists" },
-  { href: "/admin/inquiries", label: "Inbox" },
-];
+import { cn, getSectionRoot } from "@/lib/utils";
+import { adminNav } from "../../features/admin/config/adminNav";
 
 export function AdminMobileNav() {
   const pathname = usePathname();
@@ -90,8 +84,8 @@ export function AdminMobileNav() {
             )}
           >
             <div className="flex w-max min-w-full items-center gap-2 px-4 pr-10">
-              {links.map((item) => {
-                const segment = "/" + pathname.split("/").slice(1, 3).join("/");
+              {adminNav.map((item) => {
+                const segment = getSectionRoot(pathname);
                 const active = segment === item.href;
                 const isInbox = item.href === "/admin/inquiries";
 

@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: PageProps) {
   try {
     const artist = await getById<Artist>("/api/artists", id, { revalidate });
 
-    const title = `${artist.name} — Artist`;
+    const title = `${artist.name} — Artist | ArtCatalog`;
     const description = artist.bio ?? `Explore artworks by ${artist.name}.`;
 
     return {
