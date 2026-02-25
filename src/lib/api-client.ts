@@ -1,6 +1,7 @@
 // lib/api-client.ts
 
 import { toast } from "react-hot-toast";
+import { API_BASE_URL } from "./config";
 
 type FetchOpts = {
   // Next.js fetch options
@@ -10,11 +11,6 @@ type FetchOpts = {
   // Normal fetch init extras
   headers?: Record<string, string>;
 };
-
-const API_BASE_URL =
-  process.env.API_BASE_URL ??
-  process.env.NEXT_PUBLIC_API_BASE_URL ??
-  "http://localhost:5000";
 
 /**
  * Error type carrying HTTP status.

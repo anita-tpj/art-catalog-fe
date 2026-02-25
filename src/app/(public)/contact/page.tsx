@@ -5,6 +5,12 @@ type PageProps = {
   searchParams: Promise<Record<string, string | undefined>>;
 };
 
+export const metadata = {
+  title: "Contact | ArtCatalog",
+  description:
+    "Get in touch with ArtCatalog for inquiries, collaborations, or questions about artworks and artists.",
+};
+
 export default async function ContactPage({ searchParams }: PageProps) {
   const sp = await searchParams;
 

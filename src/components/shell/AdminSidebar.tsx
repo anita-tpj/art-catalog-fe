@@ -1,18 +1,11 @@
 "use client";
 
+import { adminNav } from "@/features/admin/config/adminNav";
 import { useAdminLogout } from "@/features/admin/hooks/useAdminLogout";
 import { useInquiryStats } from "@/features/inquiries/hooks/useInquiryStats";
-import { cn } from "@/lib/utils";
+import { cn, getSectionRoot } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const items = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/artworks", label: "Artworks" },
-  { href: "/admin/artists", label: "Artists" },
-  { href: "/admin/inquiries", label: "Inbox" },
-  // later: categories, settings...
-];
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -25,8 +18,8 @@ export function AdminSidebar() {
     <aside className="hidden md:block">
       <div className="sticky top-20 rounded-2xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/40">
         <nav className="flex flex-col gap-1.5 text-sm">
-          {items.map((item) => {
-            const segment = "/" + pathname.split("/").slice(1, 3).join("/");
+          {adminNav.map((item) => {
+            const segment = getSectionRoot(pathname);
             const active = segment === item.href;
             const isInbox = item.href === "/admin/inquiries";
 

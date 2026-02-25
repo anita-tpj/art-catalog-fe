@@ -24,6 +24,13 @@ export function SiteHeader() {
           </Link>
 
           <Link
+            href="/about"
+            className="hover:text-black dark:hover:text-white"
+          >
+            About
+          </Link>
+
+          <Link
             href="/contact"
             className="hover:text-black dark:hover:text-white"
           >

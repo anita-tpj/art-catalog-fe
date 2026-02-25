@@ -62,7 +62,7 @@ export function AdminDashboardStats({ data, isLoading }: Props) {
             ))
           ) : (
             <div className="px-2 text-xs text-muted-foreground">
-              No artworks yet.
+              No artworks available yet.
             </div>
           )}
         </div>
@@ -88,7 +88,7 @@ export function AdminDashboardStats({ data, isLoading }: Props) {
             ))
           ) : (
             <div className="px-2 text-xs text-muted-foreground">
-              No artists yet.
+              No artists available yet.
             </div>
           )}
         </div>

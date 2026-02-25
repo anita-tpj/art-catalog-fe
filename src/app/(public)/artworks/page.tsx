@@ -1,13 +1,16 @@
 // app/artworks/page.tsx
 import { ALL_CATEGORIES_VALUE } from "@/features/listing/services/artwork-category-options";
 import { humanizeEnum, toPositiveInt } from "@/lib/utils";
+import type { Metadata } from "next";
 import { ArtworksPageClient } from "./artworks-page-client";
 
 type PageProps = {
   searchParams: Promise<Record<string, string | undefined>>;
 };
 
-export async function generateMetadata({ searchParams }: PageProps) {
+export async function generateMetadata({
+  searchParams,
+}: PageProps): Promise<Metadata> {
   const sp = await searchParams;
   const category = sp.category;
   const search = sp.search;
@@ -20,8 +23,9 @@ export async function generateMetadata({ searchParams }: PageProps) {
   const title = parts.join(" – ");
 
   return {
-    title,
-    description: "Browse artworks by category and discover new pieces.",
+    title: `${title} | ArtCatalog`,
+    description:
+      "Explore artworks across styles and categories. Discover new pieces and contemporary visual work.",
     alternates: {
       canonical: "/artworks",
     },

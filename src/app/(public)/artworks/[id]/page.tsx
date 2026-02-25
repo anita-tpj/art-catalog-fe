@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: PageProps) {
 
   try {
     const artwork = await getById<Artwork>("/api/artworks", id, { revalidate });
-    const title = `${artwork.title} — ${artwork.artist?.name ?? "Unknown artist"}`;
+    const title = `${artwork.title} — ${artwork.artist?.name ?? "Unknown artist"} | ArtCatalog`;
 
     return {
       title,

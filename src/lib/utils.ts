@@ -2,28 +2,33 @@ import { type ClassValue, clsx } from "clsx";
 import { notFound } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
+/** Tailwind class merge helper */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/** Ensures positive integer with fallback */
 export function toPositiveInt(v: string | undefined, fallback: number) {
   const n = Number(v);
   return Number.isFinite(n) && n > 0 ? n : fallback;
 }
 
+/** Converts ENUM_VALUE to "Enum Value" */
 export function humanizeEnum(value: string) {
   return value
-    .replaceAll("_", " ")
     .toLowerCase()
-    .replace(/(^\w)|(\s\w)/g, (m) => m.toUpperCase());
+    .replaceAll("_", " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+/** Parses numeric ID or throws 404 (server only) */
 export function parseIdOrNotFound(idParam: string) {
   const id = Number(idParam);
   if (!Number.isFinite(id)) notFound();
   return id;
 }
 
+/** Formats date to local string */
 export function formatCompactTime(dt: string | null) {
   if (!dt) return "—";
   try {
@@ -33,6 +38,7 @@ export function formatCompactTime(dt: string | null) {
   }
 }
 
+/** Formats date to relative time (e.g. 5m ago) */
 export function formatRelativeTime(dt: string | null) {
   if (!dt) return "—";
   const ms = Date.now() - new Date(dt).getTime();
@@ -47,4 +53,8 @@ export function formatRelativeTime(dt: string | null) {
 
   const days = Math.floor(hours / 24);
   return `${days}d ago`;
+}
+
+export function getSectionRoot(pathname: string) {
+  return "/" + pathname.split("/").slice(1, 3).join("/");
 }
