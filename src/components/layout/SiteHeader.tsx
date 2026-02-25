@@ -8,18 +8,26 @@ export function SiteHeader() {
           ArtCatalog
         </Link>
 
-        <nav className="flex items-center gap-4 text-sm text-zinc-600 dark:text-zinc-300">
+        <nav className="flex items-center gap-6 text-sm text-zinc-600 dark:text-zinc-300">
           <Link
             href="/artworks"
             className="hover:text-black dark:hover:text-white"
           >
             Gallery
           </Link>
+
           <Link
-            href="/admin"
-            className="rounded-full border px-3 py-1 hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+            href="/artists"
+            className="hover:text-black dark:hover:text-white"
           >
-            Admin
+            Artists
+          </Link>
+
+          <Link
+            href="/contact"
+            className="hover:text-black dark:hover:text-white"
+          >
+            Contact
           </Link>
         </nav>
       </div>

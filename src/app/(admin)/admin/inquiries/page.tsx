@@ -20,7 +20,7 @@ export default async function AdminInquiriesPage({ searchParams }: PageProps) {
   const initialPageSize = toPositiveInt(sp.pageSize, 20);
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <main className="space-y-4">
       <InquiriesPageClient
         initialSearch={initialSearch}
         initialStatus={initialStatus}
