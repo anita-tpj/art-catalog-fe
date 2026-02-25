@@ -58,7 +58,7 @@ export default async function InquiryDetailPage({ params }: PageProps) {
   if (!inquiry) notFound();
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <main className="space-y-4">
       <div className="mb-6 flex items-center justify-between gap-3">
         <Link
           href="/admin/inquiries"
