@@ -36,8 +36,13 @@ export default function AdminLoginPage() {
 
   if (isLoading || data?.user) {
     return (
-      <div className="mx-auto max-w-sm rounded-xl border bg-white p-6 shadow-sm">
-        <p className="text-sm text-zinc-600">Checking session...</p>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white/70 px-5 py-4 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/50">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-900 dark:border-zinc-700 dark:border-t-zinc-200" />
+          <p className="text-sm text-zinc-600 dark:text-zinc-300">
+            Checking session…
+          </p>
+        </div>
       </div>
     );
   }
