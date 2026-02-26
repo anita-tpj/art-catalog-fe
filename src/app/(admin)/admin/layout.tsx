@@ -1,8 +1,8 @@
 "use client";
 
-import { AdminTopBar } from "@/components/admin/AdminTopBar";
 import { AdminMobileNav } from "@/components/shell/AdminMobileNav";
 import { AdminSidebar } from "@/components/shell/AdminSidebar";
+import { AdminTopBar } from "@/components/shell/AdminTopBar";
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { usePathname } from "next/navigation";
 import { PropsWithChildren } from "react";

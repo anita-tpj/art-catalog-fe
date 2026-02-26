@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { AdminBreadcrumbs } from "../../features/admin/components/AdminBreadcrumbs";
+import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 
 export function AdminTopBar() {
   return (

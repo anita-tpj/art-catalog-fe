@@ -1,6 +1,3 @@
-export * from "../../components/shell/AdminMobileNav";
-export * from "../../components/shell/AdminSidebar";
-export * from "../../components/shell/AdminResponsiveList";
 export * from "./components/dashboard/AdminDashboardStats";
 export * from "./components/dashboard/ListRow";
 export * from "./components/dashboard/StatCard";

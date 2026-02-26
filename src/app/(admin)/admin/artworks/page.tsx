@@ -1,11 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui";
-import { Card } from "@/components/ui";
-import { ConfirmDialog } from "@/components/ui";
-import { EmptyState } from "@/components/ui";
-import { PageSizeSelector } from "@/components/ui";
-import { Pagination } from "@/components/ui";
+import {
+  Button,
+  Card,
+  ConfirmDialog,
+  EmptyState,
+  PageSizeSelector,
+  Pagination,
+} from "@/components/ui";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -14,11 +16,10 @@ import { FiEdit } from "react-icons/fi";
 import { MdOutlineAdd } from "react-icons/md";
 import { TbTrashX } from "react-icons/tb";
 
-import { SearchEmptyState } from "@/components/ui";
-import { SearchInput } from "@/components/ui";
-import { AdminResponsiveList } from "@/features/admin";
-import { useRemoveArtwork } from "@/features/artworks/hooks/useRemoveArtwork";
+import { AdminResponsiveList } from "@/components/shell/AdminResponsiveList";
+import { SearchEmptyState, SearchInput } from "@/components/ui";
 import { usePaginatedArtworks } from "@/features/artworks/hooks/useArtworks";
+import { useRemoveArtwork } from "@/features/artworks/hooks/useRemoveArtwork";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { usePaginationState } from "@/hooks/usePaginationState";
 

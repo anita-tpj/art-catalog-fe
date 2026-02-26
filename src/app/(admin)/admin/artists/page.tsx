@@ -17,8 +17,8 @@ import { FiEdit } from "react-icons/fi";
 import { MdOutlineAdd } from "react-icons/md";
 import { TbTrashX } from "react-icons/tb";
 
+import { AdminResponsiveList } from "@/components/shell/AdminResponsiveList";
 import { SearchEmptyState, SearchInput } from "@/components/ui";
-import { AdminResponsiveList } from "@/features/admin";
 import { usePaginatedArtists } from "@/features/artists/hooks/useArtists";
 import { useRemoveArtist } from "@/features/artists/hooks/useRemoveArtist";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
