@@ -4,7 +4,6 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import * as React from "react";
 
 export const Select = SelectPrimitive.Root;
-
 export const SelectValue = SelectPrimitive.Value;
 
 export const SelectTrigger = React.forwardRef<
@@ -13,15 +12,22 @@ export const SelectTrigger = React.forwardRef<
 >(({ className = "", children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
-    className={`flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white pl-3 pr-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+    className={`
+      flex h-10 w-full items-center justify-between rounded-md
+      border border-zinc-200 bg-white pl-3 pr-2 text-sm text-zinc-900 shadow-sm
+      focus:outline-none focus:ring-2 focus:ring-zinc-400
+      dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-zinc-500
+      ${className}
+    `}
     {...props}
   >
     {children}
-    {/* fallback chevron icon */}
+
     <svg
-      className="ml-1 h-4 w-4 opacity-60"
+      className="ml-1 h-4 w-4 opacity-60 text-zinc-500 dark:text-zinc-400"
       viewBox="0 0 20 20"
       fill="currentColor"
+      aria-hidden="true"
     >
       <path
         fillRule="evenodd"
@@ -31,7 +37,6 @@ export const SelectTrigger = React.forwardRef<
     </svg>
   </SelectPrimitive.Trigger>
 ));
-
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 export const SelectContent = React.forwardRef<
@@ -41,7 +46,12 @@ export const SelectContent = React.forwardRef<
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
-      className={`z-50 min-w-32 bg-white rounded-md border border-gray-300 shadow-lg ${className}`}
+      className={`
+        z-50 min-w-32 rounded-md
+        border border-zinc-200 bg-white text-zinc-900 shadow-lg
+        dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100
+        ${className}
+      `}
       position={position}
       {...props}
     >
@@ -51,7 +61,6 @@ export const SelectContent = React.forwardRef<
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ));
-
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
 export const SelectItem = React.forwardRef<
@@ -60,29 +69,25 @@ export const SelectItem = React.forwardRef<
 >(({ className = "", children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
-    className={` relative
-    flex cursor-pointer select-none items-center
-    rounded-sm
-    py-1.5
-    pl-8
-    pr-2
-    text-sm
-    outline-none
-    focus:bg-zinc-100
-    data-[state=checked]:bg-zinc-50
-    dark:focus:bg-zinc-800
-    dark:data-[state=checked]:bg-zinc-900 ${className}`}
+    className={`
+      relative flex cursor-pointer select-none items-center rounded-sm
+      py-1.5 pl-8 pr-2 text-sm outline-none
+      focus:bg-zinc-100 data-[state=checked]:bg-zinc-50
+      dark:focus:bg-zinc-800 dark:data-[state=checked]:bg-zinc-800
+      ${className}
+    `}
     {...props}
   >
     <SelectPrimitive.ItemIndicator className="absolute left-2 inline-flex items-center justify-center">
       <svg
         viewBox="0 0 24 24"
-        className="h-4 w-4 text-zinc-400"
+        className="h-4 w-4 text-zinc-500 dark:text-zinc-400"
         fill="none"
         stroke="currentColor"
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
+        aria-hidden="true"
       >
         <polyline points="20 6 9 17 4 12" />
       </svg>
@@ -93,5 +98,4 @@ export const SelectItem = React.forwardRef<
     </SelectPrimitive.ItemText>
   </SelectPrimitive.Item>
 ));
-
 SelectItem.displayName = SelectPrimitive.Item.displayName;
