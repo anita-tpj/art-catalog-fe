@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui";
-import { Label } from "@/components/ui";
+import { Button, Label } from "@/components/ui";
 import clsx from "clsx";
 import Image from "next/image";
 import { useId, useMemo } from "react";
@@ -13,6 +12,7 @@ import {
   UseFormSetValue,
   useWatch,
 } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 export type UploadedImage = { url: string; publicId: string };
 
@@ -61,6 +61,7 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
   onClear,
   clearLabel = "Remove",
 }: Props<TFieldValues>) {
+  const { t } = useTranslation();
   const reactId = useId();
   const inputId = useMemo(
     () => `${reactId}-${String(imgUrl)}-file-input`,
@@ -116,7 +117,7 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
                   />
                 ) : (
                   <span className="text-[10px] text-muted-foreground">
-                    No image
+                    {t("No image")}
                   </span>
                 )}
               </div>
@@ -143,7 +144,7 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
                   onClick={() => document.getElementById(inputId)?.click()}
                   disabled={!!uploading}
                 >
-                  {uploading ? "Uploading..." : buttonLabel}
+                  {uploading ? t("Uploading...") : buttonLabel}
                 </Button>
 
                 {onClear && imageUrl ? (
@@ -164,16 +165,18 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
                 <p className="text-xs text-red-500">{uploadError}</p>
               ) : null}
 
-              {fieldState.error ? (
+              {fieldState.error?.message && (
                 <p className="text-xs text-red-500">
-                  {fieldState.error.message}
+                  {t(fieldState.error.message)}
                 </p>
-              ) : null}
+              )}
 
               {/* Artwork preview */}
               {!isAvatar && imageUrl ? (
                 <div className="space-y-1">
-                  <p className="mb-1 text-xs text-muted-foreground">Preview:</p>
+                  <p className="mb-1 text-xs text-muted-foreground">
+                    {t("Preview")}:
+                  </p>
                   <div className="overflow-hidden rounded-md border bg-muted">
                     <Image
                       src={imageUrl}

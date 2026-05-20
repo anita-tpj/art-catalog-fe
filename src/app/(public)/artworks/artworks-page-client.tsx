@@ -3,12 +3,11 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import { ErrorState } from "@/components/ui";
-import { PageSizeSelector } from "@/components/ui";
-import { Pagination } from "@/components/ui";
+import { ErrorState, PageSizeSelector, Pagination } from "@/components/ui";
 
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { usePaginationState } from "@/hooks/usePaginationState";
+import { useTranslation } from "react-i18next";
 
 import {
   ArtworkCard,
@@ -46,6 +45,7 @@ export function ArtworksPageClient({
   const [category, setCategory] = useState<string>(initialCategory);
   const [search, setSearch] = useState(initialSearch);
   const debouncedSearch = useDebouncedValue(search, 400);
+  const { t } = useTranslation();
 
   const apiCategory = category === ALL_CATEGORIES_VALUE ? undefined : category;
 
@@ -80,9 +80,9 @@ export function ArtworksPageClient({
   return (
     <>
       <div className="mb-2 space-y-2">
-        <h1 className="text-3xl font-semibold">Artworks</h1>
+        <h1 className="text-3xl font-semibold">{t("Artworks")}</h1>
         <p className="text-sm text-muted-foreground">
-          Browse the gallery. Use search + category to filter.
+          {t("Browse the gallery. Use search + category to filter.")}
         </p>
       </div>
 
@@ -105,12 +105,12 @@ export function ArtworksPageClient({
       ) : isError ? (
         <ErrorState
           title="Couldn’t load artworks"
-          message={error instanceof Error ? error.message : "Please try again."}
+          message={error instanceof Error ? t(error.message) : t("Please try again.")}
           onRetry={() => refetch()}
         />
       ) : items.length === 0 ? (
         <div className="mt-10 rounded-lg border p-8 text-center text-sm text-muted-foreground">
-          No artworks found.
+          {t("No artworks found.")}
         </div>
       ) : (
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

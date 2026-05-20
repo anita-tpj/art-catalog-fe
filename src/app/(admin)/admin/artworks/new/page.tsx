@@ -8,8 +8,10 @@ import {
 } from "@/features/artworks/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 export default function NewArtworkPage() {
+  const { t } = useTranslation();
   const createArtwork = useCreateArtwork();
 
   const form = useForm<CreateArtworkDTO>({
@@ -44,9 +46,9 @@ export default function NewArtworkPage() {
     <ArtworkFormLayout
       form={form}
       onSubmit={(data) => createArtwork.mutate(data)}
-      title="Create artwork"
-      subtitle="Add a new artwork to the catalog."
-      submitLabel={isBusy ? "Saving..." : "Save artwork"}
+      title={t("Create artwork")}
+      subtitle={t("Add a new artwork to the catalog.")}
+      submitLabel={isBusy ? t("Saving...") : t("Save artwork")}
       isBusy={isBusy}
       apiError={apiError}
     />

@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { ArtworkFormLayout } from "@/features/artworks/components/admin/ArtworkFormLayout";
 import { useArtwork } from "@/features/artworks/hooks/useArtwork";
 import { useUpdateArtwork } from "@/features/artworks/hooks/useUpdateArtwork";
+import { useTranslation } from "react-i18next";
 import { CreateArtworkDTO, CreateArtworkSchema } from "../../types";
 
 interface EditArtworkPageProps {
@@ -14,6 +15,7 @@ interface EditArtworkPageProps {
 }
 
 export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
+  const { t } = useTranslation();
   const { data: artwork, isLoading } = useArtwork(id);
   const updateArtwork = useUpdateArtwork();
 
@@ -47,13 +49,15 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
   }, [artwork, reset]);
   console.log("after reset", form.getValues());
   if (isLoading && !artwork) {
-    return <p className="text-sm text-zinc-500">Loading artwork details…</p>;
+    return (
+      <p className="text-sm text-zinc-500">{t("Loading artwork details…")}</p>
+    );
   }
 
   if (!artwork) {
     return (
       <p className="text-sm text-red-500">
-        Artwork not found or failed to load.
+        {t("Artwork not found or failed to load.")}
       </p>
     );
   }
@@ -67,9 +71,9 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
     <ArtworkFormLayout
       form={form}
       onSubmit={(data) => updateArtwork.mutate({ id, data })}
-      title="Edit artwork"
-      subtitle="Update artwork details and image."
-      submitLabel={isBusy ? "Updating..." : "Update artwork"}
+      title={t("Edit artwork")}
+      subtitle={t("Update artwork details and image.")}
+      submitLabel={isBusy ? t("Updating...") : t("Update artwork")}
       isBusy={isBusy}
       apiError={apiError}
     />

@@ -6,6 +6,7 @@ import { useInquiryStats } from "@/features/inquiries/hooks/useInquiryStats";
 import { cn, getSectionRoot } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -13,6 +14,7 @@ export function AdminSidebar() {
   const logout = useAdminLogout();
 
   const unread = data?.newCount ?? 0;
+  const { t } = useTranslation();
 
   return (
     <aside className="hidden md:block">
@@ -33,7 +35,7 @@ export function AdminSidebar() {
                     "bg-zinc-900 text-zinc-50 hover:bg-zinc-900 hover:text-zinc-50 dark:bg-zinc-50 dark:text-zinc-950",
                 )}
               >
-                <span>{item.label}</span>
+                <span>{t(item.label)}</span>
 
                 {/* NEW badge */}
                 {isInbox && unread > 0 && (
@@ -62,7 +64,7 @@ export function AdminSidebar() {
               "w-full rounded-md px-2 py-2.5 text-left text-sm text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-50 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-50",
             )}
           >
-            {logout.isPending ? "Logging out..." : "Logout"}
+            {logout.isPending ? t("Logging out...") : t("Logout")}
           </button>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 interface CancelButtonProps {
   to?: string;
@@ -14,9 +15,11 @@ export function CancelButton({
   to,
   back,
   disabled = false,
-  children = "Cancel",
+  children,
 }: CancelButtonProps) {
   const router = useRouter();
+  const { t } = useTranslation();
+  const label = children ?? t("Cancel");
 
   const handleClick = () => {
     if (back) {
@@ -36,7 +39,7 @@ export function CancelButton({
       disabled={disabled}
       onClick={handleClick}
     >
-      {children}
+      {label}
     </Button>
   );
 }

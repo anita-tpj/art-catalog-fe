@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 
 export function showErrorToast(
   error: unknown,
-  fallbackMessage = "Something went wrong"
+  fallbackMessage = "Something went wrong",
 ) {
   if (error instanceof Error && error.message) {
     toast.error(error.message);

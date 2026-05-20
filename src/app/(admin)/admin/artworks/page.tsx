@@ -22,8 +22,11 @@ import { usePaginatedArtworks } from "@/features/artworks/hooks/useArtworks";
 import { useRemoveArtwork } from "@/features/artworks/hooks/useRemoveArtwork";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { usePaginationState } from "@/hooks/usePaginationState";
+import { useTranslation } from "react-i18next";
 
 export default function AdminArtworksPage() {
+  const { t } = useTranslation();
+
   const { page, pageSize, changePage, changePageSize } = usePaginationState(10);
 
   const [search, setSearch] = useState("");
@@ -66,13 +69,15 @@ export default function AdminArtworksPage() {
       {/* ===== HEADER (always visible) ===== */}
       <header className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-2">
-          <h1 className="text-xl font-semibold tracking-tight">Artworks</h1>
+          <h1 className="text-xl font-semibold tracking-tight">
+            {t("Artworks")}
+          </h1>
 
           <Button asChild>
             <Link href="/admin/artworks/new">
               <div className="flex items-center gap-1">
                 <MdOutlineAdd size={22} />
-                <span>New Artwork</span>
+                <span>{t("New Artwork")}</span>
               </div>
             </Link>
           </Button>
@@ -81,18 +86,20 @@ export default function AdminArtworksPage() {
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Search artworks..."
+          placeholder={t("Search artworks...")}
         />
       </header>
 
       {/* ===== MAIN CONTENT SWITCH ===== */}
       {isLoading ? (
-        <Card className="p-4 text-sm text-zinc-500">Loading artworks…</Card>
+        <Card className="p-4 text-sm text-zinc-500">
+          {t("Loading artworks…")}
+        </Card>
       ) : isEmptyDb ? (
         <EmptyState
-          message="No artworks available yet."
+          message={t("No artworks available yet.")}
           actionHref="/admin/artworks/new"
-          actionLabel="Create Artwork"
+          actionLabel={t("Create Artwork")}
         />
       ) : isSearchEmpty ? (
         <SearchEmptyState query={debouncedSearch} entityLabel="artworks" />
@@ -104,7 +111,7 @@ export default function AdminArtworksPage() {
             isLoading={isLoading}
             loadingContent={
               <Card className="p-4 text-sm text-zinc-500">
-                Loading artworks…
+                {t("Loading artworks…")}
               </Card>
             }
             renderTable={(items) => (
@@ -112,10 +119,10 @@ export default function AdminArtworksPage() {
                 <table className="w-full border-t border-zinc-200 text-sm dark:border-zinc-800">
                   <thead className="bg-zinc-50 text-left text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
                     <tr>
-                      <th className="px-4 py-2 w-20">Image</th>
-                      <th className="px-4 py-2">Title</th>
-                      <th className="px-4 py-2">Artist</th>
-                      <th className="px-4 py-2 text-right">Actions</th>
+                      <th className="px-4 py-2 w-20">{t("Image")}</th>
+                      <th className="px-4 py-2">{t("Title")}</th>
+                      <th className="px-4 py-2">{t("Artist")}</th>
+                      <th className="px-4 py-2 text-right">{t("Actions")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -137,7 +144,7 @@ export default function AdminArtworksPage() {
                               />
                             ) : (
                               <span className="text-[10px] text-zinc-400">
-                                No image
+                                {t("No image")}
                               </span>
                             )}
                           </div>
@@ -160,8 +167,10 @@ export default function AdminArtworksPage() {
                             </Link>
 
                             <ConfirmDialog
-                              title="Delete artwork"
-                              description="This action cannot be undone. This will permanently delete the artwork."
+                              title={t("Delete artwork")}
+                              description={t(
+                                "This action cannot be undone. This will permanently delete the artwork.",
+                              )}
                               onConfirm={() => removeArtwork.mutate(artwork.id)}
                               isLoading={removeArtwork.isPending}
                             >
@@ -187,7 +196,7 @@ export default function AdminArtworksPage() {
                   >
                     <div className="flex gap-3">
                       {/* Thumbnail */}
-                      <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 flex items-center justify-center">
+                      <div className="h-16 w-16 shrink-0 overflow-hidden rounded border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 flex items-center justify-center">
                         {artwork.imageUrl ? (
                           <Image
                             src={artwork.imageUrl}
@@ -198,7 +207,7 @@ export default function AdminArtworksPage() {
                           />
                         ) : (
                           <span className="text-[10px] text-zinc-400">
-                            No image
+                            {t("No image")}
                           </span>
                         )}
                       </div>
@@ -222,8 +231,10 @@ export default function AdminArtworksPage() {
                             </Link>
 
                             <ConfirmDialog
-                              title="Delete artwork"
-                              description="This action cannot be undone. This will permanently delete the artwork."
+                              title={t("Delete artwork")}
+                              description={t(
+                                "This action cannot be undone. This will permanently delete the artwork.",
+                              )}
                               onConfirm={() => removeArtwork.mutate(artwork.id)}
                               isLoading={removeArtwork.isPending}
                             >

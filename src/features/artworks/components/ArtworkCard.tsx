@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Artwork, ArtworkCategoryLabels } from "../types";
 
 interface ArtworkCardProps {
@@ -7,6 +8,8 @@ interface ArtworkCardProps {
 }
 
 export const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
+  const { t } = useTranslation();
+
   return (
     <article
       key={artwork.id}
@@ -31,7 +34,7 @@ export const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">
-              No image
+              {t("No image")}
             </div>
           )}
 
@@ -59,7 +62,7 @@ export const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
         <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
           {artwork.category ? (
             <span className="rounded-full border px-2 py-0.5">
-              {ArtworkCategoryLabels[artwork.category]}
+              {t(ArtworkCategoryLabels[artwork.category])}
             </span>
           ) : null}
           {artwork.artist ? (

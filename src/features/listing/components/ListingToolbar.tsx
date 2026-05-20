@@ -1,12 +1,11 @@
 "use client";
 
-import { CategorySelect } from "@/components/ui";
-import { FilterChip } from "@/components/ui";
-import { SearchInput } from "@/components/ui";
+import { CategorySelect, FilterChip, SearchInput } from "@/components/ui";
 import { ArtworkCategoryLabels } from "@/features/artworks/types";
+import { useTranslation } from "react-i18next";
 import {
   ALL_CATEGORIES_VALUE,
-  artworkCategoryOptions,
+  useArtworkCategoryOptions,
 } from "../services/artwork-category-options";
 
 type Props = {
@@ -32,6 +31,8 @@ export function ListingToolbar({
 }: Props) {
   const hasSearch = search.trim() !== "";
   const hasCategory = category !== ALL_CATEGORIES_VALUE;
+  const artworkCategoryOptions = useArtworkCategoryOptions();
+  const { t } = useTranslation();
 
   return (
     <section className="mt-4">
@@ -40,7 +41,7 @@ export function ListingToolbar({
           <SearchInput
             value={search}
             onChange={onSearchChange}
-            placeholder="Search artworks..."
+            placeholder={t("Search artworks...")}
           />
         </div>
 
@@ -49,7 +50,7 @@ export function ListingToolbar({
             value={category}
             onChange={onCategoryChange}
             options={artworkCategoryOptions}
-            placeholder="All categories"
+            placeholder={t("All categories")}
           />
         </div>
       </div>
@@ -58,18 +59,18 @@ export function ListingToolbar({
         <div className="mt-3 flex flex-wrap items-center gap-2">
           {hasSearch && (
             <FilterChip
-              label={`Search: ${search.trim()}`}
+              label={`${t("Search")}: ${search.trim()}`}
               onRemove={onClearSearch}
             />
           )}
 
           {hasCategory && (
             <FilterChip
-              label={`Category: ${
+              label={`${t("Category")}: ${t(
                 ArtworkCategoryLabels[
                   category as keyof typeof ArtworkCategoryLabels
-                ] ?? category
-              }`}
+                ] ?? category,
+              )}`}
               onRemove={onClearCategory}
             />
           )}
@@ -79,7 +80,7 @@ export function ListingToolbar({
             onClick={onClearFilters}
             className="ml-auto text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
           >
-            Clear all
+            {t("Clear all")}
           </button>
         </div>
       )}

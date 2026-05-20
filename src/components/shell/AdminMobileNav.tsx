@@ -7,6 +7,7 @@ import * as React from "react";
 import { useAdminLogout } from "@/features/admin/hooks/useAdminLogout";
 import { useInquiryStats } from "@/features/inquiries/hooks/useInquiryStats";
 import { cn, getSectionRoot } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 import { adminNav } from "../../features/admin/config/adminNav";
 
 export function AdminMobileNav() {
@@ -19,6 +20,7 @@ export function AdminMobileNav() {
   const scrollerRef = React.useRef<HTMLDivElement | null>(null);
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
   const [canScrollRight, setCanScrollRight] = React.useState(false);
+  const { t } = useTranslation();
 
   const updateFades = React.useCallback(() => {
     const el = scrollerRef.current;
@@ -100,7 +102,7 @@ export function AdminMobileNav() {
                         : "bg-zinc-100 text-zinc-700 border-zinc-200 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-700",
                     )}
                   >
-                    {item.label}
+                    {t(item.label)}
 
                     {isInbox && unread > 0 && (
                       <span
@@ -128,7 +130,7 @@ export function AdminMobileNav() {
                   "dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-700 dark:hover:bg-zinc-800",
                 )}
               >
-                {logout.isPending ? "..." : "Logout"}
+                {logout.isPending ? "..." : t("Logout")}
               </button>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import { ArtworkCategoryLabels } from "@/features/artworks/types";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Artist } from "../types";
 
 interface ArtistCardProps {
@@ -8,11 +9,13 @@ interface ArtistCardProps {
 }
 
 export const ArtistCard = ({ artist }: ArtistCardProps) => {
+  const { t } = useTranslation();
+
   return (
     <Link href={`/artists/${artist.id}`} className="block focus:outline-none">
       <article
         className="
-          group overflow-hidden rounded-2xl border bg-background
+          group h-full overflow-hidden rounded-2xl border bg-background
           transition-all duration-200
           hover:-translate-y-0.5 hover:shadow-md hover:border-muted-foreground/30
         "
@@ -28,7 +31,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">
-              No image
+              {t("No image")}
             </div>
           )}
 
@@ -43,7 +46,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
 
             {artist.primaryCategory ? (
               <span className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
-                {ArtworkCategoryLabels[artist.primaryCategory]}
+                {t(ArtworkCategoryLabels[artist.primaryCategory])}
               </span>
             ) : null}
 

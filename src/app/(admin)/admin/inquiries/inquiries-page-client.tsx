@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 
-import { ErrorState } from "@/components/ui";
-import { PageSizeSelector } from "@/components/ui";
-import { Pagination } from "@/components/ui";
+import { ErrorState, PageSizeSelector, Pagination } from "@/components/ui";
 
 import { Button } from "@/components/ui";
 import {
@@ -15,6 +13,7 @@ import {
 } from "@/features/inquiries";
 import { useUpdateInquiryStatus } from "@/features/inquiries/hooks/useUpdateInquiryStatus";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import { MdArrowForward, MdOutlineArchive } from "react-icons/md";
 import { PiEnvelopeSimpleOpen } from "react-icons/pi";
 
@@ -55,6 +54,7 @@ export function InquiriesPageClient({
     initialPageSize,
     defaultPageSize: DEFAULT_PAGE_SIZE,
   });
+  const { t } = useTranslation();
 
   const { data, isLoading, isError, error, refetch } = usePaginatedInquiries({
     page,
@@ -74,21 +74,21 @@ export function InquiriesPageClient({
 
   const emptyMessage =
     status === "NEW"
-      ? "No new inquiries."
+      ? t("No new inquiries.")
       : status === "READ"
-        ? "No read inquiries."
+        ? t("No read inquiries.")
         : status === "ARCHIVED"
-          ? "No archived inquiries."
-          : "No inquiries yet.";
+          ? t("No archived inquiries.")
+          : t("No inquiries yet.");
 
   return (
     <>
       <div className="mb-2 space-y-2">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-semibold">Inquiries</h1>
+            <h1 className="text-3xl font-semibold">{t("Inquiries")}</h1>
             <p className="text-sm text-muted-foreground">
-              Admin inbox for contact inquiries.
+              {t("Admin inbox for contact inquiries.")}
             </p>
           </div>
         </div>
@@ -104,12 +104,14 @@ export function InquiriesPageClient({
 
       {isLoading ? (
         <div className="mt-6 rounded-2xl border p-6 text-sm text-muted-foreground">
-          Loading inquiries…
+          {t("Loading inquiries…")}
         </div>
       ) : isError ? (
         <ErrorState
-          title="Couldn’t load inquiries"
-          message={error instanceof Error ? error.message : "Please try again."}
+          title={t("Couldn't load inquiries")}
+          message={
+            error instanceof Error ? t(error.message) : t("Please try again.")
+          }
           onRetry={() => refetch()}
         />
       ) : items.length === 0 ? (
@@ -150,7 +152,7 @@ export function InquiriesPageClient({
                             : "text-muted-foreground"
                         }`}
                       >
-                        {i.status}
+                        {t(i.status)}
                       </span>
 
                       <span className="text-sm font-medium">{i.name}</span>
@@ -173,10 +175,10 @@ export function InquiriesPageClient({
                       <Button
                         variant="link"
                         disabled={isUpdating}
-                        title="Mark as read"
+                        title={t("Mark as read")}
                         onClick={() => {
                           updateStatus({ id: i.id, status: "READ" });
-                          toast.success("Marked as read");
+                          toast.success(t("Marked as read"));
                         }}
                       >
                         <PiEnvelopeSimpleOpen size="20" />
@@ -187,17 +189,17 @@ export function InquiriesPageClient({
                       <Button
                         variant="link"
                         disabled={isUpdating}
-                        title="Mark as archived"
+                        title={t("Mark as archived")}
                         onClick={() => {
                           updateStatus({ id: i.id, status: "ARCHIVED" });
-                          toast.success("Marked as archived");
+                          toast.success(t("Marked as archived"));
                         }}
                       >
                         <MdOutlineArchive size="20" />
                       </Button>
                     )}
 
-                    <Link title="Open" href={`/admin/inquiries/${i.id}`}>
+                    <Link title={t("Open")} href={`/admin/inquiries/${i.id}`}>
                       <MdArrowForward size="20" />
                     </Link>
                   </div>

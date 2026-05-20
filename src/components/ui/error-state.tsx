@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
+
 export function ErrorState({
   title = "Something went wrong",
   message,
@@ -9,6 +11,8 @@ export function ErrorState({
   message?: string;
   onRetry?: () => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className="mt-6 rounded-lg border p-6">
       <div className="text-base font-semibold">{title}</div>
@@ -21,7 +25,7 @@ export function ErrorState({
           onClick={onRetry}
           className="mt-4 h-9 rounded-md border px-3 text-sm font-medium"
         >
-          Retry
+          {t("Retry")}
         </button>
       ) : null}
     </div>

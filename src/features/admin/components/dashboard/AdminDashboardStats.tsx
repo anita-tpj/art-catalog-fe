@@ -1,8 +1,8 @@
 "use client";
 
 import { formatCompactTime, formatRelativeTime } from "@/lib/utils";
-import clsx from "clsx";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   MdAccessTime,
   MdOutlineCollections,
@@ -20,9 +20,10 @@ type Props = {
 };
 
 export function AdminDashboardStats({ data, isLoading }: Props) {
+  const { t } = useTranslation();
   const lastRelative = useMemo(
-    () => formatRelativeTime(data?.lastInquiryAt ?? null),
-    [data?.lastInquiryAt],
+    () => formatRelativeTime(data?.lastInquiryAt ?? null, t),
+    [data?.lastInquiryAt, t],
   );
   const lastExact = useMemo(
     () => formatCompactTime(data?.lastInquiryAt ?? null),
@@ -42,9 +43,9 @@ export function AdminDashboardStats({ data, isLoading }: Props) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <StatCard
-        title="Artworks"
+        title={t("Artworks")}
         value={data?.artworksCount ?? "—"}
-        subtitle="Total artworks in catalog"
+        subtitle={t("Total artworks in catalog")}
         icon={<MdOutlineCollections size={18} />}
         href="/admin/artworks"
       >
@@ -56,22 +57,22 @@ export function AdminDashboardStats({ data, isLoading }: Props) {
                 href={`/admin/artworks/${a.id}`}
                 title={a.title}
                 subtitle={a.artistName}
-                meta={formatRelativeTime(a.createdAt)}
+                meta={formatRelativeTime(a.createdAt, t)}
                 imageUrl={a.imageUrl}
               />
             ))
           ) : (
             <div className="px-2 text-xs text-muted-foreground">
-              No artworks available yet.
+              {t("No artworks available yet.")}
             </div>
           )}
         </div>
       </StatCard>
 
       <StatCard
-        title="Artists"
+        title={t("Artists")}
         value={data?.artistsCount ?? "—"}
-        subtitle="All artist profiles"
+        subtitle={t("All artist profiles")}
         icon={<MdOutlinePerson size={18} />}
         href="/admin/artists"
       >
@@ -82,25 +83,24 @@ export function AdminDashboardStats({ data, isLoading }: Props) {
                 key={a.id}
                 href={`/admin/artists/${a.id}`}
                 title={a.name}
-                meta={formatRelativeTime(a.createdAt)}
+                meta={formatRelativeTime(a.createdAt, t)}
                 imageUrl={a.avatarUrl}
               />
             ))
           ) : (
             <div className="px-2 text-xs text-muted-foreground">
-              No artists available yet.
+              {t("No artists available yet.")}
             </div>
           )}
         </div>
       </StatCard>
 
       <StatCard
-        title="New inquiries"
+        title={t("New inquiries")}
         value={data?.inquiriesNewCount ?? "—"}
-        subtitle={clsx(
-          "All inquiries: ",
-          String(data?.inquiriesAllCount ?? "—"),
-        )}
+        subtitle={t("All inquiries: {{count}}", {
+          count: data?.inquiriesAllCount ?? "—",
+        })}
         icon={<MdOutlineMail size={18} />}
         href="/admin/inquiries?status=NEW"
       >
@@ -112,27 +112,31 @@ export function AdminDashboardStats({ data, isLoading }: Props) {
                 href={`/admin/inquiries/${i.id}`}
                 title={i.name}
                 subtitle={i.regarding}
-                meta={formatRelativeTime(i.createdAt)}
+                meta={formatRelativeTime(i.createdAt, t)}
                 imageUrl={null}
               />
             ))
           ) : (
             <div className="px-2 text-xs text-muted-foreground">
-              No new inquiries.
+              {t("No new inquiries.")}
             </div>
           )}
         </div>
       </StatCard>
 
       <StatCard
-        title="Last inquiry"
+        title={t("Last inquiry")}
         value={lastRelative}
-        subtitle={data?.lastInquiryAt ? `Received: ${lastExact}` : "—"}
+        subtitle={
+          data?.lastInquiryAt
+            ? t("Received: {{date}}", { date: lastExact })
+            : "—"
+        }
         icon={<MdAccessTime size={18} />}
         href="/admin/inquiries"
       >
         <div className="px-2 text-xs text-muted-foreground">
-          Jump to Inbox to view the latest messages.
+          {t("Jump to Inbox to view the latest messages.")}
         </div>
       </StatCard>
     </div>

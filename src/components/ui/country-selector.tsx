@@ -1,7 +1,7 @@
 "use client";
 
-import { Label } from "@/components/ui";
 import {
+  Label,
   Select,
   SelectContent,
   SelectItem,
@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui";
 import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 type CountryOption = { value: string; label: string };
 
@@ -29,6 +30,8 @@ export function CountrySelector<TFieldValues extends FieldValues>({
   options,
   requiredMessage,
 }: CountrySelectorProps<TFieldValues>) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-1">
       <Label>{label}</Label>
@@ -59,8 +62,10 @@ export function CountrySelector<TFieldValues extends FieldValues>({
               </SelectContent>
             </Select>
 
-            {fieldState.error && (
-              <p className="text-xs text-red-500">{fieldState.error.message}</p>
+            {fieldState.error?.message && (
+              <p className="text-xs text-red-500">
+                {t(fieldState.error.message)}
+              </p>
             )}
           </div>
         )}

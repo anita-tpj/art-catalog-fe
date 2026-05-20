@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import {
   MdArrowForward,
   MdOutlineArchive,
@@ -48,6 +49,7 @@ function buildMailto(inquiry: Inquiry, regarding: string, created: string) {
 }
 
 export function InquiryDetailClient({ initialInquiry }: Props) {
+  const { t } = useTranslation();
   const router = useRouter();
   const [inquiry, setInquiry] = useState<Inquiry>(initialInquiry);
 
@@ -92,7 +94,7 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
               <span
                 className={`rounded-full border px-2 py-0.5 text-xs ${statusPill}`}
               >
-                {inquiry.status}
+                {t(inquiry.status)}
               </span>
 
               <div className="text-sm font-medium">{inquiry.name}</div>
@@ -106,7 +108,7 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                 <a
                   href={buildMailto(inquiry, regarding, created)}
                   className="inline-flex"
-                  title="Reply"
+                  title={t("Reply")}
                 >
                   <Button type="button" variant="link" size="xs">
                     <MdOutlineReply size="20" />
@@ -117,14 +119,14 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                 <Button
                   variant="link"
                   size="xs"
-                  title="Copy"
+                  title={t("Copy")}
                   onClick={async () => {
                     navigator.clipboard.writeText(inquiry.email);
                     try {
                       await navigator.clipboard.writeText(inquiry.email);
-                      toast.success("Email copied");
+                      toast.success(t("Email copied"));
                     } catch {
-                      toast.error("Couldn’t copy email");
+                      toast.error(t("Couldn't copy email"));
                     }
                   }}
                 >
@@ -136,12 +138,12 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                   type="button"
                   variant="link"
                   size="xs"
-                  title="Mark unread"
+                  title={t("Mark unread")}
                   onClick={async () => {
                     await setStatus("NEW");
                     router.push("/admin/inquiries");
                     router.refresh();
-                    toast.success("Marked as unread");
+                    toast.success(t("Marked as unread"));
                   }}
                 >
                   <MdOutlineMarkEmailUnread size="20" />
@@ -152,13 +154,13 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                   type="button"
                   variant="link"
                   size="xs"
-                  title="Archive"
+                  title={t("Archive")}
                   disabled={isPending || inquiry.status === "ARCHIVED"}
                   onClick={async () => {
                     await setStatus("ARCHIVED");
                     router.push("/admin/inquiries");
                     router.refresh();
-                    toast.success("Marked as archived");
+                    toast.success(t("Marked as archived"));
                   }}
                 >
                   <MdOutlineArchive size="20" />
@@ -179,14 +181,14 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
         {/* RIGHT */}
         <aside className="lg:col-span-4 space-y-4">
           <div className="rounded-2xl border p-5 space-y-2">
-            <div className="text-sm font-medium">Related</div>
+            <div className="text-sm font-medium">{t("Related")}</div>
 
             {inquiry.artworkId && (
               <Link
                 className="text-sm underline underline-offset-4 flex items-center gap-0.5"
                 href={`/artworks/${inquiry.artworkId}`}
               >
-                View artwork
+                {t("View artwork")}
                 <MdArrowForward />
               </Link>
             )}
@@ -196,13 +198,13 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                 className="text-sm underline underline-offset-4 flex items-center gap-0.5"
                 href={`/artists/${inquiry.artistId}`}
               >
-                View artist
+                {t("View artist")}
                 <MdArrowForward />
               </Link>
             )}
 
             <div className="pt-2 text-xs text-muted-foreground">
-              Tip: Opening a NEW inquiry auto-marks it as READ.
+              {t("Tip: Opening a NEW inquiry auto-marks it as READ.")}
             </div>
           </div>
         </aside>
