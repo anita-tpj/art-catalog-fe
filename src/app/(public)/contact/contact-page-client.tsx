@@ -1,39 +1,45 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import { useForm } from "react-hook-form";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button } from "@/components/ui";
-import { Card } from "@/components/ui";
-import { TextInputField } from "@/components/ui";
-import { TextareaField } from "@/components/ui";
+import { Button, Card, TextareaField, TextInputField } from "@/components/ui";
 
 import { artistsService } from "@/features/artists";
 import { artworksService } from "@/features/artworks";
 import { inquiriesService } from "@/features/inquiries";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   artworkId?: number;
   artistId?: number;
 };
 
-const contactSchema = z.object({
-  name: z.string().min(1, "Name is required").max(120, "Name is too long"),
-  email: z.string().min(1, "Email is required").email("Enter a valid email"),
-  message: z
-    .string()
-    .min(10, "Message is too short")
-    .max(4000, "Message is too long"),
-});
+const contactSchema = (t: (key: string) => string) =>
+  z.object({
+    name: z
+      .string()
+      .min(1, t("Name is required"))
+      .max(120, t("Name is too long")),
+    email: z
+      .string()
+      .min(1, t("Email is required"))
+      .email(t("Enter a valid email")),
+    message: z
+      .string()
+      .min(10, t("Message is too short"))
+      .max(4000, t("Message is too long")),
+  });
 
-type ContactFormValues = z.infer<typeof contactSchema>;
+type ContactFormValues = z.infer<ReturnType<typeof contactSchema>>;
 
 export function ContactPageClient({ artworkId, artistId }: Props) {
+  const { t } = useTranslation();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -64,8 +70,10 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
       ? `/artists/${artistId}`
       : "/";
 
+  const schema = contactSchema(t);
+
   const form = useForm<ContactFormValues>({
-    resolver: zodResolver(contactSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: "",
       email: "",
@@ -115,7 +123,7 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
       const msg =
         err instanceof Error
           ? err.message
-          : "Something went wrong. Please try again.";
+          : t("Something went wrong. Please try again.");
       setSubmitError(msg);
     }
   });
@@ -123,15 +131,15 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
   return (
     <section className="space-y-6">
       <header className="space-y-1">
-        <h1 className="text-3xl font-semibold">Contact</h1>
+        <h1 className="text-3xl font-semibold">{t("Contact")}</h1>
         <p className="text-sm text-muted-foreground">
-          Send an inquiry and we’ll get back to you.
+          {t("Send an inquiry and we'll get back to you.")}
         </p>
       </header>
 
       {contextLine ? (
         <Card className="rounded-2xl p-4">
-          <div className="text-sm font-medium">Regarding</div>
+          <div className="text-sm font-medium">{t("Regarding")}</div>
           <div className="text-sm text-muted-foreground">{contextLine}</div>
 
           <div className="mt-2">
@@ -139,7 +147,7 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
               className="inline-flex items-center gap-1 text-sm underline underline-offset-4"
               href={backHref}
             >
-              View related page
+              {t("View related page")}
               <MdArrowForward />
             </Link>
           </div>
@@ -148,21 +156,23 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
 
       {isSuccess ? (
         <Card className="rounded-2xl p-6">
-          <div className="text-lg font-semibold">Inquiry sent ✅</div>
+          <div className="text-lg font-semibold">{t("Inquiry sent")} ✅</div>
           <p className="mt-1 text-sm text-muted-foreground">
-            Thanks! We received your message and will get back to you soon.
+            {t(
+              "Thanks! We received your message and will get back to you soon.",
+            )}
           </p>
 
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <Button asChild variant="outline">
               <Link href={backHref} className="inline-flex items-center gap-1">
                 <MdArrowBack />
-                Back
+                {t("Back")}
               </Link>
             </Button>
 
             <Button asChild>
-              <Link href="/artworks">Browse artworks</Link>
+              <Link href="/artworks">{t("Browse artworks")}</Link>
             </Button>
           </div>
         </Card>
@@ -170,16 +180,16 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
         <Card className="rounded-2xl p-6">
           <form onSubmit={onSubmit} className="space-y-4" noValidate>
             <TextInputField
-              label="Name"
-              placeholder="Your name"
+              label={t("Name")}
+              placeholder={t("Your name")}
               error={errors.name?.message}
               disabled={isSubmitting}
               {...register("name")}
             />
 
             <TextInputField
-              label="Email"
-              placeholder="you@example.com"
+              label={t("Email")}
+              placeholder={t("you@example.com")}
               type="email"
               error={errors.email?.message}
               disabled={isSubmitting}
@@ -187,8 +197,8 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
             />
 
             <TextareaField
-              label="Message"
-              placeholder="Write your message…"
+              label={t("Message")}
+              placeholder={t("Write your message…")}
               rows={6}
               error={errors.message?.message}
               disabled={isSubmitting}
@@ -203,12 +213,13 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
 
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Sending…" : "Send inquiry"}
+                {isSubmitting ? t("Sending…") : t("Send inquiry")}
               </Button>
 
               <p className="text-xs text-muted-foreground">
-                By sending this inquiry, you agree we may contact you back via
-                email.
+                {t(
+                  "By sending this inquiry, you agree we may contact you back via email.",
+                )}
               </p>
             </div>
           </form>

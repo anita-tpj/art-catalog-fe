@@ -1,4 +1,5 @@
 import { Inquiry } from "@/features/inquiries/types";
+import { getTranslation } from "@/i18n/server";
 import { API_BASE_URL } from "@/lib/config";
 import { parseIdOrNotFound } from "@/lib/utils";
 import Link from "next/link";
@@ -27,6 +28,9 @@ export default async function InquiryDetailPage({ params }: PageProps) {
   const id = parseIdOrNotFound(idParam);
 
   const inquiry = await fetchInquiryOrNull(id);
+
+  const { t } = await getTranslation();
+
   if (!inquiry) notFound();
 
   return (
@@ -37,11 +41,11 @@ export default async function InquiryDetailPage({ params }: PageProps) {
           className="text-sm underline underline-offset-4 flex items-center gap-0.5"
         >
           <MdArrowBack />
-          Back to inbox
+          {t("Back to inbox")}
         </Link>
 
         <div className="text-xs text-muted-foreground">
-          Inquiry #{inquiry.id}
+          {t("Inquiry")} #{inquiry.id}
         </div>
       </div>
 

@@ -1,14 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui";
-import { CancelButton } from "@/components/ui";
-import { Card } from "@/components/ui";
-import { CountrySelector } from "@/components/ui";
-import { EnumSelectField } from "@/components/ui";
-import { Spinner } from "@/components/ui";
-import { TextInputField } from "@/components/ui";
-import { TextareaField } from "@/components/ui";
-import { YearSelector } from "@/components/ui";
+import {
+  Button,
+  CancelButton,
+  Card,
+  CountrySelector,
+  EnumSelectField,
+  Spinner,
+  TextareaField,
+  TextInputField,
+  YearSelector,
+} from "@/components/ui";
 import {
   ArtworkCategory,
   ArtworkCategoryLabels,
@@ -17,6 +19,7 @@ import { useCountryOptions } from "@/hooks/useCountries";
 
 import { ImageUploadField } from "@/components/ui";
 import { UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useArtistAvatarUpload } from "../../hooks/useArtistAvatarUpload";
 import { CreateArtistDTO } from "../../types";
 
@@ -49,6 +52,7 @@ export function ArtistFormLayout({
 
   const countryOptions = useCountryOptions();
   const { uploading, error, uploadFile } = useArtistAvatarUpload();
+  const { t } = useTranslation();
 
   return (
     <section className="space-y-4">
@@ -73,8 +77,8 @@ export function ArtistFormLayout({
                 setValue={setValue}
                 imgUrl={"avatarUrl"}
                 imgPublicId={"avatarPublicId"}
-                label="Avatar"
-                buttonLabel="Upload avatar"
+                label={"Avatar"}
+                buttonLabel={t("Upload avatar")}
                 variant="avatar"
                 onUpload={uploadFile}
                 uploading={uploading}
@@ -86,9 +90,9 @@ export function ArtistFormLayout({
               />
               {/* Name */}
               <TextInputField
-                label="Name"
-                placeholder="Type name"
-                error={errors.name?.message}
+                label={t("Name")}
+                placeholder={t("Type name")}
+                error={errors.name?.message ? t(errors.name.message) : undefined}
                 {...register("name")}
               />
               <div className="flex gap-4">
@@ -97,8 +101,8 @@ export function ArtistFormLayout({
                   <CountrySelector<CreateArtistDTO>
                     control={control}
                     name="country"
-                    label="Country"
-                    placeholder="Select country"
+                    label={t("Country")}
+                    placeholder={t("Select country")}
                     options={countryOptions}
                   />
                 </div>
@@ -107,8 +111,8 @@ export function ArtistFormLayout({
                   <EnumSelectField<CreateArtistDTO, ArtworkCategory>
                     control={control}
                     name="primaryCategory"
-                    label="Primary category"
-                    placeholder="Select category"
+                    label={t("Primary category")}
+                    placeholder={t("Select category")}
                     enumObject={ArtworkCategory}
                     labels={ArtworkCategoryLabels}
                   />
@@ -119,10 +123,10 @@ export function ArtistFormLayout({
             <div className="space-y-4">
               {/* Bio */}
               <TextareaField
-                label="Bio"
-                placeholder="Type bio"
+                label={t("Bio")}
+                placeholder={t("Type bio")}
                 rows={4}
-                error={errors.bio?.message}
+                error={errors.bio?.message ? t(errors.bio.message) : undefined}
                 {...register("bio")}
               />
               <div className="flex gap-4">
@@ -131,8 +135,8 @@ export function ArtistFormLayout({
                   <YearSelector<CreateArtistDTO>
                     control={control}
                     name="birthYear"
-                    label="Year of birth"
-                    placeholder="Select year"
+                    label={t("Year of birth")}
+                    placeholder={t("Select year")}
                   />
                 </div>
                 {/* Death Year */}
@@ -140,8 +144,8 @@ export function ArtistFormLayout({
                   <YearSelector<CreateArtistDTO>
                     control={control}
                     name="deathYear"
-                    label="Year of death"
-                    placeholder="Select year"
+                    label={t("Year of death")}
+                    placeholder={t("Select year")}
                   />
                 </div>
               </div>
@@ -150,7 +154,7 @@ export function ArtistFormLayout({
 
           {apiError && (
             <p className="text-xs text-red-500">
-              {apiError || "Failed to save artist."}
+              {apiError || t("Failed to save artist.")}
             </p>
           )}
 

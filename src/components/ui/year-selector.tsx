@@ -14,6 +14,7 @@ import {
   DEFAULT_MIN_YEAR,
   CURRENT_YEAR,
 } from "@/lib/year-options";
+import { useTranslation } from "react-i18next";
 
 type YearSelectorProps<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
@@ -35,6 +36,7 @@ export function YearSelector<TFieldValues extends FieldValues>({
   requiredMessage,
 }: YearSelectorProps<TFieldValues>) {
   const years = getYearOptions(minYear, maxYear);
+  const { t } = useTranslation();
 
   return (
     <div className="space-y-1">
@@ -65,8 +67,10 @@ export function YearSelector<TFieldValues extends FieldValues>({
               </SelectContent>
             </Select>
 
-            {fieldState.error && (
-              <p className="text-xs text-red-500">{fieldState.error.message}</p>
+             {fieldState.error?.message && (
+              <p className="text-xs text-red-500">
+                {t(fieldState.error.message)}
+              </p>
             )}
           </div>
         )}

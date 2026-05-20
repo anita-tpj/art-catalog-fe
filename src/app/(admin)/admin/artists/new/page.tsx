@@ -5,8 +5,10 @@ import { useCreateArtist } from "@/features/artists/hooks/useCreateArtist";
 import { CreateArtistDTO, createArtistSchema } from "@/features/artists/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 const NewArtistPage = () => {
+  const { t } = useTranslation();
   const createArtist = useCreateArtist();
 
   const form = useForm<CreateArtistDTO>({
@@ -28,16 +30,16 @@ const NewArtistPage = () => {
 
   const isBusy = isSubmitting || createArtist.isPending;
   const apiError = createArtist.error
-    ? (createArtist.error as Error).message
+    ? t((createArtist.error as Error).message)
     : undefined;
 
   return (
     <ArtistFormLayout
       form={form}
       onSubmit={(data) => createArtist.mutate(data)}
-      title="Create artist"
-      subtitle="Add a new artist to the catalog."
-      submitLabel={isBusy ? "Saving..." : "Save artist"}
+      title={t("Create artist")}
+      subtitle={t("Add a new artist to the catalog.")}
+      submitLabel={isBusy ? t("Saving...") : t("Save artist")}
       isBusy={isBusy}
       apiError={apiError}
     />

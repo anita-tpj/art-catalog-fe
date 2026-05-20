@@ -1,7 +1,7 @@
 export const ArtworkCardSkeleton = () => {
   return (
     <div className="animate-pulse overflow-hidden rounded-2xl border bg-background">
-      <div className="aspect-[4/3] bg-muted" />
+      <div className="aspect-4/3 bg-muted" />
 
       <div className="space-y-3 p-4">
         <div className="flex items-start justify-between gap-3">

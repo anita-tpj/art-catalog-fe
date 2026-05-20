@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 type ResponsiveListProps<T> = {
   items: T[];
@@ -15,11 +16,13 @@ export function AdminResponsiveList<T>({
   renderTable,
   renderCards,
 }: ResponsiveListProps<T>) {
+  const { t } = useTranslation();
+
   if (isLoading) {
     return (
       <>
         {loadingContent ?? (
-          <div className="text-sm text-zinc-500">Loading...</div>
+          <div className="text-sm text-zinc-500">{t("Loading...")}</div>
         )}
       </>
     );

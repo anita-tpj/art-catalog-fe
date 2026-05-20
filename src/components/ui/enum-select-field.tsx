@@ -1,7 +1,7 @@
 "use client";
 
-import { Label } from "@/components/ui";
 import {
+  Label,
   Select,
   SelectContent,
   SelectItem,
@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui";
 import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 type EnumSelectFieldProps<
   TFieldValues extends FieldValues,
@@ -38,6 +39,7 @@ export function EnumSelectField<
   requiredMessage,
 }: EnumSelectFieldProps<TFieldValues, TEnumValue>) {
   const values = Object.values(enumObject) as TEnumValue[];
+  const { t } = useTranslation();
 
   return (
     <div className="space-y-1">
@@ -60,14 +62,16 @@ export function EnumSelectField<
               <SelectContent>
                 {values.map((value) => (
                   <SelectItem key={value} value={value}>
-                    {labels[value]}
+                    {t(labels[value])}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
-            {fieldState.error && (
-              <p className="text-xs text-red-500">{fieldState.error.message}</p>
+            {fieldState.error?.message && (
+              <p className="text-xs text-red-500">
+                {t(fieldState.error.message)}
+              </p>
             )}
           </div>
         )}

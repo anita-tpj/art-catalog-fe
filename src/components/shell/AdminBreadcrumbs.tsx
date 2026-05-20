@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 const LABELS: Record<string, string> = {
   admin: "Dashboard",
@@ -13,6 +14,7 @@ const LABELS: Record<string, string> = {
 export function AdminBreadcrumbs() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
+  const { t } = useTranslation();
 
   if (segments[0] !== "admin") return null;
 
@@ -23,7 +25,7 @@ export function AdminBreadcrumbs() {
           href="/admin"
           className="hover:text-zinc-900 dark:hover:text-zinc-100"
         >
-          Dashboard
+          {t("Dashboard")}
         </Link>
 
         {segments.slice(1).map((seg, i) => {
@@ -35,7 +37,7 @@ export function AdminBreadcrumbs() {
               <span className="text-zinc-300 dark:text-zinc-700">/</span>
               <Link
                 href={href}
-                className="hover:text-zinc-900 dark:hover:text-zinc-100"
+                className="hover:text-zinc-900 dark:hover:text-zinc-100 capitalize"
               >
                 {label}
               </Link>

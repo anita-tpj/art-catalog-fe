@@ -39,20 +39,33 @@ export function formatCompactTime(dt: string | null) {
 }
 
 /** Formats date to relative time (e.g. 5m ago) */
-export function formatRelativeTime(dt: string | null) {
+export function formatRelativeTime(
+  dt: string | null,
+  t: (key: string, options?: any) => string,
+) {
   if (!dt) return "—";
+
   const ms = Date.now() - new Date(dt).getTime();
+
   if (Number.isNaN(ms)) return "—";
 
   const mins = Math.floor(ms / 60000);
-  if (mins < 1) return "Just now";
-  if (mins < 60) return `${mins}m ago`;
+
+  if (mins < 1) return t("Just now");
+
+  if (mins < 60) {
+    return t("{{count}}m ago", { count: mins });
+  }
 
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
+
+  if (hours < 24) {
+    return t("{{count}}h ago", { count: hours });
+  }
 
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+
+  return t("{{count}}d ago", { count: days });
 }
 
 export function getSectionRoot(pathname: string) {

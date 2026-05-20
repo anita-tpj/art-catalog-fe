@@ -9,6 +9,7 @@ import {
   ArtworkStyleLabels,
   ArtworkTechniqueLabels,
 } from "@/features/artworks/types";
+import { getTranslation } from "@/i18n/server";
 import { getById } from "@/lib/api-client";
 import { parseIdOrNotFound } from "@/lib/utils";
 import Image from "next/image";
@@ -26,12 +27,12 @@ function getArtistName(artwork: Artwork) {
   return artwork.artist?.name ?? "Unknown artist";
 }
 
-function getSubtitle(artwork: Artwork) {
+function getSubtitle(artwork: Artwork, t: (key: string) => string) {
   const artistName = getArtistName(artwork);
   return [
     artistName,
     artwork.year ? String(artwork.year) : null,
-    artwork.technique ? ArtworkTechniqueLabels[artwork.technique] : null,
+    artwork.technique ? t(ArtworkTechniqueLabels[artwork.technique]) : null,
   ]
     .filter(Boolean)
     .join(" • ");
@@ -91,6 +92,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function ArtworkDetailPage({ params }: PageProps) {
+  const { t } = await getTranslation();
   const { id: idParam } = await params;
   const id = parseIdOrNotFound(idParam);
 
@@ -104,7 +106,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const subtitle = getSubtitle(artwork);
+  const subtitle = getSubtitle(artwork, t);
   const details = getDetails(artwork);
 
   return (
@@ -115,7 +117,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
           className="text-sm underline underline-offset-4 flex items-center gap-0.5"
         >
           <MdArrowBack />
-          Back to artworks
+          {t("Back to artworks")}
         </Link>
       </div>
 
@@ -135,7 +137,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
                 />
               ) : (
                 <div className="absolute inset-0 grid place-items-center text-sm text-muted-foreground">
-                  No image
+                  {t("No image")}
                 </div>
               )}
             </div>
@@ -151,7 +153,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
 
           {artwork.description ? (
             <div className="mt-6 space-y-2">
-              <h2 className="text-lg font-semibold">About</h2>
+              <h2 className="text-lg font-semibold">{t("About artwork")}</h2>
               <p className="text-sm leading-6 text-muted-foreground">
                 {artwork.description}
               </p>
@@ -173,17 +175,19 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
           <dl className="grid grid-cols-2 gap-x-4 gap-y-3 rounded-2xl border p-4">
             {details.map((d) => (
               <div key={d.label} className="space-y-1">
-                <dt className="text-xs text-muted-foreground">{d.label}</dt>
-                <dd className="text-sm font-medium">{d.value}</dd>
+                <dt className="text-xs text-muted-foreground">{t(d.label)}</dt>
+                <dd className="text-sm font-medium">{t(d.value)}</dd>
               </div>
             ))}
           </dl>
 
           <div className="sticky top-6 rounded-2xl border p-4 space-y-3">
             <div className="text-sm">
-              <div className="font-medium">Interested in this piece?</div>
+              <div className="font-medium">
+                {t("Interested in this piece?")}
+              </div>
               <div className="text-muted-foreground">
-                Send an inquiry and we’ll get back to you.
+                {t("Send an inquiry and we'll get back to you.")}
               </div>
             </div>
 
@@ -195,7 +199,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
                     String(artwork.id),
                   )}&from=artwork`}
                 >
-                  Contact about this artwork
+                  {t("Contact about this artwork")}
                 </Link>
               </Button>
 
@@ -205,7 +209,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
                     href={`/artists/${artwork.artistId}`}
                     className="inline-flex h-10 items-center gap-0.5 justify-center rounded-md border px-4 text-sm font-medium"
                   >
-                    More from this artist
+                    {t("More from this artist")}
                     <MdArrowForward />
                   </Link>
                 </Button>

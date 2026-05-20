@@ -5,8 +5,10 @@ import { adminLogin } from "@/features/admin/services/admin-auth.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPageClient() {
+  const { t } = useTranslation();
   const router = useRouter();
   const qc = useQueryClient();
   const searchParams = useSearchParams();
@@ -40,7 +42,7 @@ export default function LoginPageClient() {
         <div className="flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white/70 px-5 py-4 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/50">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-900 dark:border-zinc-700 dark:border-t-zinc-200" />
           <p className="text-sm text-zinc-600 dark:text-zinc-300">
-            Checking session…
+            {t("Checking session…")}
           </p>
         </div>
       </div>
@@ -49,11 +51,11 @@ export default function LoginPageClient() {
 
   return (
     <div className="mx-auto max-w-sm rounded-xl border bg-white p-6 shadow-sm">
-      <h1 className="text-xl font-semibold">Admin login</h1>
+      <h1 className="text-xl font-semibold">{t("Admin login")}</h1>
 
       <div className="mt-4 space-y-3">
         <label className="block">
-          <span className="text-sm text-zinc-600">Email</span>
+          <span className="text-sm text-zinc-600">{t("Email")}</span>
           <input
             className="mt-1 w-full rounded-md border px-3 py-2"
             value={email}
@@ -63,7 +65,7 @@ export default function LoginPageClient() {
         </label>
 
         <label className="block">
-          <span className="text-sm text-zinc-600">Password</span>
+          <span className="text-sm text-zinc-600">{t("Password")}</span>
           <input
             className="mt-1 w-full rounded-md border px-3 py-2"
             value={password}
@@ -75,7 +77,7 @@ export default function LoginPageClient() {
 
         {loginMutation.isError && (
           <p className="text-sm text-red-600">
-            {(loginMutation.error as Error)?.message ?? "Login failed"}
+            {(loginMutation.error as Error)?.message ?? t("Login failed")}
           </p>
         )}
 
@@ -84,7 +86,7 @@ export default function LoginPageClient() {
           onClick={() => loginMutation.mutate()}
           disabled={loginMutation.isPending}
         >
-          {loginMutation.isPending ? "Signing in..." : "Sign in"}
+          {loginMutation.isPending ? t("Signing in...") : t("Sign in")}
         </button>
       </div>
     </div>

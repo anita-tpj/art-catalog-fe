@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   value: string;
@@ -22,8 +23,12 @@ export function CategorySelect({
   onChange,
   options,
   label,
-  placeholder = "Select category",
+  placeholder,
 }: Props) {
+  const { t } = useTranslation();
+
+  const effectivePlaceholder = placeholder ?? t("Select category");
+
   return (
     <div className="space-y-1">
       {label ? <Label>{label}</Label> : null}
@@ -39,7 +44,7 @@ export function CategorySelect({
           "
         >
           <SelectValue
-            placeholder={placeholder}
+            placeholder={effectivePlaceholder}
             className="text-zinc-400 dark:text-zinc-500"
           />
         </SelectTrigger>

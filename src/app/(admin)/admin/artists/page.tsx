@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   Button,
@@ -25,6 +26,7 @@ import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { usePaginationState } from "@/hooks/usePaginationState";
 
 export default function AdminArtistsPage() {
+  const { t } = useTranslation();
   const { page, pageSize, changePage, changePageSize } = usePaginationState(10);
 
   const [search, setSearch] = useState("");
@@ -67,13 +69,15 @@ export default function AdminArtistsPage() {
       {/* ===== HEADER (always visible) ===== */}
       <header className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-2">
-          <h1 className="text-xl font-semibold tracking-tight">Artists</h1>
+          <h1 className="text-xl font-semibold tracking-tight">
+            {t("Artists")}
+          </h1>
 
           <Button asChild>
             <Link href="/admin/artists/new">
               <div className="flex items-center gap-1">
                 <MdOutlineAdd size={22} />
-                <span>New Artist</span>
+                <span>{t("New Artist")}</span>
               </div>
             </Link>
           </Button>
@@ -82,18 +86,20 @@ export default function AdminArtistsPage() {
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Search artists..."
+          placeholder={t("Search artists...")}
         />
       </header>
 
       {/* ===== MAIN CONTENT SWITCH ===== */}
       {isLoading ? (
-        <Card className="p-4 text-sm text-zinc-500">Loading artists…</Card>
+        <Card className="p-4 text-sm text-zinc-500">
+          {t("Loading artists…")}
+        </Card>
       ) : isEmptyDb ? (
         <EmptyState
-          message="No artists available yet."
+          message={t("No artists available yet.")}
           actionHref="/admin/artists/new"
-          actionLabel="Create Artist"
+          actionLabel={t("Create Artist")}
         />
       ) : isSearchEmpty ? (
         <SearchEmptyState query={debouncedSearch} entityLabel="artists" />
@@ -105,7 +111,7 @@ export default function AdminArtistsPage() {
             isLoading={isLoading}
             loadingContent={
               <Card className="p-4 text-sm text-zinc-500">
-                Loading artists…
+                {t("Loading artists…")}
               </Card>
             }
             renderTable={(items) => (
@@ -113,9 +119,9 @@ export default function AdminArtistsPage() {
                 <table className="w-full border-t border-zinc-200 text-sm dark:border-zinc-800">
                   <thead className="bg-zinc-50 text-left text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
                     <tr>
-                      <th className="px-4 py-2">Artist</th>
-                      <th className="px-4 py-2">Country</th>
-                      <th className="px-4 py-2 text-right">Actions</th>
+                      <th className="px-4 py-2">{t("Artist")}</th>
+                      <th className="px-4 py-2">{t("Country")}</th>
+                      <th className="px-4 py-2 text-right">{t("Actions")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -138,7 +144,7 @@ export default function AdminArtistsPage() {
                                 />
                               ) : (
                                 <span className="text-[10px] text-zinc-400">
-                                  NA
+                                  {t("NA")}
                                 </span>
                               )}
                             </div>
@@ -164,8 +170,10 @@ export default function AdminArtistsPage() {
                             </Link>
 
                             <ConfirmDialog
-                              title="Delete artist"
-                              description="This action cannot be undone. This will permanently delete the artist."
+                              title={t("Delete artist")}
+                              description={t(
+                                "This action cannot be undone. This will permanently delete the artis.",
+                              )}
                               onConfirm={() => removeArtist.mutate(artist.id)}
                               isLoading={removeArtist.isPending}
                             >
@@ -200,14 +208,14 @@ export default function AdminArtistsPage() {
                             />
                           ) : (
                             <span className="text-[10px] text-zinc-400">
-                              NA
+                              {t("NA")}
                             </span>
                           )}
                         </div>
                         <div>
                           <div className="font-medium">{artist.name}</div>
                           <div className="text-xs text-zinc-500">
-                            {artist.country || "Unknown country"}
+                            {artist.country || t("Unknown country")}
                           </div>
                         </div>
                       </div>
@@ -222,8 +230,10 @@ export default function AdminArtistsPage() {
                         </Link>
 
                         <ConfirmDialog
-                          title="Delete artist"
-                          description="This action cannot be undone. This will permanently delete the artist."
+                          title={t("Delete artist")}
+                          description={t(
+                            "This action cannot be undone. This will permanently delete the artist.",
+                          )}
                           onConfirm={() => removeArtist.mutate(artist.id)}
                           isLoading={removeArtist.isPending}
                         >

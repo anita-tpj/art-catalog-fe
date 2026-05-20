@@ -3,6 +3,7 @@
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function AdminGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function AdminGuard({ children }: { children: ReactNode }) {
 
   const isLogin = pathname === "/admin/login";
   const { data, isLoading, isError } = useAdminMe();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isLogin) return;
@@ -34,7 +36,7 @@ export default function AdminGuard({ children }: { children: ReactNode }) {
         <div className="flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white/70 px-5 py-4 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/50">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-900 dark:border-zinc-700 dark:border-t-zinc-200" />
           <p className="text-sm text-zinc-600 dark:text-zinc-300">
-            Checking admin session…
+            {t("Checking admin session…")}
           </p>
         </div>
       </div>
@@ -48,7 +50,7 @@ export default function AdminGuard({ children }: { children: ReactNode }) {
   if (data.user.role !== "ADMIN") {
     return (
       <div className="rounded-2xl border p-4 text-sm text-zinc-600">
-        Forbidden.
+        {t("Forbidden.")}
       </div>
     );
   }

@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui";
 import { Artist } from "@/features/artists/types";
 import { ArtworkCategoryLabels } from "@/features/artworks/types";
+import { getTranslation } from "@/i18n/server";
 import { get, getById } from "@/lib/api-client";
 import { parseIdOrNotFound } from "@/lib/utils";
 import Image from "next/image";
@@ -109,6 +110,8 @@ export default async function ArtistDetailPage({ params }: PageProps) {
   const artworks = await fetchArtistArtworks(id);
   const badges = getArtistMetaBadges(artist);
 
+  const { t } = await getTranslation();
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">
       <div className="mb-6 flex items-center justify-between gap-3">
@@ -117,14 +120,14 @@ export default async function ArtistDetailPage({ params }: PageProps) {
           className="text-sm underline underline-offset-4 flex items-center gap-1"
         >
           <MdArrowBack />
-          Back to artists
+          {t("Back to artists")}
         </Link>
 
         <Link
           href={`/artworks?search=${encodeURIComponent(artist.name)}`}
           className="text-sm underline underline-offset-4 flex items-center gap-1"
         >
-          Search artworks
+          {t("Search artworks")}
           <MdArrowForward />
         </Link>
       </div>
@@ -146,7 +149,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">
-                  No image
+                  {t("No image")}
                 </div>
               )}
             </div>
@@ -166,9 +169,9 @@ export default async function ArtistDetailPage({ params }: PageProps) {
                   <span
                     key={b.label}
                     className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground"
-                    title={b.label}
+                    title={t(b.label)}
                   >
-                    {b.value}
+                    {t(b.value)}
                   </span>
                 ))}
               </div>
@@ -180,7 +183,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
               {artist.bio}
             </p>
           ) : (
-            <p className="text-sm text-muted-foreground">No bio yet.</p>
+            <p className="text-sm text-muted-foreground">{t("No bio yet.")}</p>
           )}
 
           <div className="flex flex-col gap-2 sm:flex-row">
@@ -189,7 +192,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
                 className="inline-flex h-10 items-center justify-center text-sm font-medium text-primary-foreground"
                 href={`/contact?artistId=${encodeURIComponent(String(id))}&from=artist`}
               >
-                Contact about this artist
+                {t("Contact about this artist")}
               </Link>
             </Button>
 
@@ -198,7 +201,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
                 className="inline-flex h-10 items-center justify-center text-sm font-medium"
                 href={`/artworks?search=${encodeURIComponent(artist.name)}`}
               >
-                View related artworks
+                {t("View related artworks")}
               </Link>
             </Button>
           </div>
@@ -209,9 +212,9 @@ export default async function ArtistDetailPage({ params }: PageProps) {
       <section className="mt-10 space-y-4">
         <div className="flex items-baseline justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold">Artworks</h2>
+            <h2 className="text-lg font-semibold">{t("Artworks")}</h2>
             <p className="text-sm text-muted-foreground">
-              Latest pieces by {artist.name}.
+              {t("Latest pieces by")} {artist.name}.
             </p>
           </div>
 
@@ -219,14 +222,14 @@ export default async function ArtistDetailPage({ params }: PageProps) {
             href={`/artworks?artistId=${encodeURIComponent(String(id))}`}
             className="text-sm underline underline-offset-4 flex items-center gap-0.5"
           >
-            View all
+            {t("View all")}
             <MdArrowForward />
           </Link>
         </div>
 
         {artworks.items.length === 0 ? (
           <div className="rounded-2xl border p-8 text-center text-sm text-muted-foreground">
-            No artworks found for this artist.
+            {t("No artworks found for this artist.")}
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -251,7 +254,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">
-                      No image
+                      {t("No image")}
                     </div>
                   )}
 
@@ -271,7 +274,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
                   </div>
 
                   <div className="text-xs text-muted-foreground">
-                    {formatArtworkCategory(a.category)}
+                    {t(formatArtworkCategory(a.category))}
                   </div>
                 </div>
               </Link>

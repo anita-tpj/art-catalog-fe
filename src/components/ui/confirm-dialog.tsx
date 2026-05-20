@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui";
-import { Spinner } from "@/components/ui";
+import { Button, Spinner } from "@/components/ui";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ConfirmDialogProps {
   children: ReactNode;
@@ -26,6 +26,8 @@ export function ConfirmDialog({
   isDestructive = true,
   isLoading = false,
 }: ConfirmDialogProps) {
+  const { t } = useTranslation();
+
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger asChild>{children}</AlertDialog.Trigger>
@@ -64,7 +66,7 @@ export function ConfirmDialog({
                 onClick={onConfirm}
               >
                 {isLoading && <Spinner size="sm" className="mr-2" />}
-                {isLoading ? "Deleting..." : confirmLabel}
+                {isLoading ? t("Deleting...") : confirmLabel}
               </Button>
             </AlertDialog.Action>
           </div>

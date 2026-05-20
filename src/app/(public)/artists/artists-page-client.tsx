@@ -3,9 +3,8 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import { ErrorState } from "@/components/ui";
-import { PageSizeSelector } from "@/components/ui";
-import { Pagination } from "@/components/ui";
+import { ErrorState, PageSizeSelector, Pagination } from "@/components/ui";
+import { useTranslation } from "react-i18next";
 
 import {
   ArtistCard,
@@ -34,6 +33,7 @@ export function ArtistsPageClient({
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
+  const { t } = useTranslation();
 
   const DEFAULT_PAGE_SIZE = 6;
 
@@ -79,10 +79,11 @@ export function ArtistsPageClient({
   return (
     <>
       <div className="mb-2 space-y-2">
-        <h1 className="text-3xl font-semibold">Artists</h1>
+        <h1 className="text-3xl font-semibold">{t("Artists")}</h1>
         <p className="text-sm text-muted-foreground">
-          Browse artists. Use search to filter + primary artist&apos;s category
-          to filter.
+          {t(
+            "Browse artists. Use search to filter + primary artist's category to filter.",
+          )}
         </p>
       </div>
 
@@ -105,12 +106,12 @@ export function ArtistsPageClient({
       ) : isError ? (
         <ErrorState
           title="Couldn’t load artists"
-          message={error instanceof Error ? error.message : "Please try again."}
+          message={error instanceof Error ? t(error.message) : t("Please try again.")}
           onRetry={() => refetch()}
         />
       ) : items.length === 0 ? (
         <div className="mt-10 rounded-lg border p-8 text-center text-sm text-muted-foreground">
-          No artists found.
+          {t("No artists found.")}
         </div>
       ) : (
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

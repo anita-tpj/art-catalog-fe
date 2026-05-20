@@ -1,6 +1,7 @@
 "use client";
 
 import * as Select from "@radix-ui/react-select";
+import { useTranslation } from "react-i18next";
 import { FiChevronDown } from "react-icons/fi";
 
 interface PageSizeSelectorProps {
@@ -14,10 +15,12 @@ export function PageSizeSelector({
   onChange,
   options = [6, 12, 24, 48, 96],
 }: PageSizeSelectorProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400">
       {/* Show label only on md+ */}
-      <span className="hidden md:inline-block text-xs">Per page</span>
+      <span className="hidden md:inline-block text-xs">{t("Per page")}</span>
 
       <Select.Root
         value={String(value)}

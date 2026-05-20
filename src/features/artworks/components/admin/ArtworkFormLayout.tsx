@@ -1,6 +1,16 @@
 "use client";
 
-import { BooleanRadioField, Button, CancelButton, Card, EnumSelectField, Spinner, TextareaField, TextInputField, YearSelector } from "@/components/ui";
+import {
+  BooleanRadioField,
+  Button,
+  CancelButton,
+  Card,
+  EnumSelectField,
+  Spinner,
+  TextareaField,
+  TextInputField,
+  YearSelector,
+} from "@/components/ui";
 import { ArtistSelector } from "@/components/ui/artist-selector";
 import {
   ArtworkFieldKey,
@@ -25,6 +35,7 @@ import {
 
 import { ImageUploadField } from "@/components/ui";
 import { UseFormReturn } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useArtworkImageUpload } from "../../hooks/useArtworkImageUpload";
 
 interface ArtworkFormLayoutProps {
@@ -60,6 +71,7 @@ export function ArtworkFormLayout({
   const isReq = (k: ArtworkFieldKey) => config?.required.includes(k);
 
   const { uploading, error, uploadFile } = useArtworkImageUpload();
+  const { t } = useTranslation();
 
   return (
     <section className="space-y-4">
@@ -80,9 +92,9 @@ export function ArtworkFormLayout({
             <div className="space-y-6 lg:pr-5">
               <div className="space-y-4">
                 <TextInputField
-                  label="Title"
-                  placeholder="Type title"
-                  error={errors.title?.message}
+                  label={t("Title")}
+                  placeholder={t("Type title")}
+                  error={errors.title?.message ? t(errors.title.message) : undefined}
                   {...register("title")}
                 />
 
@@ -90,14 +102,14 @@ export function ArtworkFormLayout({
                   <ArtistSelector<CreateArtworkDTO>
                     control={control}
                     name="artistId"
-                    label="Artist"
+                    label={t("Artist")}
                   />
 
                   <EnumSelectField<CreateArtworkDTO, ArtworkCategory>
                     control={control}
                     name="category"
-                    label="Category"
-                    placeholder="Select category"
+                    label={t("Category")}
+                    placeholder={t("Select category")}
                     enumObject={ArtworkCategory}
                     labels={ArtworkCategoryLabels}
                   />
@@ -106,7 +118,7 @@ export function ArtworkFormLayout({
 
               <div className="space-y-3">
                 <h2 className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  Artistic details
+                  {t("Artistic details")}
                 </h2>
 
                 <div className="grid gap-4 lg:grid-cols-2">
@@ -115,8 +127,8 @@ export function ArtworkFormLayout({
                       control={control}
                       name="technique"
                       //label={`Technique${isReq("technique") ? " *" : ""}`}
-                      label="Technique"
-                      placeholder="Select technique"
+                      label={t("Technique")}
+                      placeholder={t("Select technique")}
                       enumObject={ArtworkTechnique}
                       labels={ArtworkTechniqueLabels}
                     />
@@ -126,8 +138,8 @@ export function ArtworkFormLayout({
                     <EnumSelectField<CreateArtworkDTO, ArtworkStyle>
                       control={control}
                       name="style"
-                      label="Style"
-                      placeholder="Select style"
+                      label={t("Style")}
+                      placeholder={t("Select style")}
                       enumObject={ArtworkStyle}
                       labels={ArtworkStyleLabels}
                     />
@@ -137,8 +149,8 @@ export function ArtworkFormLayout({
                     <EnumSelectField<CreateArtworkDTO, ArtworkMotive>
                       control={control}
                       name="motive"
-                      label="Motive"
-                      placeholder="Select motive"
+                      label={t("Motive")}
+                      placeholder={t("Select motive")}
                       enumObject={ArtworkMotive}
                       labels={ArtworkMotiveLabels}
                     />
@@ -148,8 +160,8 @@ export function ArtworkFormLayout({
                     <EnumSelectField<CreateArtworkDTO, ArtworkOrientation>
                       control={control}
                       name="orientation"
-                      label="Orientation"
-                      placeholder="Select orientation"
+                      label={t("Orientation")}
+                      placeholder={t("Select orientation")}
                       enumObject={ArtworkOrientation}
                       labels={ArtworkOrientationLabels}
                     />
@@ -159,8 +171,8 @@ export function ArtworkFormLayout({
                     <EnumSelectField<CreateArtworkDTO, ArtworkStandardSize>
                       control={control}
                       name="size"
-                      label="Size"
-                      placeholder="Select size"
+                      label={t("Size")}
+                      placeholder={t("Select size")}
                       enumObject={ArtworkStandardSize}
                       labels={ArtworkStandardSizeLabels}
                     />
@@ -170,9 +182,9 @@ export function ArtworkFormLayout({
                     <BooleanRadioField<CreateArtworkDTO>
                       control={control}
                       name="framed"
-                      label="Framed"
-                      trueLabel="Yes"
-                      falseLabel="No"
+                      label={t("Framed")}
+                      trueLabel={t("Yes")}
+                      falseLabel={t("No")}
                     />
                   )}
                 </div>
@@ -186,8 +198,8 @@ export function ArtworkFormLayout({
                   setValue={setValue}
                   imgUrl={"imageUrl"}
                   imgPublicId={"imagePublicId"}
-                  label="Artwork image"
-                  buttonLabel="Upload image"
+                  label={t("Artwork image")}
+                  buttonLabel={t("Upload image")}
                   variant="preview"
                   previewHeight={160}
                   onUpload={uploadFile}
@@ -195,10 +207,10 @@ export function ArtworkFormLayout({
                   uploadError={error}
                 />
                 <TextareaField
-                  label="Description"
-                  placeholder="Type description"
+                  label={t("Description")}
+                  placeholder={t("Type description")}
                   rows={4}
-                  error={errors.description?.message}
+                  error={errors.description?.message ? t(errors.description.message) : undefined}
                   {...register("description")}
                 />
               </div>
@@ -206,8 +218,8 @@ export function ArtworkFormLayout({
                 <YearSelector<CreateArtworkDTO>
                   control={control}
                   name="year"
-                  label="Year"
-                  placeholder="Select year"
+                  label={t("Year")}
+                  placeholder={t("Select year")}
                 />
               </div>
             </div>
@@ -215,7 +227,7 @@ export function ArtworkFormLayout({
 
           {apiError && (
             <p className="text-xs text-red-500">
-              {apiError || "Failed to save artwork."}
+              {apiError || t("Failed to save artwork.")}
             </p>
           )}
 

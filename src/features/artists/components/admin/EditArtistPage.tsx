@@ -6,6 +6,7 @@ import { useUpdateArtist } from "@/features/artists/hooks/useUpdateArtist";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Resolver, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { CreateArtistDTO, createArtistSchema } from "../../types";
 
 interface EditArtistPageProps {
@@ -15,6 +16,7 @@ interface EditArtistPageProps {
 export const EditArtistPage = ({ id }: EditArtistPageProps) => {
   const { data: artist, isLoading } = useArtist(id);
   const updateArtist = useUpdateArtist();
+  const { t } = useTranslation();
 
   const form = useForm<CreateArtistDTO>({
     resolver: zodResolver(createArtistSchema) as Resolver<CreateArtistDTO>,
@@ -41,13 +43,15 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
   }, [artist, reset]);
 
   if (isLoading && !artist) {
-    return <p className="text-sm text-zinc-500">Loading artist details…</p>;
+    return (
+      <p className="text-sm text-zinc-500">{t("Loading artist details…")}</p>
+    );
   }
 
   if (!artist) {
     return (
       <p className="text-sm text-red-500">
-        Artist not found or failed to load.
+        {t("Artist not found or failed to load.")}
       </p>
     );
   }
@@ -61,9 +65,9 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
     <ArtistFormLayout
       form={form}
       onSubmit={(data) => updateArtist.mutate({ id, data })}
-      title="Edit artist"
-      subtitle="Update artist details."
-      submitLabel={isBusy ? "Updating..." : "Update artist"}
+      title={t("Edit artist")}
+      subtitle={t("Update artist details.")}
+      submitLabel={isBusy ? t("Updating...") : t("Update artist")}
       isBusy={isBusy}
       apiError={apiError}
     />

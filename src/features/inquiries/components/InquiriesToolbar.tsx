@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui";
-import { SearchInput } from "@/components/ui";
+import { Button, SearchInput } from "@/components/ui";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 import { InboxStatus, InquiryStats } from "../types";
 
 type Props = {
@@ -40,6 +40,8 @@ export function InquiriesToolbar({
   onClearSearch,
   stats,
 }: Props) {
+  const { t } = useTranslation();
+
   return (
     <section className="mt-4">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -60,7 +62,7 @@ export function InquiriesToolbar({
                   !active && "text-muted-foreground",
                 )}
               >
-                {tab.label}
+                {t(tab.label)}
                 {typeof count === "number" && (
                   <span
                     className={clsx(
@@ -83,7 +85,7 @@ export function InquiriesToolbar({
           <SearchInput
             value={search}
             onChange={onSearchChange}
-            placeholder="Search inquiries..."
+            placeholder={t("Search inquiries...")}
           />
         </div>
       </div>
@@ -91,14 +93,14 @@ export function InquiriesToolbar({
       {search.trim() && (
         <div className="mt-3 flex items-center gap-2">
           <span className="text-xs text-muted-foreground">
-            Search: {search.trim()}
+            {t("Search:")} {search.trim()}
           </span>
           <button
             type="button"
             onClick={onClearSearch}
             className="text-xs underline underline-offset-4 text-muted-foreground hover:text-foreground"
           >
-            Clear
+            {t("Clear")}
           </button>
         </div>
       )}

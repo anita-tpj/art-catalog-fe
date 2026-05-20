@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
+import LanguageSwitcher from "../ui/language-switcher";
 
 export function AdminTopBar() {
+  const { t } = useTranslation();
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/60">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -15,9 +18,9 @@ export function AdminTopBar() {
                 href="/admin"
                 className="text-sm font-semibold tracking-tight hover:opacity-80"
               >
-                ArtCatalog
+                {t("ArtCatalog")}
                 <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200 pl-2">
-                  Admin
+                  {t("Admin")}
                 </span>
               </Link>
             </div>
@@ -30,8 +33,9 @@ export function AdminTopBar() {
               href="/"
               className="rounded-full border border-zinc-300 px-3 py-1 text-xs text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900"
             >
-              View site
+              {t("View site")}
             </Link>
+            <LanguageSwitcher />
           </div>
         </div>
       </div>
