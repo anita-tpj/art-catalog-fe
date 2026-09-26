@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import {
   ArtistCard,
   ArtistCardSkeleton,
-  usePaginatedArtists,
+  usePaginatedPublishedArtists,
 } from "@/features/artists";
 import { ListingToolbar } from "@/features/listing/components/ListingToolbar";
 import { useListingUrlState } from "@/features/listing/hooks/useListingUrlState";
@@ -48,7 +48,8 @@ export function ArtistsPageClient({
 
   const apiCategory = category === ALL_CATEGORIES_VALUE ? undefined : category;
 
-  const { data, isLoading, isError, error, refetch } = usePaginatedArtists({
+const { data, isLoading, isError, error, refetch } =
+  usePaginatedPublishedArtists({
     page,
     pageSize,
     search: debouncedSearch || undefined,

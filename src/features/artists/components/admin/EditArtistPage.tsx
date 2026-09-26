@@ -39,6 +39,8 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
       avatarUrl: artist.avatarUrl ?? undefined,
       avatarPublicId: artist.avatarPublicId ?? undefined,
       primaryCategory: artist.primaryCategory ?? undefined,
+      status: artist.status,
+      visibility: artist.visibility,
     });
   }, [artist, reset]);
 

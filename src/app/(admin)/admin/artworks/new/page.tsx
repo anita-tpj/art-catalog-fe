@@ -6,8 +6,9 @@ import {
   CreateArtworkDTO,
   CreateArtworkSchema,
 } from "@/features/artworks/types";
+import { ItemStatus } from "@/types/item";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Resolver, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 export default function NewArtworkPage() {
@@ -15,7 +16,7 @@ export default function NewArtworkPage() {
   const createArtwork = useCreateArtwork();
 
   const form = useForm<CreateArtworkDTO>({
-    resolver: zodResolver(CreateArtworkSchema),
+    resolver: zodResolver(CreateArtworkSchema) as Resolver<CreateArtworkDTO>,
     defaultValues: {
       title: "",
       year: undefined,
@@ -30,6 +31,7 @@ export default function NewArtworkPage() {
       size: undefined,
       framed: false,
       artistId: undefined as unknown as number,
+      status: ItemStatus.DRAFT,
     },
   });
 

@@ -1,50 +1,28 @@
 // app/artists/[id]/page.tsx
+
 import { Button } from "@/components/ui";
 import { Artist } from "@/features/artists/types";
 import { ArtworkCategoryLabels } from "@/features/artworks/types";
 import { getTranslation } from "@/i18n/server";
-import { get, getById } from "@/lib/api-client";
+import { getById } from "@/lib/api-client";
 import { parseIdOrNotFound } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 type PageProps = { params: Promise<{ id: string }> };
-
-type ArtworkCardItem = {
-  id: number;
-  title: string;
-  imageUrl: string | null;
-  year: number | null;
-  category: keyof typeof ArtworkCategoryLabels | string;
-};
-
-async function fetchArtistArtworks(artistId: number) {
-  const params = new URLSearchParams({
-    page: "1",
-    pageSize: "12",
-    artistId: String(artistId),
-  });
-
-  try {
-    return await get<{ items: ArtworkCardItem[]; total: number }>(
-      `/api/artworks?${params.toString()}`,
-      { revalidate },
-    );
-  } catch {
-    return { items: [], total: 0 };
-  }
-}
 
 function getLifeSpan(artist: Artist) {
   const b = artist.birthYear ?? null;
   const d = artist.deathYear ?? null;
+
   if (!b && !d) return null;
   if (b && d) return `${b}–${d}`;
   if (b && !d) return `${b}–`;
+
   return `–${d}`;
 }
 
@@ -52,13 +30,21 @@ function getArtistMetaBadges(artist: Artist) {
   const badges: Array<{ label: string; value: string }> = [];
 
   const lifeSpan = getLifeSpan(artist);
-  if (lifeSpan) badges.push({ label: "Years", value: lifeSpan });
 
-  if (artist.country?.trim())
-    badges.push({ label: "Country", value: artist.country.trim() });
+  if (lifeSpan) {
+    badges.push({ label: "Years", value: lifeSpan });
+  }
+
+  if (artist.country?.trim()) {
+    badges.push({
+      label: "Country",
+      value: artist.country.trim(),
+    });
+  }
 
   if (artist.primaryCategory) {
     const pc = artist.primaryCategory as keyof typeof ArtworkCategoryLabels;
+
     badges.push({
       label: "Primary",
       value: ArtworkCategoryLabels[pc] ?? String(pc),
@@ -68,18 +54,26 @@ function getArtistMetaBadges(artist: Artist) {
   return badges;
 }
 
-function formatArtworkCategory(category: ArtworkCardItem["category"]) {
+function formatArtworkCategory(
+  category: keyof typeof ArtworkCategoryLabels | string,
+) {
   const key = category as keyof typeof ArtworkCategoryLabels;
+
   return ArtworkCategoryLabels[key] ?? String(category);
 }
 
 export async function generateMetadata({ params }: PageProps) {
   const { id: idParam } = await params;
   const id = Number(idParam);
-  if (!Number.isFinite(id)) return { title: "Artist not found" };
+
+  if (!Number.isFinite(id)) {
+    return { title: "Artist not found" };
+  }
 
   try {
-    const artist = await getById<Artist>("/api/artists", id, { revalidate });
+    const artist = await getById<Artist>("/api/artists/public", id, {
+      revalidate,
+    });
 
     const title = `${artist.name} — Artist | ArtCatalog`;
     const description = artist.bio ?? `Explore artworks by ${artist.name}.`;
@@ -87,8 +81,13 @@ export async function generateMetadata({ params }: PageProps) {
     return {
       title,
       description,
-      alternates: { canonical: `/artists/${id}` },
-      openGraph: { title, description },
+      alternates: {
+        canonical: `/artists/${id}`,
+      },
+      openGraph: {
+        title,
+        description,
+      },
     };
   } catch {
     return { title: "Artist not found" };
@@ -102,14 +101,13 @@ export default async function ArtistDetailPage({ params }: PageProps) {
   let artist: Artist;
 
   try {
-    artist = await getById<Artist>("/api/artists", id, { revalidate });
+    artist = await getById<Artist>("/api/artists/public", id, { revalidate });
   } catch {
     notFound();
   }
 
-  const artworks = await fetchArtistArtworks(id);
+  const artworks = artist.artworks ?? [];
   const badges = getArtistMetaBadges(artist);
-
   const { t } = await getTranslation();
 
   return (
@@ -190,7 +188,9 @@ export default async function ArtistDetailPage({ params }: PageProps) {
             <Button asChild>
               <Link
                 className="inline-flex h-10 items-center justify-center text-sm font-medium text-primary-foreground"
-                href={`/contact?artistId=${encodeURIComponent(String(id))}&from=artist`}
+                href={`/contact?artistId=${encodeURIComponent(
+                  String(id),
+                )}&from=artist`}
               >
                 {t("Contact about this artist")}
               </Link>
@@ -227,13 +227,13 @@ export default async function ArtistDetailPage({ params }: PageProps) {
           </Link>
         </div>
 
-        {artworks.items.length === 0 ? (
+        {artworks.length === 0 ? (
           <div className="rounded-2xl border p-8 text-center text-sm text-muted-foreground">
             {t("No artworks found for this artist.")}
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {artworks.items.map((a) => (
+            {artworks.map((a) => (
               <Link
                 key={a.id}
                 href={`/artworks/${a.id}`}
@@ -266,6 +266,7 @@ export default async function ArtistDetailPage({ params }: PageProps) {
                     <h3 className="line-clamp-2 text-base font-semibold leading-snug group-hover:underline underline-offset-4">
                       {a.title}
                     </h3>
+
                     {a.year ? (
                       <span className="shrink-0 text-xs text-muted-foreground">
                         {a.year}

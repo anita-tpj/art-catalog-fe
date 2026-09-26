@@ -3,8 +3,9 @@
 import { ArtistFormLayout } from "@/features/artists/components/admin/ArtistFormLayout";
 import { useCreateArtist } from "@/features/artists/hooks/useCreateArtist";
 import { CreateArtistDTO, createArtistSchema } from "@/features/artists/types";
+import { ItemStatus, ItemVisibility } from "@/types/item";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Resolver, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 const NewArtistPage = () => {
@@ -12,7 +13,7 @@ const NewArtistPage = () => {
   const createArtist = useCreateArtist();
 
   const form = useForm<CreateArtistDTO>({
-    resolver: zodResolver(createArtistSchema),
+    resolver: zodResolver(createArtistSchema) as Resolver<CreateArtistDTO>,
     defaultValues: {
       name: "",
       bio: "",
@@ -21,6 +22,9 @@ const NewArtistPage = () => {
       deathYear: undefined,
       avatarUrl: undefined,
       avatarPublicId: undefined,
+      primaryCategory: undefined,
+      status: ItemStatus.DRAFT,
+      visibility: ItemVisibility.PRIVATE,
     },
   });
 

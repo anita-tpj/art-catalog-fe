@@ -14,8 +14,23 @@ export function useArtists() {
 
 export function usePaginatedArtists(params: PaginatedRequest) {
   return useQuery<PaginatedResult<Artist>>({
-    queryKey: [ARTISTS_QUERY_KEY, params],
+    queryKey: [ARTISTS_QUERY_KEY, "admin", params],
     queryFn: () => artistsService.getPaginated(params),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function usePublishedArtists() {
+  return useQuery<Artist[]>({
+    queryKey: [ARTISTS_QUERY_KEY, "public", "options"],
+    queryFn: artistsService.getAllPublished,
+  });
+}
+
+export function usePaginatedPublishedArtists(params: PaginatedRequest) {
+  return useQuery<PaginatedResult<Artist>>({
+    queryKey: [ARTISTS_QUERY_KEY, "public", params],
+    queryFn: () => artistsService.getPaginatedPublished(params),
     placeholderData: keepPreviousData,
   });
 }
