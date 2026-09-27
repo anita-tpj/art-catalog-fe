@@ -38,6 +38,7 @@ export default async function ArtworksPage({ searchParams }: PageProps) {
   const initialCategory = sp.category ?? ALL_CATEGORIES_VALUE;
   const initialPage = toPositiveInt(sp.page, 1);
   const initialPageSize = toPositiveInt(sp.pageSize, 6);
+  const initialArtist = sp.artist?.trim() || undefined;
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">
@@ -46,6 +47,7 @@ export default async function ArtworksPage({ searchParams }: PageProps) {
         initialCategory={initialCategory}
         initialPage={initialPage}
         initialPageSize={initialPageSize}
+        initialArtist={initialArtist}
       />
     </main>
   );

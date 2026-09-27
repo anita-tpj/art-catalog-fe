@@ -45,13 +45,13 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
 
   const { data: artwork } = useQuery({
     queryKey: ["contact-artwork", artworkId],
-    queryFn: () => artworksService.getOne(artworkId as number),
+    queryFn: () => artworksService.getPublishedOne(artworkId as number),
     enabled: !!artworkId,
   });
 
   const { data: artist } = useQuery({
     queryKey: ["contact-artist", artistId],
-    queryFn: () => artistsService.getOne(artistId as number),
+    queryFn: () => artistsService.getPublishedOne(artistId as number),
     enabled: !!artistId,
   });
 
@@ -66,8 +66,8 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
 
   const backHref = artworkId
     ? `/artworks/${artworkId}`
-    : artistId
-      ? `/artists/${artistId}`
+    : artist?.slug
+      ? `/${artist.slug}`
       : "/";
 
   const schema = contactSchema(t);

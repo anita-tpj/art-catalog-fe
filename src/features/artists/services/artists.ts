@@ -56,4 +56,7 @@ export const artistsService = {
   },
 
   getPublishedOne: (id: number) => getById<Artist>("/api/artists/public", id),
+  
+  getPublishedBySlug: (slug: string) =>
+  get<Artist>(`/api/artists/public/profile/${encodeURIComponent(slug)}`),
 };

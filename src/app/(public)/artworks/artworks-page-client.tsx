@@ -23,6 +23,7 @@ type Props = {
   initialCategory: string;
   initialPage: number;
   initialPageSize: number;
+  initialArtist?: string;
 };
 
 export function ArtworksPageClient({
@@ -30,6 +31,7 @@ export function ArtworksPageClient({
   initialCategory,
   initialPage,
   initialPageSize,
+  initialArtist,
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -55,6 +57,7 @@ export function ArtworksPageClient({
       pageSize,
       search: debouncedSearch || undefined,
       category: apiCategory,
+      artist: initialArtist,
     });
 
   const items = data?.items ?? [];
@@ -76,6 +79,9 @@ export function ArtworksPageClient({
     defaultPageSize: DEFAULT_PAGE_SIZE,
     allCategoriesValue: ALL_CATEGORIES_VALUE,
     keys: { categoryKey: "category" },
+    preservedParams: {
+      artist: initialArtist,
+    },
   });
 
   return (

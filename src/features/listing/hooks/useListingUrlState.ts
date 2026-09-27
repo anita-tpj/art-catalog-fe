@@ -15,6 +15,7 @@ type Params = {
   router: AppRouterInstance;
   pathname: string;
   searchParamsString: string; // pass sp.toString() from useSearchParams()
+
   // current state
   debouncedSearch: string;
   category: string;
@@ -33,6 +34,9 @@ type Params = {
 
   // config
   keys: BuildUrlKeys;
+
+  // params that should survive listing changes
+  preservedParams?: Record<string, string | undefined>;
 };
 
 export function useListingUrlState({
@@ -50,6 +54,7 @@ export function useListingUrlState({
   defaultPageSize,
   allCategoriesValue,
   keys,
+  preservedParams = {},
 }: Params) {
   const {
     searchKey = "search",
@@ -71,29 +76,48 @@ export function useListingUrlState({
     ) => {
       const params = new URLSearchParams();
 
+      Object.entries(preservedParams).forEach(([key, value]) => {
+        if (value) {
+          params.set(key, value);
+        }
+      });
+
       const nextSearch = (next.search ?? debouncedSearch ?? "").trim();
       const nextCategory = next.category ?? category;
       const nextPage = next.page ?? page;
       const nextPageSize = next.pageSize ?? pageSize;
 
+      const hasPreservedParams = Object.values(preservedParams).some(Boolean);
+
       const isDefault =
         !nextSearch &&
         nextCategory === allCategoriesValue &&
         nextPage === 1 &&
-        nextPageSize === defaultPageSize;
+        nextPageSize === defaultPageSize &&
+        !hasPreservedParams;
 
       if (isDefault) return pathname;
 
-      if (nextSearch) params.set(searchKey, nextSearch);
+      if (nextSearch) {
+        params.set(searchKey, nextSearch);
+      }
 
       if (nextCategory && nextCategory !== allCategoriesValue) {
         params.set(categoryKey, nextCategory);
       }
 
-      params.set(pageKey, String(nextPage));
-      params.set(pageSizeKey, String(nextPageSize));
+      if (
+        nextPage !== 1 ||
+        nextPageSize !== defaultPageSize ||
+        nextSearch ||
+        nextCategory !== allCategoriesValue
+      ) {
+        params.set(pageKey, String(nextPage));
+        params.set(pageSizeKey, String(nextPageSize));
+      }
 
       const qs = params.toString();
+
       return qs ? `${pathname}?${qs}` : pathname;
     },
     [
@@ -108,6 +132,7 @@ export function useListingUrlState({
       categoryKey,
       pageKey,
       pageSizeKey,
+      preservedParams,
     ],
   );
 
@@ -132,8 +157,16 @@ export function useListingUrlState({
   const onClearFilters = () => {
     setSearch("");
     setCategory(allCategoriesValue);
-    changePageSize(defaultPageSize); // implies page=1 in your usePaginationState
-    router.push(pathname); // clean URL
+    changePageSize(defaultPageSize);
+
+    router.push(
+      buildUrl({
+        search: "",
+        category: allCategoriesValue,
+        page: 1,
+        pageSize: defaultPageSize,
+      }),
+    );
   };
 
   const onPageChange = (p: number) => {
@@ -142,7 +175,7 @@ export function useListingUrlState({
   };
 
   const onPageSizeChange = (s: number) => {
-    changePageSize(s); // resets page to 1
+    changePageSize(s);
     router.push(buildUrl({ pageSize: s, page: 1 }));
   };
 
@@ -155,12 +188,18 @@ export function useListingUrlState({
 
     if (page !== 1) changePage(1);
 
-    const nextUrl = buildUrl({ search: debouncedSearch, page: 1 });
+    const nextUrl = buildUrl({
+      search: debouncedSearch,
+      page: 1,
+    });
+
     const currentUrl = searchParamsString
       ? `${pathname}?${searchParamsString}`
       : pathname;
 
-    if (nextUrl !== currentUrl) router.replace(nextUrl);
+    if (nextUrl !== currentUrl) {
+      router.replace(nextUrl);
+    }
   }, [
     debouncedSearch,
     page,

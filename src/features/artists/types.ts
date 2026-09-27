@@ -16,6 +16,8 @@ export interface Artist {
   artworksCount: number | null;
   status: ItemStatus;
   visibility: ItemVisibility;
+  slug: string | null;
+  slugLocked: boolean;
   artworks?: Artwork[];
 }
 
@@ -56,6 +58,21 @@ export const createArtistSchema = z.object({
   status: z.nativeEnum(ItemStatus).default(ItemStatus.DRAFT),
 
   visibility: z.nativeEnum(ItemVisibility).default(ItemVisibility.PRIVATE),
+
+  slug: z.preprocess(
+    (value) => (value === "" ? null : value),
+    z
+      .string()
+      .trim()
+      .min(3, "Slug must be at least 3 characters")
+      .max(50, "Slug must be at most 50 characters")
+      .regex(
+        /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+        "Use only lowercase letters, numbers and hyphens",
+      )
+      .nullable()
+      .optional(),
+  ),
 });
 
 export const UpdateArtistSchema = createArtistSchema.partial();
