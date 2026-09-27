@@ -46,6 +46,7 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
       size: artwork.size ?? undefined,
       framed: artwork.framed,
       status: artwork.status,
+      availability: artwork.availability,
     });
   }, [artwork, reset]);
   if (isLoading && !artwork) {

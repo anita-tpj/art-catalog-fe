@@ -322,5 +322,10 @@
   "Draft": "Draft",
   "Published": "Published",
   "Public": "Public",
-  "Private": "Private"
+  "Private": "Private",
+  "Availability": "Availability",
+  "Available": "Available",
+  "Reserved": "Reserved",
+  "Sold": "Sold",
+  "Not for sale": "Not for sale"
 }

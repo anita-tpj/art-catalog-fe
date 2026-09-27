@@ -112,9 +112,14 @@ i18n.t("Artist is required");
 
 i18n.t("Title is required");
 
-i18n.t("DRAFT");
-i18n.t("PUBLISHED");
-i18n.t("ARCHIVED");
+i18n.t("Draft");
+i18n.t("Published");
+i18n.t("Archived");
 
-i18n.t("PUBLIC");
-i18n.t("PRIVATE");
+i18n.t("Public");
+i18n.t("Private");
+
+i18n.t("Available");
+i18n.t("Reserved");
+i18n.t("Sold");
+i18n.t("Not for sale");

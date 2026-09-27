@@ -18,6 +18,8 @@ import {
 } from "@/config/artwork-category-field-config";
 
 import {
+  ArtworkAvailability,
+  ArtworkAvailabilityLabels,
   ArtworkCategory,
   ArtworkCategoryLabels,
   ArtworkMotive,
@@ -231,16 +233,21 @@ export function ArtworkFormLayout({
                     placeholder={t("Select year")}
                   />
                 </div>
-                <div className="space-y-4 mt-8 pt-2 border-t border-zinc-300">
-                  <div className="w-1/2">
-                    <EnumSelectField<CreateArtworkDTO, ItemStatus>
-                      control={control}
-                      name="status"
-                      label={t("Status")}
-                      enumObject={ItemStatus}
-                      labels={ItemStatusLabels}
-                    />
-                  </div>
+                <div className="grid grid-cols-2 gap-4 mt-8 pt-2 border-t border-zinc-300">
+                  <EnumSelectField<CreateArtworkDTO, ArtworkAvailability>
+                    control={control}
+                    name="availability"
+                    label={t("Availability")}
+                    enumObject={ArtworkAvailability}
+                    labels={ArtworkAvailabilityLabels}
+                  />
+                  <EnumSelectField<CreateArtworkDTO, ItemStatus>
+                    control={control}
+                    name="status"
+                    label={t("Status")}
+                    enumObject={ItemStatus}
+                    labels={ItemStatusLabels}
+                  />
                 </div>
               </div>
             </div>
