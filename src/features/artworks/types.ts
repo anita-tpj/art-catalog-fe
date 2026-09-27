@@ -1,4 +1,5 @@
 import { CURRENT_YEAR, DEFAULT_MIN_YEAR } from "@/lib/year-options";
+import { ItemStatus } from "@/types/item";
 import { z } from "zod";
 
 export enum ArtworkCategory {
@@ -182,6 +183,7 @@ export interface Artwork {
   framed: boolean;
   category: ArtworkCategory;
   artistId: number;
+  status: ItemStatus;
   artist: {
     name: string;
   };
@@ -218,6 +220,7 @@ export const CreateArtworkSchema = z.object({
   category: z.nativeEnum(ArtworkCategory, {
     error: "Category is required",
   }),
+  status: z.nativeEnum(ItemStatus).default(ItemStatus.DRAFT),
 });
 
 export const UpdateArtworkSchema = CreateArtworkSchema.partial();

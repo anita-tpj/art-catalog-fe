@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Resolver, useForm } from "react-hook-form";
 
 import { ArtworkFormLayout } from "@/features/artworks/components/admin/ArtworkFormLayout";
 import { useArtwork } from "@/features/artworks/hooks/useArtwork";
@@ -20,7 +20,7 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
   const updateArtwork = useUpdateArtwork();
 
   const form = useForm<CreateArtworkDTO>({
-    resolver: zodResolver(CreateArtworkSchema),
+    resolver: zodResolver(CreateArtworkSchema) as Resolver<CreateArtworkDTO>,
   });
 
   const {
@@ -45,9 +45,9 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
       orientation: artwork.orientation ?? undefined,
       size: artwork.size ?? undefined,
       framed: artwork.framed,
+      status: artwork.status,
     });
   }, [artwork, reset]);
-  console.log("after reset", form.getValues());
   if (isLoading && !artwork) {
     return (
       <p className="text-sm text-zinc-500">{t("Loading artwork details…")}</p>

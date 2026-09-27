@@ -18,6 +18,12 @@ import {
 import { useCountryOptions } from "@/hooks/useCountries";
 
 import { ImageUploadField } from "@/components/ui";
+import {
+  ItemStatus,
+  ItemStatusLabels,
+  ItemVisibility,
+  ItemVisibilityLabels,
+} from "@/types/item";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useArtistAvatarUpload } from "../../hooks/useArtistAvatarUpload";
@@ -92,7 +98,9 @@ export function ArtistFormLayout({
               <TextInputField
                 label={t("Name")}
                 placeholder={t("Type name")}
-                error={errors.name?.message ? t(errors.name.message) : undefined}
+                error={
+                  errors.name?.message ? t(errors.name.message) : undefined
+                }
                 {...register("name")}
               />
               <div className="flex gap-4">
@@ -116,6 +124,28 @@ export function ArtistFormLayout({
                     enumObject={ArtworkCategory}
                     labels={ArtworkCategoryLabels}
                   />
+                </div>
+                {/* Artist status */}
+                <div className="flex gap-4">
+                  <div className="space-y-1 w-1/2">
+                    <EnumSelectField<CreateArtistDTO, ItemStatus>
+                      control={control}
+                      name="status"
+                      label={t("Status")}
+                      enumObject={ItemStatus}
+                      labels={ItemStatusLabels}
+                    />
+                  </div>
+                  {/* Artist visibility */}
+                  <div className="space-y-1 w-1/2">
+                    <EnumSelectField<CreateArtistDTO, ItemVisibility>
+                      control={control}
+                      name="visibility"
+                      label={t("Visibility")}
+                      enumObject={ItemVisibility}
+                      labels={ItemVisibilityLabels}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

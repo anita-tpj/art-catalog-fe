@@ -33,6 +33,8 @@ import {
   CreateArtworkDTO,
 } from "../../types";
 
+import { ItemStatus, ItemStatusLabels } from "@/types/item";
+
 import { ImageUploadField } from "@/components/ui";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -94,7 +96,9 @@ export function ArtworkFormLayout({
                 <TextInputField
                   label={t("Title")}
                   placeholder={t("Type title")}
-                  error={errors.title?.message ? t(errors.title.message) : undefined}
+                  error={
+                    errors.title?.message ? t(errors.title.message) : undefined
+                  }
                   {...register("title")}
                 />
 
@@ -113,6 +117,16 @@ export function ArtworkFormLayout({
                     enumObject={ArtworkCategory}
                     labels={ArtworkCategoryLabels}
                   />
+
+                  <div className="w-1/2">
+                    <EnumSelectField<CreateArtworkDTO, ItemStatus>
+                      control={control}
+                      name="status"
+                      label={t("Status")}
+                      enumObject={ItemStatus}
+                      labels={ItemStatusLabels}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -210,7 +224,11 @@ export function ArtworkFormLayout({
                   label={t("Description")}
                   placeholder={t("Type description")}
                   rows={4}
-                  error={errors.description?.message ? t(errors.description.message) : undefined}
+                  error={
+                    errors.description?.message
+                      ? t(errors.description.message)
+                      : undefined
+                  }
                   {...register("description")}
                 />
               </div>

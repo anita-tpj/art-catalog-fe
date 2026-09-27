@@ -17,7 +17,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -74,7 +74,9 @@ export async function generateMetadata({ params }: PageProps) {
   if (!Number.isFinite(id)) return { title: "Artwork not found" };
 
   try {
-    const artwork = await getById<Artwork>("/api/artworks", id, { revalidate });
+    const artwork = await getById<Artwork>("/api/artworks/public", id, {
+      revalidate,
+    });
     const title = `${artwork.title} — ${artwork.artist?.name ?? "Unknown artist"} | ArtCatalog`;
 
     return {
@@ -99,8 +101,8 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
   let artwork: Artwork;
 
   try {
-    artwork = await getById<Artwork>("/api/artworks", id, {
-      revalidate: 60,
+    artwork = await getById<Artwork>("/api/artworks/public", id, {
+      revalidate,
     });
   } catch {
     notFound();

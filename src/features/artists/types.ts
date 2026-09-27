@@ -1,6 +1,7 @@
 import { CURRENT_YEAR, DEFAULT_MIN_YEAR } from "@/lib/year-options";
+import { ItemStatus, ItemVisibility } from "@/types/item";
 import { z } from "zod";
-import { ArtworkCategory } from "../artworks/types";
+import { Artwork, ArtworkCategory } from "../artworks/types";
 
 export interface Artist {
   id: number;
@@ -13,25 +14,10 @@ export interface Artist {
   avatarPublicId: string | null;
   primaryCategory: ArtworkCategory;
   artworksCount: number | null;
+  status: ItemStatus;
+  visibility: ItemVisibility;
+  artworks?: Artwork[];
 }
-
-const optionalYear = z.preprocess(
-  (value) => {
-    if (value === "" || value === null || value === undefined) {
-      return undefined;
-    }
-    const num = Number(value);
-    return Number.isNaN(num) ? undefined : num;
-  },
-  z
-    .number()
-    .int()
-    .min(1800, { message: "Year must be greater than 1800" })
-    .max(new Date().getFullYear(), {
-      message: "Year cannot be in the future",
-    })
-    .optional(),
-);
 
 export const createArtistSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -48,6 +34,7 @@ export const createArtistSchema = z.object({
       message: "Year cannot be in the future",
     })
     .optional(),
+
   deathYear: z
     .number()
     .int()
@@ -58,11 +45,17 @@ export const createArtistSchema = z.object({
       message: "Year cannot be in the future",
     })
     .optional(),
+
   avatarUrl: z.string().url("Must be a valid URL").optional(),
   avatarPublicId: z.string().optional(),
+
   primaryCategory: z.nativeEnum(ArtworkCategory, {
     error: "Category is required",
   }),
+
+  status: z.nativeEnum(ItemStatus).default(ItemStatus.DRAFT),
+
+  visibility: z.nativeEnum(ItemVisibility).default(ItemVisibility.PRIVATE),
 });
 
 export const UpdateArtistSchema = createArtistSchema.partial();

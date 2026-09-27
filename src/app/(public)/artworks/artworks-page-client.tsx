@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import {
   ArtworkCard,
   ArtworkCardSkeleton,
-  usePaginatedArtworks,
+  usePaginatedPublishedArtworks,
 } from "@/features/artworks";
 import { ListingToolbar } from "@/features/listing/components/ListingToolbar";
 import { useListingUrlState } from "@/features/listing/hooks/useListingUrlState";
@@ -49,12 +49,13 @@ export function ArtworksPageClient({
 
   const apiCategory = category === ALL_CATEGORIES_VALUE ? undefined : category;
 
-  const { data, isLoading, isError, error, refetch } = usePaginatedArtworks({
-    page,
-    pageSize,
-    search: debouncedSearch || undefined,
-    category: apiCategory,
-  });
+  const { data, isLoading, isError, error, refetch } =
+    usePaginatedPublishedArtworks({
+      page,
+      pageSize,
+      search: debouncedSearch || undefined,
+      category: apiCategory,
+    });
 
   const items = data?.items ?? [];
   const total = data?.meta.total ?? 0;
@@ -105,7 +106,9 @@ export function ArtworksPageClient({
       ) : isError ? (
         <ErrorState
           title="Couldn’t load artworks"
-          message={error instanceof Error ? t(error.message) : t("Please try again.")}
+          message={
+            error instanceof Error ? t(error.message) : t("Please try again.")
+          }
           onRetry={() => refetch()}
         />
       ) : items.length === 0 ? (
