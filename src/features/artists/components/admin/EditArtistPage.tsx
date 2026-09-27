@@ -41,6 +41,7 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
       primaryCategory: artist.primaryCategory ?? undefined,
       status: artist.status,
       visibility: artist.visibility,
+      slug: artist.slug ?? undefined,
     });
   }, [artist, reset]);
 
@@ -72,6 +73,7 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
       submitLabel={isBusy ? t("Updating...") : t("Update artist")}
       isBusy={isBusy}
       apiError={apiError}
+      slugLocked={artist.slugLocked}
     />
   );
 };

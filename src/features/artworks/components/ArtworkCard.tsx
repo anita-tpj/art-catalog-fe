@@ -67,7 +67,7 @@ export const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
           ) : null}
           {artwork.artist ? (
             <Link
-              href={`/artists/${artwork.artistId}`}
+              href={`/${artwork.artist.slug}`}
               className="rounded-full border px-2 py-0.5 hover:bg-black hover:text-white"
             >
               {artwork.artist.name}

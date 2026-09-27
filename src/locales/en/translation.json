@@ -310,5 +310,17 @@
   "Email is required": "Email is required",
   "Enter a valid email": "Enter a valid email",
   "Message is too short": "Message is too short",
-  "Message is too long": "Message is too long"
+  "Message is too long": "Message is too long",
+  "artwork_one": "{{count}} artwork",
+  "artwork_other": "{{count}} artworks",
+  "Public profile URL": "Public profile URL",
+  "choose-your-url": "choose-your-url",
+  "This URL is locked because the profile has already been published.": "This URL is locked because the profile has already been published.",
+  "Choose your public profile URL. You can change it until the profile is published.": "Choose your public profile URL. You can change it until the profile is published.",
+  "Status": "Status",
+  "Visibility": "Visibility",
+  "Draft": "Draft",
+  "Published": "Published",
+  "Public": "Public",
+  "Private": "Private"
 }

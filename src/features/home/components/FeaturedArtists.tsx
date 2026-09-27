@@ -8,6 +8,7 @@ type Artist = {
   id: string;
   name: string;
   avatarUrl?: string | null;
+  slug: string;
 };
 
 export function FeaturedArtists({ artists }: { artists: Artist[] }) {
@@ -45,7 +46,7 @@ export function FeaturedArtists({ artists }: { artists: Artist[] }) {
           {artists.slice(0, 6).map((a) => (
             <Link
               key={a.id}
-              href={`/artists/${a.id}`}
+              href={`/${a.slug}`}
               className="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/40"
             >
               <div className="h-12 w-12 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">

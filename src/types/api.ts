@@ -11,6 +11,7 @@ export interface PaginatedRequest {
   search?: string;
   category?: string;
   artistId?: number;
+  artist?: string;
   primaryCategory?: string;
 }
 

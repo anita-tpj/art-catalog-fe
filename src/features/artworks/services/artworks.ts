@@ -8,6 +8,7 @@ function buildPaginatedParams({
   search,
   category,
   artistId,
+  artist,
 }: PaginatedRequest) {
   const params = new URLSearchParams({
     page: String(page),
@@ -26,9 +27,12 @@ function buildPaginatedParams({
     params.set("artistId", String(artistId));
   }
 
+  if (artist?.trim()) {
+    params.set("artist", artist.trim());
+  }
+
   return params;
 }
-
 export const artworksService = {
   // Admin
   getAll: () =>

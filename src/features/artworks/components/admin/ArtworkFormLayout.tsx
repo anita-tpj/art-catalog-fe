@@ -117,16 +117,6 @@ export function ArtworkFormLayout({
                     enumObject={ArtworkCategory}
                     labels={ArtworkCategoryLabels}
                   />
-
-                  <div className="w-1/2">
-                    <EnumSelectField<CreateArtworkDTO, ItemStatus>
-                      control={control}
-                      name="status"
-                      label={t("Status")}
-                      enumObject={ItemStatus}
-                      labels={ItemStatusLabels}
-                    />
-                  </div>
                 </div>
               </div>
 
@@ -232,13 +222,26 @@ export function ArtworkFormLayout({
                   {...register("description")}
                 />
               </div>
-              <div className="w-1/2">
-                <YearSelector<CreateArtworkDTO>
-                  control={control}
-                  name="year"
-                  label={t("Year")}
-                  placeholder={t("Select year")}
-                />
+              <div className="space-y-4">
+                <div className="w-1/2">
+                  <YearSelector<CreateArtworkDTO>
+                    control={control}
+                    name="year"
+                    label={t("Year")}
+                    placeholder={t("Select year")}
+                  />
+                </div>
+                <div className="space-y-4 mt-8 pt-2 border-t border-zinc-300">
+                  <div className="w-1/2">
+                    <EnumSelectField<CreateArtworkDTO, ItemStatus>
+                      control={control}
+                      name="status"
+                      label={t("Status")}
+                      enumObject={ItemStatus}
+                      labels={ItemStatusLabels}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

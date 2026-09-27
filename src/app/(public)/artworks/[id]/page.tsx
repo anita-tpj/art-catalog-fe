@@ -208,7 +208,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
               {artwork.artistId ? (
                 <Button asChild variant="outline">
                   <Link
-                    href={`/artists/${artwork.artistId}`}
+                    href={`/${artwork.artist.slug}`}
                     className="inline-flex h-10 items-center gap-0.5 justify-center rounded-md border px-4 text-sm font-medium"
                   >
                     {t("More from this artist")}

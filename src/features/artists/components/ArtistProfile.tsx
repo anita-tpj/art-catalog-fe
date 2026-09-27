@@ -1,19 +1,15 @@
-// app/artists/[id]/page.tsx
-
 import { Button } from "@/components/ui";
 import { Artist } from "@/features/artists/types";
 import { ArtworkCategoryLabels } from "@/features/artworks/types";
 import { getTranslation } from "@/i18n/server";
-import { getById } from "@/lib/api-client";
-import { parseIdOrNotFound } from "@/lib/utils";
+import { ItemVisibility } from "@/types/item";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
-export const revalidate = 0;
-
-type PageProps = { params: Promise<{ id: string }> };
+type ArtistProfileProps = {
+  artist: Artist;
+};
 
 function getLifeSpan(artist: Artist) {
   const b = artist.birthYear ?? null;
@@ -62,73 +58,27 @@ function formatArtworkCategory(
   return ArtworkCategoryLabels[key] ?? String(category);
 }
 
-export async function generateMetadata({ params }: PageProps) {
-  const { id: idParam } = await params;
-  const id = Number(idParam);
-
-  if (!Number.isFinite(id)) {
-    return { title: "Artist not found" };
-  }
-
-  try {
-    const artist = await getById<Artist>("/api/artists/public", id, {
-      revalidate,
-    });
-
-    const title = `${artist.name} — Artist | ArtCatalog`;
-    const description = artist.bio ?? `Explore artworks by ${artist.name}.`;
-
-    return {
-      title,
-      description,
-      alternates: {
-        canonical: `/artists/${id}`,
-      },
-      openGraph: {
-        title,
-        description,
-      },
-    };
-  } catch {
-    return { title: "Artist not found" };
-  }
-}
-
-export default async function ArtistDetailPage({ params }: PageProps) {
-  const { id: idParam } = await params;
-  const id = parseIdOrNotFound(idParam);
-
-  let artist: Artist;
-
-  try {
-    artist = await getById<Artist>("/api/artists/public", id, { revalidate });
-  } catch {
-    notFound();
-  }
-
+export async function ArtistProfile({ artist }: ArtistProfileProps) {
   const artworks = artist.artworks ?? [];
+  const hasMoreArtworks =
+    artist.visibility === ItemVisibility.PUBLIC &&
+    (artist.artworksCount ?? 0) > 6;
   const badges = getArtistMetaBadges(artist);
   const { t } = await getTranslation();
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-6 flex items-center justify-between gap-3">
-        <Link
-          href="/artists"
-          className="text-sm underline underline-offset-4 flex items-center gap-1"
-        >
-          <MdArrowBack />
-          {t("Back to artists")}
-        </Link>
-
-        <Link
-          href={`/artworks?search=${encodeURIComponent(artist.name)}`}
-          className="text-sm underline underline-offset-4 flex items-center gap-1"
-        >
-          {t("Search artworks")}
-          <MdArrowForward />
-        </Link>
-      </div>
+      {artist.visibility === ItemVisibility.PUBLIC && (
+        <div className="mb-6">
+          <Link
+            href="/artists"
+            className="flex items-center gap-1 text-sm underline underline-offset-4"
+          >
+            <MdArrowBack />
+            {t("Back to artists")}
+          </Link>
+        </div>
+      )}
 
       {/* Header card */}
       <section className="grid gap-6 rounded-2xl border p-6 lg:grid-cols-12">
@@ -189,21 +139,21 @@ export default async function ArtistDetailPage({ params }: PageProps) {
               <Link
                 className="inline-flex h-10 items-center justify-center text-sm font-medium text-primary-foreground"
                 href={`/contact?artistId=${encodeURIComponent(
-                  String(id),
+                  String(artist.id),
                 )}&from=artist`}
               >
                 {t("Contact about this artist")}
               </Link>
             </Button>
 
-            <Button asChild variant="outline">
+            {/* <Button asChild variant="outline">
               <Link
                 className="inline-flex h-10 items-center justify-center text-sm font-medium"
                 href={`/artworks?search=${encodeURIComponent(artist.name)}`}
               >
                 {t("View related artworks")}
               </Link>
-            </Button>
+            </Button> */}
           </div>
         </div>
       </section>
@@ -212,19 +162,28 @@ export default async function ArtistDetailPage({ params }: PageProps) {
       <section className="mt-10 space-y-4">
         <div className="flex items-baseline justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold">{t("Artworks")}</h2>
+            <h2 className="text-lg font-semibold">
+              {t("Artworks")}{" "}
+              {(artist.artworksCount ?? 0) > 0 && (
+                <span className="text-sm font-normal">
+                  ({artist.artworksCount})
+                </span>
+              )}
+            </h2>
             <p className="text-sm text-muted-foreground">
               {t("Latest pieces by")} {artist.name}.
             </p>
           </div>
 
-          <Link
-            href={`/artworks?artistId=${encodeURIComponent(String(id))}`}
-            className="text-sm underline underline-offset-4 flex items-center gap-0.5"
-          >
-            {t("View all")}
-            <MdArrowForward />
-          </Link>
+          {hasMoreArtworks && (
+            <Link
+              href={`/artworks?artist=${encodeURIComponent(artist.slug!)}`}
+              className="flex items-center gap-0.5 text-sm underline underline-offset-4"
+            >
+              {t("View all")}
+              <MdArrowForward />
+            </Link>
+          )}
         </div>
 
         {artworks.length === 0 ? (

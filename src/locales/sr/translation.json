@@ -310,5 +310,18 @@
   "Email is required": "Email je obavezan",
   "Enter a valid email": "Unesite ispravan email",
   "Message is too short": "Poruka je prekratka",
-  "Message is too long": "Poruka je predugačka"
+  "Message is too long": "Poruka je predugačka",
+  "artwork_one": "{{count}} rad",
+  "artwork_few": "{{count}} rada",
+  "artwork_other": "{{count}} radova",
+  "Public profile URL": "URL javnog profila",
+  "choose-your-url": "izaberite-svoj-url",
+  "This URL is locked because the profile has already been published.": "Ovaj URL je zaključan jer je profil već objavljen.",
+  "Choose your public profile URL. You can change it until the profile is published.": "Izaberite URL svog javnog profila. Možete ga menjati sve dok profil ne bude objavljen.",
+  "Status": "Status",
+  "Visibility": "Vidljivost",
+  "Draft": "Nacrt",
+  "Published": "Objavljeno",
+  "Public": "Javno",
+  "Private": "Privatno"
 }

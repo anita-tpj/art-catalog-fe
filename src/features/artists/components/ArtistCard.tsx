@@ -12,7 +12,7 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
   const { t } = useTranslation();
 
   return (
-    <Link href={`/artists/${artist.id}`} className="block focus:outline-none">
+    <Link href={`/${artist.slug}`} className="block focus:outline-none">
       <article
         className="
           group h-full overflow-hidden rounded-2xl border bg-background
@@ -43,18 +43,19 @@ export const ArtistCard = ({ artist }: ArtistCardProps) => {
             <h3 className="line-clamp-2 text-base font-semibold leading-snug group-hover:underline underline-offset-4">
               {artist.name}
             </h3>
+            <div className="flex items-center gap-2">
+              {artist.primaryCategory ? (
+                <span className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
+                  {t(ArtworkCategoryLabels[artist.primaryCategory])}
+                </span>
+              ) : null}
 
-            {artist.primaryCategory ? (
-              <span className="rounded-full border px-2 py-0.5 text-xs text-muted-foreground">
-                {t(ArtworkCategoryLabels[artist.primaryCategory])}
-              </span>
-            ) : null}
-
-            {typeof artist.artworksCount === "number" ? (
-              <span className="shrink-0 text-xs text-muted-foreground">
-                {artist.artworksCount}
-              </span>
-            ) : null}
+              {typeof artist.artworksCount === "number" ? (
+                <span className="text-xs text-muted-foreground">
+                  · {t("artwork", { count: artist.artworksCount })}
+                </span>
+              ) : null}
+            </div>
           </div>
 
           {artist.bio ? (

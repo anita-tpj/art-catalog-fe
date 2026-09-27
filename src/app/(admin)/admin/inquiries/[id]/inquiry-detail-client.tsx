@@ -193,10 +193,10 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
               </Link>
             )}
 
-            {inquiry.artistId && (
+            {inquiry.artist?.slug && (
               <Link
                 className="text-sm underline underline-offset-4 flex items-center gap-0.5"
-                href={`/artists/${inquiry.artistId}`}
+                href={`/${inquiry.artist.slug}`}
               >
                 {t("View artist")}
                 <MdArrowForward />

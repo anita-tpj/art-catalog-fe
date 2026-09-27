@@ -111,3 +111,10 @@ i18n.t("Category is required");
 i18n.t("Artist is required");
 
 i18n.t("Title is required");
+
+i18n.t("DRAFT");
+i18n.t("PUBLISHED");
+i18n.t("ARCHIVED");
+
+i18n.t("PUBLIC");
+i18n.t("PRIVATE");

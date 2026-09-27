@@ -37,6 +37,7 @@ interface ArtistFormLayoutProps {
   submitLabel: string;
   isBusy?: boolean;
   apiError?: string;
+  slugLocked?: boolean;
 }
 
 export function ArtistFormLayout({
@@ -47,6 +48,7 @@ export function ArtistFormLayout({
   submitLabel,
   isBusy = false,
   apiError,
+  slugLocked = false,
 }: ArtistFormLayoutProps) {
   const {
     register,
@@ -125,28 +127,6 @@ export function ArtistFormLayout({
                     labels={ArtworkCategoryLabels}
                   />
                 </div>
-                {/* Artist status */}
-                <div className="flex gap-4">
-                  <div className="space-y-1 w-1/2">
-                    <EnumSelectField<CreateArtistDTO, ItemStatus>
-                      control={control}
-                      name="status"
-                      label={t("Status")}
-                      enumObject={ItemStatus}
-                      labels={ItemStatusLabels}
-                    />
-                  </div>
-                  {/* Artist visibility */}
-                  <div className="space-y-1 w-1/2">
-                    <EnumSelectField<CreateArtistDTO, ItemVisibility>
-                      control={control}
-                      name="visibility"
-                      label={t("Visibility")}
-                      enumObject={ItemVisibility}
-                      labels={ItemVisibilityLabels}
-                    />
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -177,6 +157,66 @@ export function ArtistFormLayout({
                     label={t("Year of death")}
                     placeholder={t("Select year")}
                   />
+                </div>
+              </div>
+              <div className="space-y-4 mt-8 pt-2 border-t border-zinc-300">
+                {/* Public profile slug */}
+                <div className="space-y-1">
+                  <label className="text-sm font-medium">
+                    {t("Public profile URL")}
+                  </label>
+
+                  <div className="flex items-center">
+                    <span className="shrink-0 text-sm text-zinc-500">
+                      creativeatlas.co/
+                    </span>
+
+                    <input
+                      type="text"
+                      placeholder={t("choose-your-url")}
+                      disabled={slugLocked}
+                      {...register("slug")}
+                      className="w-full rounded-md border border-zinc-300 bg-transparent px-3 py-2 text-sm disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-500 dark:border-zinc-700 dark:disabled:bg-zinc-800"
+                    />
+                  </div>
+
+                  {errors.slug?.message ? (
+                    <p className="text-xs text-red-500">
+                      {t(errors.slug.message)}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-zinc-500">
+                      {slugLocked
+                        ? t(
+                            "This URL is locked because the profile has already been published.",
+                          )
+                        : t(
+                            "Choose your public profile URL. You can change it until the profile is published.",
+                          )}
+                    </p>
+                  )}
+                </div>
+                <div className="flex gap-4">
+                  {/* Artist visibility */}
+                  <div className="space-y-1 w-1/2">
+                    <EnumSelectField<CreateArtistDTO, ItemVisibility>
+                      control={control}
+                      name="visibility"
+                      label={t("Visibility")}
+                      enumObject={ItemVisibility}
+                      labels={ItemVisibilityLabels}
+                    />
+                  </div>
+                  {/* Artist status */}
+                  <div className="space-y-1 w-1/2">
+                    <EnumSelectField<CreateArtistDTO, ItemStatus>
+                      control={control}
+                      name="status"
+                      label={t("Status")}
+                      enumObject={ItemStatus}
+                      labels={ItemStatusLabels}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

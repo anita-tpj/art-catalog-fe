@@ -186,6 +186,7 @@ export interface Artwork {
   status: ItemStatus;
   artist: {
     name: string;
+    slug: string | null;
   };
 }
 

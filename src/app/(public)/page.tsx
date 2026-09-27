@@ -16,6 +16,7 @@ type Artist = {
   id: string;
   name: string;
   avatarUrl?: string | null;
+  slug: string;
 };
 
 async function fetchJson<T>(path: string, params?: Record<string, string>) {
@@ -46,7 +47,9 @@ async function getFeaturedArtworks(): Promise<Artwork[]> {
   // - /artworks?take=12
   // - /artworks?perPage=12
   try {
-    const data = await fetchJson<any>("/api/artworks", { limit: "12" });
+    const data = await fetchJson<any>("/api/artworks/public", {
+      pageSize: "12",
+    });
 
     // Supports either array response or { items: [] } response
     return Array.isArray(data) ? data : (data.items ?? []);
@@ -57,7 +60,9 @@ async function getFeaturedArtworks(): Promise<Artwork[]> {
 
 async function getFeaturedArtists(): Promise<Artist[]> {
   try {
-    const data = await fetchJson<any>("/api/artists", { limit: "6" });
+    const data = await fetchJson<any>("/api/artists/public", {
+      pageSize: "6",
+    });
     return Array.isArray(data) ? data : (data.items ?? []);
   } catch {
     return [];

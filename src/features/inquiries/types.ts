@@ -21,7 +21,11 @@ export type Inquiry = {
   artistId: number | null;
   artworkId: number | null;
 
-  artist?: { id: number; name: string } | null;
+  artist?: {
+    id: number;
+    name: string;
+    slug: string | null;
+  } | null;
   artwork?: { id: number; title: string } | null;
 
   createdAt: string;
