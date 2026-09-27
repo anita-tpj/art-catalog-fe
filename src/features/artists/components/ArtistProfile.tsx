@@ -67,7 +67,7 @@ export async function ArtistProfile({ artist }: ArtistProfileProps) {
   const { t } = await getTranslation();
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
+    <>
       {artist.visibility === ItemVisibility.PUBLIC && (
         <div className="mb-6">
           <Link
@@ -242,6 +242,6 @@ export async function ArtistProfile({ artist }: ArtistProfileProps) {
           </div>
         )}
       </section>
-    </main>
+    </>
   );
 }

@@ -42,13 +42,11 @@ export default async function ArtistsPage({ searchParams }: PageProps) {
   const initialPageSize = toPositiveInt(sp.pageSize, 6);
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
-      <ArtistsPageClient
-        initialSearch={initialSearch}
-        initialCategory={initialCategory}
-        initialPage={initialPage}
-        initialPageSize={initialPageSize}
-      />
-    </main>
+    <ArtistsPageClient
+      initialSearch={initialSearch}
+      initialCategory={initialCategory}
+      initialPage={initialPage}
+      initialPageSize={initialPageSize}
+    />
   );
 }

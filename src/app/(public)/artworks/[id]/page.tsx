@@ -144,7 +144,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
   const details = getDetails(artwork);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
+    <>
       <div className="mb-6">
         <Link
           href="/artworks"
@@ -254,6 +254,6 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
           </div>
         </aside>
       </div>
-    </div>
+    </>
   );
 }

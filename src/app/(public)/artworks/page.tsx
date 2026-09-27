@@ -41,14 +41,12 @@ export default async function ArtworksPage({ searchParams }: PageProps) {
   const initialArtist = sp.artist?.trim() || undefined;
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
-      <ArtworksPageClient
-        initialSearch={initialSearch}
-        initialCategory={initialCategory}
-        initialPage={initialPage}
-        initialPageSize={initialPageSize}
-        initialArtist={initialArtist}
-      />
-    </main>
+    <ArtworksPageClient
+      initialSearch={initialSearch}
+      initialCategory={initialCategory}
+      initialPage={initialPage}
+      initialPageSize={initialPageSize}
+      initialArtist={initialArtist}
+    />
   );
 }
