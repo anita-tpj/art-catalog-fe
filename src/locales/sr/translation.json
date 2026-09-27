@@ -323,5 +323,10 @@
   "Draft": "Nacrt",
   "Published": "Objavljeno",
   "Public": "Javno",
-  "Private": "Privatno"
+  "Private": "Privatno",
+  "Availability": "Dostupnost",
+  "Available": "Dostupno",
+  "Reserved": "Rezervisano",
+  "Sold": "Prodato",
+  "Not for sale": "Nije na prodaju"
 }

@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui";
 import {
   Artwork,
+  ArtworkAvailability,
+  ArtworkAvailabilityLabels,
   ArtworkCategoryLabels,
   ArtworkMotiveLabels,
   ArtworkOrientationLabels,
@@ -66,6 +68,36 @@ function getDetails(artwork: Artwork): DetailItem[] {
     ),
     toDetail("Framed", artwork.framed ? "Yes" : "No"),
   ].filter((x): x is DetailItem => Boolean(x));
+}
+
+const availabilityStyles: Record<ArtworkAvailability, string> = {
+  [ArtworkAvailability.AVAILABLE]:
+    "border-emerald-200 bg-emerald-50 text-emerald-700",
+
+  [ArtworkAvailability.RESERVED]: "border-amber-200 bg-amber-50 text-amber-700",
+
+  [ArtworkAvailability.SOLD]: "border-rose-200 bg-rose-50 text-rose-700",
+
+  [ArtworkAvailability.NOT_FOR_SALE]:
+    "border-stone-300 bg-stone-100 text-stone-800",
+};
+
+function AvailabilityBadge({
+  artwork,
+  t,
+}: {
+  artwork: Artwork;
+  t: (key: string) => string;
+}) {
+  return (
+    <span
+      className={`inline-flex mt-2 rounded-full border px-2.5 py-1 text-xs font-medium ${
+        availabilityStyles[artwork.availability]
+      }`}
+    >
+      {t(ArtworkAvailabilityLabels[artwork.availability])}
+    </span>
+  );
 }
 
 export async function generateMetadata({ params }: PageProps) {
@@ -151,6 +183,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
             {subtitle ? (
               <p className="text-sm text-muted-foreground">{subtitle}</p>
             ) : null}
+            <AvailabilityBadge artwork={artwork} t={t} />
           </div>
 
           {artwork.description ? (
@@ -172,6 +205,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
             {subtitle ? (
               <p className="text-sm text-muted-foreground">{subtitle}</p>
             ) : null}
+            <AvailabilityBadge artwork={artwork} t={t} />
           </div>
 
           <dl className="grid grid-cols-2 gap-x-4 gap-y-3 rounded-2xl border p-4">

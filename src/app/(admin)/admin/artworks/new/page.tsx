@@ -3,6 +3,7 @@
 import { ArtworkFormLayout } from "@/features/artworks/components/admin/ArtworkFormLayout";
 import { useCreateArtwork } from "@/features/artworks/hooks/useCreateArtwork";
 import {
+  ArtworkAvailability,
   CreateArtworkDTO,
   CreateArtworkSchema,
 } from "@/features/artworks/types";
@@ -32,6 +33,7 @@ export default function NewArtworkPage() {
       framed: false,
       artistId: undefined as unknown as number,
       status: ItemStatus.DRAFT,
+      availability: ArtworkAvailability.AVAILABLE,
     },
   });
 

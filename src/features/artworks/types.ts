@@ -166,6 +166,19 @@ export const ArtworkStandardSizeLabels: Record<ArtworkStandardSize, string> = {
   CUSTOM: "Custom size",
 };
 
+export enum ArtworkAvailability {
+  AVAILABLE = "AVAILABLE",
+  RESERVED = "RESERVED",
+  SOLD = "SOLD",
+  NOT_FOR_SALE = "NOT_FOR_SALE",
+}
+export const ArtworkAvailabilityLabels: Record<ArtworkAvailability, string> = {
+  [ArtworkAvailability.AVAILABLE]: "Available",
+  [ArtworkAvailability.RESERVED]: "Reserved",
+  [ArtworkAvailability.SOLD]: "Sold",
+  [ArtworkAvailability.NOT_FOR_SALE]: "Not for sale",
+};
+
 export interface Artwork {
   id: number;
   title: string;
@@ -184,6 +197,7 @@ export interface Artwork {
   category: ArtworkCategory;
   artistId: number;
   status: ItemStatus;
+  availability: ArtworkAvailability;
   artist: {
     name: string;
     slug: string | null;
@@ -222,6 +236,9 @@ export const CreateArtworkSchema = z.object({
     error: "Category is required",
   }),
   status: z.nativeEnum(ItemStatus).default(ItemStatus.DRAFT),
+  availability: z
+    .nativeEnum(ArtworkAvailability)
+    .default(ArtworkAvailability.AVAILABLE),
 });
 
 export const UpdateArtworkSchema = CreateArtworkSchema.partial();
