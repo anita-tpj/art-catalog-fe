@@ -1,6 +1,5 @@
 import AboutPageClient from "./about-page-client";
 
-
 export const metadata = {
   title: "About | ArtCatalog",
   description:
@@ -8,10 +7,5 @@ export const metadata = {
 };
 
 export default function AboutPage() {
- 
-  return (
-    <main className="mx-auto max-w-6xl px-4 py-8">
-      <AboutPageClient />
-    </main>
-  );
+  return <AboutPageClient />;
 }
