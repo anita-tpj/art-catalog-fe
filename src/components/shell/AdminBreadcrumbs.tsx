@@ -1,5 +1,6 @@
 "use client";
 
+import { useAdminHome } from "@/features/admin/hooks/useAdminHome";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -15,17 +16,27 @@ export function AdminBreadcrumbs() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
   const { t } = useTranslation();
+  const adminHome = useAdminHome();
+  const isOwnArtistProfile = adminHome.href === pathname;
 
   if (segments[0] !== "admin") return null;
+
+  if (isOwnArtistProfile) {
+    return (
+      <nav className="text-xs text-zinc-500 dark:text-zinc-400">
+        {t(adminHome.label)}
+      </nav>
+    );
+  }
 
   return (
     <nav className="text-xs text-zinc-500 dark:text-zinc-400">
       <div className="flex flex-wrap items-center gap-2">
         <Link
-          href="/admin"
+          href={adminHome.href}
           className="hover:text-zinc-900 dark:hover:text-zinc-100"
         >
-          {t("Dashboard")}
+          {t(adminHome.label)}
         </Link>
 
         {segments.slice(1).map((seg, i) => {

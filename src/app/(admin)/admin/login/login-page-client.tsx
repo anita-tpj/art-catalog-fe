@@ -1,7 +1,10 @@
 "use client";
 
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
-import { adminLogin } from "@/features/admin/services/admin-auth.api";
+import {
+  AdminUserDto,
+  adminLogin,
+} from "@/features/admin/services/admin-auth.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,26 +16,48 @@ export default function LoginPageClient() {
   const qc = useQueryClient();
   const searchParams = useSearchParams();
 
-  // Only allow internal admin routes to prevent open redirects.
-  const rawNext = searchParams.get("next") || "/admin";
-  const nextUrl = rawNext.startsWith("/admin") ? rawNext : "/admin";
+  const rawNext = searchParams.get("next");
 
   const { data, isLoading } = useAdminMe();
 
-  // already logged in → go to /admin
+  function getDefaultAdminUrl(user: AdminUserDto) {
+    if (user.role === "ADMIN") {
+      return "/admin";
+    }
+
+    if (user.artistId) {
+      return `/admin/artists/${user.artistId}/edit`;
+    }
+
+    return "/admin";
+  }
+
+  function getRedirectUrl(user: AdminUserDto) {
+    if (rawNext?.startsWith("/admin")) {
+      return rawNext;
+    }
+
+    return getDefaultAdminUrl(user);
+  }
+
+  // Already logged in
   useEffect(() => {
-    if (data?.user) router.replace(nextUrl);
-  }, [data?.user, router, nextUrl]);
+    if (!data?.user) return;
+
+    router.replace(getRedirectUrl(data.user));
+  }, [data?.user, router, rawNext]);
 
   const [email, setEmail] = useState("admin@artcatalog.local");
   const [password, setPassword] = useState("admin12345");
 
   const loginMutation = useMutation({
     mutationFn: () => adminLogin(email, password),
-    onSuccess: async () => {
-      // refresh admin state
-      await qc.invalidateQueries({ queryKey: ["adminMe"] });
-      router.replace(nextUrl);
+
+    onSuccess: async (result) => {
+      // Make sure all components using adminMe get the new session/user.
+      qc.setQueryData(["adminMe"], result);
+
+      router.replace(getRedirectUrl(result.user));
     },
   });
 
@@ -41,6 +66,7 @@ export default function LoginPageClient() {
       <div className="flex min-h-screen items-center justify-center">
         <div className="flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white/70 px-5 py-4 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/50">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-900 dark:border-zinc-700 dark:border-t-zinc-200" />
+
           <p className="text-sm text-zinc-600 dark:text-zinc-300">
             {t("Checking session…")}
           </p>
@@ -56,6 +82,7 @@ export default function LoginPageClient() {
       <div className="mt-4 space-y-3">
         <label className="block">
           <span className="text-sm text-zinc-600">{t("Email")}</span>
+
           <input
             className="mt-1 w-full rounded-md border px-3 py-2"
             value={email}
@@ -66,6 +93,7 @@ export default function LoginPageClient() {
 
         <label className="block">
           <span className="text-sm text-zinc-600">{t("Password")}</span>
+
           <input
             className="mt-1 w-full rounded-md border px-3 py-2"
             value={password}

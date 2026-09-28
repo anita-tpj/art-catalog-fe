@@ -38,6 +38,7 @@ import {
 import { ItemStatus, ItemStatusLabels } from "@/types/item";
 
 import { ImageUploadField } from "@/components/ui";
+import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useArtworkImageUpload } from "../../hooks/useArtworkImageUpload";
@@ -77,6 +78,9 @@ export function ArtworkFormLayout({
   const { uploading, error, uploadFile } = useArtworkImageUpload();
   const { t } = useTranslation();
 
+  const { data: adminData } = useAdminMe();
+  const isAdmin = adminData?.user.role === "ADMIN";
+
   return (
     <section className="space-y-4">
       <div>
@@ -105,11 +109,13 @@ export function ArtworkFormLayout({
                 />
 
                 <div className="grid gap-4 lg:grid-cols-2">
-                  <ArtistSelector<CreateArtworkDTO>
-                    control={control}
-                    name="artistId"
-                    label={t("Artist")}
-                  />
+                  {isAdmin && (
+                    <ArtistSelector<CreateArtworkDTO>
+                      control={control}
+                      name="artistId"
+                      label={t("Artist")}
+                    />
+                  )}
 
                   <EnumSelectField<CreateArtworkDTO, ArtworkCategory>
                     control={control}

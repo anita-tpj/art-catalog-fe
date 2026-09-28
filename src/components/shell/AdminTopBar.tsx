@@ -1,12 +1,15 @@
 "use client";
 
+import { useAdminHome } from "@/features/admin/hooks/useAdminHome";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 import LanguageSwitcher from "../ui/language-switcher";
+import { AdminBreadcrumbs } from "./AdminBreadcrumbs";
 
 export function AdminTopBar() {
   const { t } = useTranslation();
+  const adminHome = useAdminHome();
+
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/60">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -15,7 +18,7 @@ export function AdminTopBar() {
           <div className="min-w-0 space-y-2">
             <div className="flex items-center gap-3">
               <Link
-                href="/admin"
+                href={adminHome.href}
                 className="text-sm font-semibold tracking-tight hover:opacity-80"
               >
                 {t("ArtCatalog")}

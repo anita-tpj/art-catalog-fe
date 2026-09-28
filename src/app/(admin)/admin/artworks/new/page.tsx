@@ -1,5 +1,6 @@
 "use client";
 
+import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { ArtworkFormLayout } from "@/features/artworks/components/admin/ArtworkFormLayout";
 import { useCreateArtwork } from "@/features/artworks/hooks/useCreateArtwork";
 import {
@@ -9,11 +10,14 @@ import {
 } from "@/features/artworks/types";
 import { ItemStatus } from "@/types/item";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { Resolver, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 export default function NewArtworkPage() {
   const { t } = useTranslation();
+  const { data: adminData } = useAdminMe();
+
   const createArtwork = useCreateArtwork();
 
   const form = useForm<CreateArtworkDTO>({
@@ -36,6 +40,16 @@ export default function NewArtworkPage() {
       availability: ArtworkAvailability.AVAILABLE,
     },
   });
+
+  useEffect(() => {
+    const artistId = adminData?.user.artistId;
+
+    if (!artistId) return;
+
+    form.setValue("artistId", artistId, {
+      shouldValidate: true,
+    });
+  }, [adminData?.user.artistId, form]);
 
   const {
     formState: { isSubmitting },

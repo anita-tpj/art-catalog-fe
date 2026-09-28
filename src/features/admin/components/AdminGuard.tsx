@@ -46,14 +46,5 @@ export default function AdminGuard({ children }: { children: ReactNode }) {
   // If not authenticated, we redirect via effect; render nothing to avoid UI flicker.
   if (!data?.user || isError) return null;
 
-  // Optional: role gate (currently only ADMIN).
-  if (data.user.role !== "ADMIN") {
-    return (
-      <div className="rounded-2xl border p-4 text-sm text-zinc-600">
-        {t("Forbidden.")}
-      </div>
-    );
-  }
-
   return <>{children}</>;
 }

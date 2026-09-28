@@ -18,6 +18,7 @@ import { TbTrashX } from "react-icons/tb";
 
 import { AdminResponsiveList } from "@/components/shell/AdminResponsiveList";
 import { SearchEmptyState, SearchInput } from "@/components/ui";
+import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { usePaginatedArtworks } from "@/features/artworks/hooks/useArtworks";
 import { useRemoveArtwork } from "@/features/artworks/hooks/useRemoveArtwork";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
@@ -26,6 +27,9 @@ import { useTranslation } from "react-i18next";
 
 export default function AdminArtworksPage() {
   const { t } = useTranslation();
+  const { data: adminData } = useAdminMe();
+
+  const isAdmin = adminData?.user.role === "ADMIN";
 
   const { page, pageSize, changePage, changePageSize } = usePaginationState(10);
 
@@ -166,19 +170,23 @@ export default function AdminArtworksPage() {
                               />
                             </Link>
 
-                            <ConfirmDialog
-                              title={t("Delete artwork")}
-                              description={t(
-                                "This action cannot be undone. This will permanently delete the artwork.",
-                              )}
-                              onConfirm={() => removeArtwork.mutate(artwork.id)}
-                              isLoading={removeArtwork.isPending}
-                            >
-                              <TbTrashX
-                                size={21}
-                                className="cursor-pointer text-red-600 hover:text-red-700"
-                              />
-                            </ConfirmDialog>
+                            {isAdmin && (
+                              <ConfirmDialog
+                                title={t("Delete artwork")}
+                                description={t(
+                                  "This action cannot be undone. This will permanently delete the artwork.",
+                                )}
+                                onConfirm={() =>
+                                  removeArtwork.mutate(artwork.id)
+                                }
+                                isLoading={removeArtwork.isPending}
+                              >
+                                <TbTrashX
+                                  size={21}
+                                  className="cursor-pointer text-red-600 hover:text-red-700"
+                                />
+                              </ConfirmDialog>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -230,19 +238,23 @@ export default function AdminArtworksPage() {
                               />
                             </Link>
 
-                            <ConfirmDialog
-                              title={t("Delete artwork")}
-                              description={t(
-                                "This action cannot be undone. This will permanently delete the artwork.",
-                              )}
-                              onConfirm={() => removeArtwork.mutate(artwork.id)}
-                              isLoading={removeArtwork.isPending}
-                            >
-                              <TbTrashX
-                                size={21}
-                                className="cursor-pointer text-red-600 hover:text-red-700"
-                              />
-                            </ConfirmDialog>
+                            {isAdmin && (
+                              <ConfirmDialog
+                                title={t("Delete artwork")}
+                                description={t(
+                                  "This action cannot be undone. This will permanently delete the artwork.",
+                                )}
+                                onConfirm={() =>
+                                  removeArtwork.mutate(artwork.id)
+                                }
+                                isLoading={removeArtwork.isPending}
+                              >
+                                <TbTrashX
+                                  size={21}
+                                  className="cursor-pointer text-red-600 hover:text-red-700"
+                                />
+                              </ConfirmDialog>
+                            )}
                           </div>
                         </div>
                       </div>
