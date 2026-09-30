@@ -3,17 +3,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import { z } from "zod";
 
 import { Button, Card, TextareaField, TextInputField } from "@/components/ui";
-
 import { artistsService } from "@/features/artists";
 import { artworksService } from "@/features/artworks";
+import { contactService } from "@/features/contact/services/contact";
 import { inquiriesService } from "@/features/inquiries";
-import { useTranslation } from "react-i18next";
 
 type Props = {
   artworkId?: number;
@@ -56,13 +56,33 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
   });
 
   const contextLine = useMemo(() => {
-    if (artworkId && artwork)
+    if (artworkId && artwork) {
       return `Artwork: "${artwork.title}" (ID ${artworkId})`;
-    if (artistId && artist) return `Artist: ${artist.name} (ID ${artistId})`;
-    if (artworkId) return `Artwork ID ${artworkId}`;
-    if (artistId) return `Artist ID ${artistId}`;
+    }
+
+    if (artistId && artist) {
+      return `Artist: ${artist.name}`;
+    }
+
+    if (artworkId) {
+      return `Artwork ID ${artworkId}`;
+    }
+
+    if (artistId) {
+      return `Artist ID ${artistId}`;
+    }
+
     return null;
   }, [artworkId, artistId, artwork, artist]);
+
+  const messagePlaceholder =
+    artworkId && artwork
+      ? t('Ask about "{{artwork}}"…', {
+          artwork: artwork.title,
+        })
+      : artistId && artist
+        ? t("Write a message to the artist…")
+        : t("Write your message…");
 
   const backHref = artworkId
     ? `/artworks/${artworkId}`
@@ -86,44 +106,29 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    getValues,
-    setValue,
-    reset,
   } = form;
-
-  // Prefill message once (don’t overwrite user typing)
-  useEffect(() => {
-    if (!contextLine) return;
-
-    const current = getValues("message");
-    if (current.trim()) return;
-
-    setValue(
-      "message",
-      `Hi,\n\nI’m interested in ${contextLine}.\nCould you share availability and pricing?\n\nThanks!`,
-      { shouldDirty: false, shouldTouch: false, shouldValidate: false },
-    );
-  }, [contextLine, getValues, setValue]);
 
   const onSubmit = handleSubmit(async (values) => {
     setSubmitError(null);
 
     try {
-      await inquiriesService.create({
-        ...values,
-        artworkId,
-        artistId,
-      });
+      if (artworkId || artistId) {
+        await inquiriesService.create({
+          ...values,
+          artworkId,
+          artistId,
+        });
+      } else {
+        await contactService.create(values);
+      }
 
       setIsSuccess(true);
-
-      // optional: clear for another message
-      // reset({ name: "", email: "", message: "" });
     } catch (err) {
       const msg =
         err instanceof Error
           ? err.message
           : t("Something went wrong. Please try again.");
+
       setSubmitError(msg);
     }
   });
@@ -132,6 +137,7 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
     <section className="space-y-6">
       <header className="space-y-1">
         <h1 className="text-3xl font-semibold">{t("Contact")}</h1>
+
         <p className="text-sm text-muted-foreground">
           {t("Send an inquiry and we'll get back to you.")}
         </p>
@@ -140,6 +146,7 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
       {contextLine ? (
         <Card className="rounded-2xl p-4">
           <div className="text-sm font-medium">{t("Regarding")}</div>
+
           <div className="text-sm text-muted-foreground">{contextLine}</div>
 
           <div className="mt-2">
@@ -157,6 +164,7 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
       {isSuccess ? (
         <Card className="rounded-2xl p-6">
           <div className="text-lg font-semibold">{t("Inquiry sent")} ✅</div>
+
           <p className="mt-1 text-sm text-muted-foreground">
             {t(
               "Thanks! We received your message and will get back to you soon.",
@@ -198,7 +206,7 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
 
             <TextareaField
               label={t("Message")}
-              placeholder={t("Write your message…")}
+              placeholder={messagePlaceholder}
               rows={6}
               error={errors.message?.message}
               disabled={isSubmitting}
