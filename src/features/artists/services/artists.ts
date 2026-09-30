@@ -57,15 +57,12 @@ export const artistsService = {
     post<
       {
         invitation: ArtistCmsInvitation;
-        token: string;
       },
       CreateArtistCmsInvitationDTO
     >(`/api/artists/${id}/cms-invitations`, data),
 
   revokeCmsInvitation: (artistId: number, invitationId: string) =>
-  del<void>(
-    `/api/artists/${artistId}/cms-invitations/${invitationId}`,
-  ),
+    del<void>(`/api/artists/${artistId}/cms-invitations/${invitationId}`),
 
   // Public
   getAllPublished: () => get<Artist[]>("/api/artists/public/all"),

@@ -172,7 +172,7 @@ export default function AdminArtistsPage() {
                             <ConfirmDialog
                               title={t("Delete artist")}
                               description={t(
-                                "This action cannot be undone. This will permanently delete the artis.",
+                                "This action cannot be undone. This will permanently delete the artist.",
                               )}
                               onConfirm={() => removeArtist.mutate(artist.id)}
                               isLoading={removeArtist.isPending}

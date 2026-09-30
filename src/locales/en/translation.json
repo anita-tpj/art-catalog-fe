@@ -37,7 +37,6 @@
   "Create Artist": "Create Artist",
   "NA": "N/A",
   "Delete artist": "Delete artist",
-  "This action cannot be undone. This will permanently delete the artis.": "This action cannot be undone. This will permanently delete the artist.",
   "Unknown country": "Unknown country",
   "This action cannot be undone. This will permanently delete the artist.": "This action cannot be undone. This will permanently delete the artist.",
   "Saving...": "Saving...",
@@ -112,7 +111,6 @@
   "No": "No",
   "match": "match",
   "Checking admin session…": "Checking admin session…",
-  "Forbidden.": "Forbidden.",
   "Total artworks in catalog": "Total artworks in catalog",
   "All artist profiles": "All artist profiles",
   "New inquiries": "New inquiries",
@@ -359,5 +357,7 @@
   "You don't have permission to access this page.": "You don't have permission to access this page.",
   "Revoke invitation": "Revoke invitation",
   "Invitation revoked": "Invitation revoked",
-  "Failed to revoke invitation": "Failed to revoke invitation"
+  "Failed to revoke invitation": "Failed to revoke invitation",
+  "Ask about \"{{artwork}}\"…": "Ask about \"{{artwork}}\"…",
+  "Write a message to the artist…": "Write a message to the artist…"
 }
