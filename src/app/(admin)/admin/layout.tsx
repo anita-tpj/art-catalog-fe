@@ -3,6 +3,7 @@
 import { AdminMobileNav } from "@/components/shell/AdminMobileNav";
 import { AdminSidebar } from "@/components/shell/AdminSidebar";
 import { AdminTopBar } from "@/components/shell/AdminTopBar";
+import { isPublicAdminRoute } from "@/features/admin/config/adminRoutes";
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { usePathname, useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
@@ -29,7 +30,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
     }
   }, [isLoading, isArtistUser, user?.artistId, pathname, router]);
 
-  const isLoginRoute = pathname === "/admin/login";
+  const isPublicRoute = isPublicAdminRoute(pathname);
   const isAuthenticated = !!data?.user;
 
   const shouldRedirectArtistUser =
@@ -48,7 +49,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
    */
   return (
     <AdminGuard>
-      {isLoginRoute ? (
+      {isPublicRoute ? (
         // Login page should never show admin navigation UI
         <div className="mx-auto w-full max-w-md px-4 py-10">{children}</div>
       ) : isLoading ? (

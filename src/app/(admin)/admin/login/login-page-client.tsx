@@ -47,8 +47,8 @@ export default function LoginPageClient() {
     router.replace(getRedirectUrl(data.user));
   }, [data?.user, router, rawNext]);
 
-  const [email, setEmail] = useState("admin@artcatalog.local");
-  const [password, setPassword] = useState("admin12345");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const loginMutation = useMutation({
     mutationFn: () => adminLogin(email, password),

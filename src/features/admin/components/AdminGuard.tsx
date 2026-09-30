@@ -1,5 +1,6 @@
 "use client";
 
+import { isPublicAdminRoute } from "@/features/admin/config/adminRoutes";
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
@@ -9,25 +10,20 @@ export default function AdminGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isLogin = pathname === "/admin/login";
+  const isPublicRoute = isPublicAdminRoute(pathname);
   const { data, isLoading, isError } = useAdminMe();
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (isLogin) return;
+    if (isPublicRoute) return;
 
-    /**
-     * If session check finished and user is missing (or request failed),
-     * redirect to login and remember the originally requested admin route.
-     */
     if (!isLoading && (!data?.user || isError)) {
       const next = encodeURIComponent(pathname || "/admin");
       router.replace(`/admin/login?next=${next}`);
     }
-  }, [isLogin, isLoading, data?.user, isError, pathname, router]);
+  }, [isPublicRoute, isLoading, data?.user, isError, pathname, router]);
 
-  // Login route is public.
-  if (isLogin) return <>{children}</>;
+  if (isPublicRoute) return <>{children}</>;
 
   // While checking session, show a lightweight loading state.
   if (isLoading) {

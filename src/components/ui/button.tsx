@@ -33,7 +33,7 @@ export function Button({
           "bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800",
         variant === "destructive" &&
           "bg-red-600 text-white hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800",
-        variant === "link" && "text-black px-0",
+        variant === "link" && "text-black px-0 underline",
         className,
       )}
       {...props}

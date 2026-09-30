@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { Resolver, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { CreateArtistDTO, createArtistSchema } from "../../types";
+import { ArtistCmsAccess } from "./ArtistCmsAccess";
 
 interface EditArtistPageProps {
   id: number;
@@ -65,16 +66,20 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
     : undefined;
 
   return (
-    <ArtistFormLayout
-      form={form}
-      onSubmit={(data) => updateArtist.mutate({ id, data })}
-      title={t("Edit artist")}
-      subtitle={t("Update artist details.")}
-      submitLabel={isBusy ? t("Updating...") : t("Update artist")}
-      isBusy={isBusy}
-      apiError={apiError}
-      slugLocked={artist.slugLocked}
-    />
+    <div className="space-y-6">
+      <ArtistFormLayout
+        form={form}
+        onSubmit={(data) => updateArtist.mutate({ id, data })}
+        title={t("Edit artist")}
+        subtitle={t("Update artist details.")}
+        submitLabel={isBusy ? t("Updating...") : t("Update artist")}
+        isBusy={isBusy}
+        apiError={apiError}
+        slugLocked={artist.slugLocked}
+      />
+
+      <ArtistCmsAccess artistId={id} />
+    </div>
   );
 };
 

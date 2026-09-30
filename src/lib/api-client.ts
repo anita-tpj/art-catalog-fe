@@ -1,5 +1,6 @@
 // lib/api-client.ts
 
+import { isPublicAdminRoute } from "@/features/admin/config/adminRoutes";
 import { toast } from "react-hot-toast";
 import { API_BASE_URL } from "./config";
 
@@ -62,8 +63,8 @@ function maybeRedirectOn401(error: unknown) {
 
   if (status !== 401) return;
 
-  // Avoid redirect loop if already on login page
-  if (window.location.pathname === "/admin/login") return;
+  // Public admin routes do not require an authenticated session.
+  if (isPublicAdminRoute(window.location.pathname)) return;
 
   // Prevent multiple redirects & duplicate toasts
   if (isRedirectingForAuth) return;
@@ -200,14 +201,14 @@ export async function put<TResponse, TBody = unknown>(
 
 export async function del<T>(
   path: string,
-  id: number,
+  id?: number | string,
   opts?: FetchOpts,
 ): Promise<T> {
   try {
-    const res = await fetch(
-      `${API_BASE_URL}${path}/${id}`,
-      buildInit("DELETE", opts),
-    );
+    const url = id !== undefined ? `${path}/${id}` : path;
+
+    const res = await fetch(`${API_BASE_URL}${url}`, buildInit("DELETE", opts));
+
     return await handleResponse<T>(res);
   } catch (error) {
     maybeRedirectOn401(error);
