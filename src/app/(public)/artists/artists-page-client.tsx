@@ -48,13 +48,13 @@ export function ArtistsPageClient({
 
   const apiCategory = category === ALL_CATEGORIES_VALUE ? undefined : category;
 
-const { data, isLoading, isError, error, refetch } =
-  usePaginatedPublishedArtists({
-    page,
-    pageSize,
-    search: debouncedSearch || undefined,
-    primaryCategory: apiCategory,
-  });
+  const { data, isLoading, isError, error, refetch } =
+    usePaginatedPublishedArtists({
+      page,
+      pageSize,
+      search: debouncedSearch || undefined,
+      primaryCategory: apiCategory,
+    });
 
   const items = data?.items ?? [];
   const total = data?.meta.total ?? 0;
@@ -96,6 +96,7 @@ const { data, isLoading, isError, error, refetch } =
         onClearFilters={listing.onClearFilters}
         onClearSearch={listing.onClearSearch}
         onClearCategory={listing.onClearCategory}
+        searchPlaceholder="Search artists..."
       />
 
       {isLoading ? (
@@ -107,7 +108,9 @@ const { data, isLoading, isError, error, refetch } =
       ) : isError ? (
         <ErrorState
           title="Couldn’t load artists"
-          message={error instanceof Error ? t(error.message) : t("Please try again.")}
+          message={
+            error instanceof Error ? t(error.message) : t("Please try again.")
+          }
           onRetry={() => refetch()}
         />
       ) : items.length === 0 ? (

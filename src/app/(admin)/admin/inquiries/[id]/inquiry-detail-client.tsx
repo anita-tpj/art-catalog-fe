@@ -5,7 +5,7 @@ import { useUpdateInquiryStatus } from "@/features/inquiries/hooks/useUpdateInqu
 import { Inquiry, InquiryStatus } from "@/features/inquiries/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import {
@@ -53,6 +53,8 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
   const router = useRouter();
   const [inquiry, setInquiry] = useState<Inquiry>(initialInquiry);
 
+  const didAutoMarkRead = useRef(false);
+
   const { mutateAsync: updateStatus, isPending } = useUpdateInquiryStatus();
 
   const regarding = useMemo(() => formatRegarding(inquiry), [inquiry]);
@@ -75,14 +77,23 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
     setInquiry((prev) => ({ ...prev, status: next }));
   }
 
-  // auto mark READ if NEW
+  // Auto mark READ only once when opening a NEW inquiry
   useEffect(() => {
-    if (inquiry.status !== "NEW") return;
+    if (didAutoMarkRead.current || initialInquiry.status !== "NEW") return;
 
-    updateStatus({ id: inquiry.id, status: "READ" })
-      .then(() => setInquiry((prev) => ({ ...prev, status: "READ" })))
-      .catch(() => {});
-  }, [inquiry.id, inquiry.status, updateStatus]);
+    didAutoMarkRead.current = true;
+
+    updateStatus({ id: initialInquiry.id, status: "READ" })
+      .then(() =>
+        setInquiry((prev) => ({
+          ...prev,
+          status: "READ",
+        })),
+      )
+      .catch(() => {
+        didAutoMarkRead.current = false;
+      });
+  }, [initialInquiry.id, initialInquiry.status, updateStatus]);
 
   return (
     <div>
@@ -121,7 +132,6 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                   size="xs"
                   title={t("Copy")}
                   onClick={async () => {
-                    navigator.clipboard.writeText(inquiry.email);
                     try {
                       await navigator.clipboard.writeText(inquiry.email);
                       toast.success(t("Email copied"));

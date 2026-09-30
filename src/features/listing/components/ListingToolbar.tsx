@@ -13,6 +13,8 @@ type Props = {
   onSearchChange: (v: string) => void;
   onClearSearch: () => void;
 
+  searchPlaceholder?: string;
+
   category: string;
   onCategoryChange: (v: string) => void;
   onClearCategory: () => void;
@@ -24,6 +26,7 @@ export function ListingToolbar({
   search,
   onSearchChange,
   onClearSearch,
+  searchPlaceholder = "Search artworks...",
   category,
   onCategoryChange,
   onClearCategory,
@@ -41,7 +44,7 @@ export function ListingToolbar({
           <SearchInput
             value={search}
             onChange={onSearchChange}
-            placeholder={t("Search artworks...")}
+            placeholder={t(searchPlaceholder)}
           />
         </div>
 

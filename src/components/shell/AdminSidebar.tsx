@@ -1,7 +1,8 @@
 "use client";
 
-import { adminNav } from "@/features/admin/config/adminNav";
+import { getAdminNav } from "@/features/admin/config/adminNav";
 import { useAdminLogout } from "@/features/admin/hooks/useAdminLogout";
+import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { useInquiryStats } from "@/features/inquiries/hooks/useInquiryStats";
 import { cn, getSectionRoot } from "@/lib/utils";
 import Link from "next/link";
@@ -10,9 +11,11 @@ import { useTranslation } from "react-i18next";
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const { data: adminData } = useAdminMe();
   const { data } = useInquiryStats();
   const logout = useAdminLogout();
 
+  const adminNav = getAdminNav(adminData?.user);
   const unread = data?.newCount ?? 0;
   const { t } = useTranslation();
 

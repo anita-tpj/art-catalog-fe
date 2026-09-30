@@ -8,12 +8,17 @@ import { useAdminLogout } from "@/features/admin/hooks/useAdminLogout";
 import { useInquiryStats } from "@/features/inquiries/hooks/useInquiryStats";
 import { cn, getSectionRoot } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
-import { adminNav } from "../../features/admin/config/adminNav";
+import { getAdminNav } from "@/features/admin/config/adminNav";
+import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 
 export function AdminMobileNav() {
   const pathname = usePathname();
+  const { data: adminData } = useAdminMe();
   const { data } = useInquiryStats();
   const logout = useAdminLogout();
+
+
+  const adminNav = getAdminNav(adminData?.user);
 
   const unread = data?.newCount ?? 0;
 

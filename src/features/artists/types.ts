@@ -79,3 +79,28 @@ export const UpdateArtistSchema = createArtistSchema.partial();
 
 export type CreateArtistDTO = z.infer<typeof createArtistSchema>;
 export type UpdateArtistDTO = z.infer<typeof UpdateArtistSchema>;
+export type ArtistCmsAccount = {
+  id: string;
+  email: string;
+  role: "ADMIN" | "EDITOR" | "VIEWER";
+  isActive: boolean;
+  createdAt: string;
+};
+
+export type ArtistCmsInvitation = {
+  id: string;
+  email: string;
+  role: "ADMIN" | "EDITOR" | "VIEWER";
+  expiresAt: string;
+  createdAt: string;
+};
+
+export type ArtistCmsAccess = {
+  status: "NONE" | "PENDING" | "ACTIVE";
+  accounts: ArtistCmsAccount[];
+  invitation: ArtistCmsInvitation | null;
+};
+
+export type CreateArtistCmsInvitationDTO = {
+  email: string;
+};

@@ -6,6 +6,7 @@ export type AdminUserDto = {
   id: string;
   email: string;
   role: AdminRole;
+  artistId: number | null;
 };
 
 export type MeResponse = { user: AdminUserDto };
@@ -16,10 +17,13 @@ export function adminMe() {
 }
 
 export function adminLogin(email: string, password: string) {
-  return post<LoginResponse, { email: string; password: string }>("/api/auth/login", {
-    email,
-    password,
-  });
+  return post<LoginResponse, { email: string; password: string }>(
+    "/api/auth/login",
+    {
+      email,
+      password,
+    },
+  );
 }
 
 export function adminLogout() {

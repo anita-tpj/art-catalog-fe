@@ -1,6 +1,12 @@
 import { del, get, getById, post, put } from "@/lib/api-client";
 import { PaginatedRequest, PaginatedResult } from "@/types/api";
-import { Artist, CreateArtistDTO } from "../types";
+import {
+  Artist,
+  ArtistCmsAccess,
+  ArtistCmsInvitation,
+  CreateArtistCmsInvitationDTO,
+  CreateArtistDTO,
+} from "../types";
 
 function buildPaginatedParams({
   page,
@@ -44,6 +50,23 @@ export const artistsService = {
 
   remove: (id: number) => del<Artist>("/api/artists", id),
 
+  getCmsAccess: (id: number) =>
+    get<ArtistCmsAccess>(`/api/artists/${id}/cms-access`),
+
+  createCmsInvitation: (id: number, data: CreateArtistCmsInvitationDTO) =>
+    post<
+      {
+        invitation: ArtistCmsInvitation;
+        token: string;
+      },
+      CreateArtistCmsInvitationDTO
+    >(`/api/artists/${id}/cms-invitations`, data),
+
+  revokeCmsInvitation: (artistId: number, invitationId: string) =>
+  del<void>(
+    `/api/artists/${artistId}/cms-invitations/${invitationId}`,
+  ),
+
   // Public
   getAllPublished: () => get<Artist[]>("/api/artists/public/all"),
 
@@ -56,7 +79,7 @@ export const artistsService = {
   },
 
   getPublishedOne: (id: number) => getById<Artist>("/api/artists/public", id),
-  
+
   getPublishedBySlug: (slug: string) =>
-  get<Artist>(`/api/artists/public/profile/${encodeURIComponent(slug)}`),
+    get<Artist>(`/api/artists/public/profile/${encodeURIComponent(slug)}`),
 };

@@ -2,6 +2,7 @@ import { Inquiry } from "@/features/inquiries/types";
 import { getTranslation } from "@/i18n/server";
 import { API_BASE_URL } from "@/lib/config";
 import { parseIdOrNotFound } from "@/lib/utils";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MdArrowBack } from "react-icons/md";
@@ -13,13 +14,18 @@ type PageProps = { params: Promise<{ id: string }> };
 
 async function fetchInquiryOrNull(id: number): Promise<Inquiry | null> {
   const apiBase = API_BASE_URL;
+  const cookieStore = await cookies();
 
   const res = await fetch(`${apiBase}/api/inquiries/${id}`, {
     cache: "no-store",
-    headers: { accept: "application/json" },
+    headers: {
+      accept: "application/json",
+      cookie: cookieStore.toString(),
+    },
   });
 
   if (!res.ok) return null;
+
   return (await res.json()) as Inquiry;
 }
 

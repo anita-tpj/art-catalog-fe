@@ -3,17 +3,43 @@
 import { AdminMobileNav } from "@/components/shell/AdminMobileNav";
 import { AdminSidebar } from "@/components/shell/AdminSidebar";
 import { AdminTopBar } from "@/components/shell/AdminTopBar";
+import { isPublicAdminRoute } from "@/features/admin/config/adminRoutes";
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
-import { usePathname } from "next/navigation";
-import { PropsWithChildren } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { PropsWithChildren, useEffect } from "react";
 import AdminGuard from "../../../features/admin/components/AdminGuard";
 
 export default function AdminLayout({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const { data, isLoading } = useAdminMe();
 
-  const isLoginRoute = pathname === "/admin/login";
+  const router = useRouter();
+
+  const user = data?.user;
+  const isArtistUser = !!user?.artistId && user.role !== "ADMIN";
+
+  useEffect(() => {
+    if (isLoading || !isArtistUser || !user?.artistId) return;
+
+    const artistProfileUrl = `/admin/artists/${user.artistId}/edit`;
+
+    const adminOnlyRoutes = ["/admin", "/admin/artists", "/admin/artists/new"];
+
+    if (adminOnlyRoutes.includes(pathname)) {
+      router.replace(artistProfileUrl);
+    }
+  }, [isLoading, isArtistUser, user?.artistId, pathname, router]);
+
+  const isPublicRoute = isPublicAdminRoute(pathname);
   const isAuthenticated = !!data?.user;
+
+  const shouldRedirectArtistUser =
+    isArtistUser &&
+    ["/admin", "/admin/artists", "/admin/artists/new"].includes(pathname);
+
+  if (shouldRedirectArtistUser) {
+    return null;
+  }
 
   /**
    * AdminGuard is responsible for redirecting unauthenticated users
@@ -23,7 +49,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
    */
   return (
     <AdminGuard>
-      {isLoginRoute ? (
+      {isPublicRoute ? (
         // Login page should never show admin navigation UI
         <div className="mx-auto w-full max-w-md px-4 py-10">{children}</div>
       ) : isLoading ? (
