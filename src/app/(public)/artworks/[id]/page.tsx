@@ -1,6 +1,6 @@
 // app/artworks/[id]/page.tsx
 import { Button } from "@/components/ui";
-import { CATEGORY_FIELD_CONFIG } from "@/features/artworks/artwork-category-field-config";
+import { CATEGORY_FIELD_CONFIG } from "@/config/artwork-category-field-config";
 import {
   Artwork,
   ArtworkAvailability,
