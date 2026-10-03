@@ -1,5 +1,6 @@
 // app/artworks/[id]/page.tsx
 import { Button } from "@/components/ui";
+import { CATEGORY_FIELD_CONFIG } from "@/features/artworks/artwork-category-field-config";
 import {
   Artwork,
   ArtworkAvailability,
@@ -44,6 +45,8 @@ function toDetail(label: string, value: string | null): DetailItem | null {
 }
 
 function getDetails(artwork: Artwork): DetailItem[] {
+  const visibleFields = CATEGORY_FIELD_CONFIG[artwork.category].visible;
+
   return [
     toDetail("Category", ArtworkCategoryLabels[artwork.category]),
     toDetail("Medium", artwork.medium),
@@ -63,7 +66,10 @@ function getDetails(artwork: Artwork): DetailItem[] {
         : null,
     ),
     toDetail("Size", artwork.size),
-    toDetail("Framed", artwork.framed ? "Yes" : "No"),
+    toDetail(
+      "Framed",
+      visibleFields.includes("framed") ? (artwork.framed ? "Yes" : "No") : null,
+    ),
   ].filter((x): x is DetailItem => Boolean(x));
 }
 
