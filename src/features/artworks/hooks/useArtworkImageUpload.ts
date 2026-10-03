@@ -8,36 +8,47 @@ interface UseArtworkImageUploadOptions {
   onUploaded?: (payload: UploadedImage) => void;
 }
 
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
 export function useArtworkImageUpload({
   onUploaded,
 }: UseArtworkImageUploadOptions = {}) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Save only publicId uploaded in this session (create/edit form)
+  // Tracks only temporary uploads made during the current form session.
   const lastUploadedPublicIdRef = useRef<string | null>(null);
 
-  const deletePreviousIfAny = async () => {
-    const prevId = lastUploadedPublicIdRef.current;
-    if (!prevId) return;
-
+  const deleteTemporaryUpload = async (publicId: string) => {
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/uploads/artwork-image?publicId=${encodeURIComponent(prevId)}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/uploads/artwork-image?publicId=${encodeURIComponent(publicId)}`,
         { method: "DELETE" },
       );
     } catch (err) {
-      console.error("Failed to delete previous Cloudinary image:", err);
+      console.error("Failed to delete temporary Cloudinary image:", err);
     }
   };
 
   const uploadFile = async (file: File): Promise<UploadedImage> => {
     setError(null);
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      const message = "Please upload a JPG, PNG or WebP image.";
+      setError(message);
+      throw new Error(message);
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      const message = "Image must be smaller than 5 MB.";
+      setError(message);
+      throw new Error(message);
+    }
+
     setUploading(true);
 
     try {
-      await deletePreviousIfAny();
-
       const formData = new FormData();
       formData.append("file", file);
 
@@ -55,7 +66,16 @@ export function useArtworkImageUpload({
 
       const data = await res.json();
 
-      const payload: UploadedImage = { url: data.url, publicId: data.publicId };
+      const payload: UploadedImage = {
+        url: data.url,
+        publicId: data.publicId,
+      };
+
+      const previousTemporaryPublicId = lastUploadedPublicIdRef.current;
+
+      if (previousTemporaryPublicId) {
+        await deleteTemporaryUpload(previousTemporaryPublicId);
+      }
 
       lastUploadedPublicIdRef.current = payload.publicId;
 
@@ -68,26 +88,15 @@ export function useArtworkImageUpload({
 
       console.error(err);
       setError(message);
-      throw err; // IMPORTANT: let UI component know it failed
+      throw err;
     } finally {
       setUploading(false);
     }
   };
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    // allow same file to be selected again
-    event.currentTarget.value = "";
-    if (!file) return;
-    await uploadFile(file);
-  };
-
   return {
     uploading,
     error,
-    uploadFile, // ✅ NEW
-    handleFileChange, // still available if you want legacy usage
+    uploadFile,
   };
 }

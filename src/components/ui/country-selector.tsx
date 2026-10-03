@@ -32,6 +32,10 @@ export function CountrySelector<TFieldValues extends FieldValues>({
 }: CountrySelectorProps<TFieldValues>) {
   const { t } = useTranslation();
 
+  const sortedOptions = [...options].sort((a, b) =>
+    a.label.localeCompare(b.label, undefined, { sensitivity: "base" }),
+  );
+
   return (
     <div className="space-y-1">
       <Label>{label}</Label>
@@ -54,7 +58,7 @@ export function CountrySelector<TFieldValues extends FieldValues>({
               </SelectTrigger>
 
               <SelectContent>
-                {options.map((c) => (
+                {sortedOptions.map((c) => (
                   <SelectItem key={c.value} value={c.value}>
                     {c.label}
                   </SelectItem>

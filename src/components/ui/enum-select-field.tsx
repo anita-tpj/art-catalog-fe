@@ -24,6 +24,7 @@ type EnumSelectFieldProps<
   /** Labels map: value → label za UI, exp. Record<ArtworkTechnique, string> */
   labels: Record<TEnumValue, string>;
   requiredMessage?: string;
+  sortOptions?: boolean;
 };
 
 export function EnumSelectField<
@@ -37,9 +38,22 @@ export function EnumSelectField<
   enumObject,
   labels,
   requiredMessage,
+  sortOptions = false,
 }: EnumSelectFieldProps<TFieldValues, TEnumValue>) {
-  const values = Object.values(enumObject) as TEnumValue[];
   const { t } = useTranslation();
+
+  const values = Object.values(enumObject) as TEnumValue[];
+
+  const sortedValues = sortOptions
+    ? [...values].sort((a, b) => {
+        if (a === "OTHER") return 1;
+        if (b === "OTHER") return -1;
+
+        return t(labels[a]).localeCompare(t(labels[b]), undefined, {
+          sensitivity: "base",
+        });
+      })
+    : values;
 
   return (
     <div className="space-y-1">
@@ -60,7 +74,7 @@ export function EnumSelectField<
               </SelectTrigger>
 
               <SelectContent>
-                {values.map((value) => (
+                {sortedValues.map((value) => (
                   <SelectItem key={value} value={value}>
                     {t(labels[value])}
                   </SelectItem>

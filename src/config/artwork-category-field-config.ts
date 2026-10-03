@@ -2,6 +2,7 @@ import { ArtworkCategory } from "@/features/artworks/types";
 
 export type ArtworkFieldKey =
   | "technique"
+  | "medium"
   | "style"
   | "motive"
   | "orientation"
@@ -18,43 +19,75 @@ export const CATEGORY_FIELD_CONFIG: Record<
   CategoryFieldConfig
 > = {
   [ArtworkCategory.PAINTING]: {
-    visible: ["technique", "style", "motive", "orientation", "size", "framed"],
-    required: ["technique", "orientation"],
+    visible: [
+      "medium",
+      "technique",
+      "style",
+      "motive",
+      "orientation",
+      "size",
+      "framed",
+    ],
+    required: [],
   },
   [ArtworkCategory.SCULPTURE]: {
-    visible: ["technique", "style", "framed"],
+    visible: ["medium", "style", "size"],
     required: [],
   },
   [ArtworkCategory.PHOTOGRAPHY]: {
-    visible: ["technique", "style", "motive", "orientation", "size", "framed"],
-    required: ["orientation"],
+    visible: ["medium", "style", "motive", "orientation", "size"],
+    required: [],
   },
   [ArtworkCategory.DRAWING_ILLUSTRATION]: {
-    visible: ["technique", "style", "motive", "orientation", "size", "framed"],
-    required: ["technique", "orientation"],
+    visible: [
+      "medium",
+      "technique",
+      "style",
+      "motive",
+      "orientation",
+      "size",
+      "framed",
+    ],
+    required: [],
   },
   [ArtworkCategory.PRINTMAKING]: {
-    visible: ["technique", "style", "motive", "orientation", "size", "framed"],
-    required: ["technique", "orientation"],
+    visible: [
+      "medium",
+      "technique",
+      "style",
+      "motive",
+      "orientation",
+      "size",
+      "framed",
+    ],
+    required: [],
   },
   [ArtworkCategory.DIGITAL_ART]: {
-    visible: ["technique", "style", "motive", "orientation"],
+    visible: ["medium", "style", "motive", "orientation", "size"],
     required: [],
   },
   [ArtworkCategory.MIXED_MEDIA]: {
-    visible: ["technique", "style", "motive", "orientation", "size", "framed"],
+    visible: [
+      "medium",
+      "technique",
+      "style",
+      "motive",
+      "orientation",
+      "size",
+      "framed",
+    ],
     required: [],
   },
   [ArtworkCategory.TEXTILE_FIBER_ART]: {
-    visible: ["technique", "style", "motive", "orientation", "size", "framed"],
+    visible: [],
     required: [],
   },
   [ArtworkCategory.CERAMICS]: {
-    visible: ["technique", "style", "size", "framed"],
+    visible: [],
     required: [],
   },
   [ArtworkCategory.OTHER]: {
-    visible: ["technique", "style", "motive", "orientation", "framed"],
+    visible: ["medium", "technique", "style", "motive", "orientation", "size"],
     required: [],
   },
 };

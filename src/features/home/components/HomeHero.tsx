@@ -27,7 +27,7 @@ export function HomeHero() {
             href="/artworks"
             className="rounded-full bg-zinc-900 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-zinc-800 hover:shadow-md dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
           >
-            {t("Browse gallery")}
+            {t("Explore gallery")}
           </Link>
 
           <Link

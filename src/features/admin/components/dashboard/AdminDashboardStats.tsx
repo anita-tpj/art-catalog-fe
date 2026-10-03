@@ -136,7 +136,7 @@ export function AdminDashboardStats({ data, isLoading }: Props) {
         href="/admin/inquiries"
       >
         <div className="px-2 text-xs text-muted-foreground">
-          {t("Jump to Inbox to view the latest messages.")}
+          {t("Open the inbox to view the latest messages.")}
         </div>
       </StatCard>
     </div>

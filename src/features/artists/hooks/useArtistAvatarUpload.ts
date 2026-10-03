@@ -8,35 +8,47 @@ interface UseArtistAvatarUploadOptions {
   onUploaded?: (payload: UploadedImage) => void;
 }
 
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
 export function useArtistAvatarUpload({
   onUploaded,
 }: UseArtistAvatarUploadOptions = {}) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Tracks only temporary uploads made during the current form session.
   const lastUploadedPublicIdRef = useRef<string | null>(null);
 
-  const deletePreviousIfAny = async () => {
-    const prevId = lastUploadedPublicIdRef.current;
-    if (!prevId) return;
-
+  const deleteTemporaryUpload = async (publicId: string) => {
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/uploads/artist-avatar?publicId=${encodeURIComponent(prevId)}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/uploads/artist-avatar?publicId=${encodeURIComponent(publicId)}`,
         { method: "DELETE" },
       );
     } catch (err) {
-      console.error("Failed to delete previous Cloudinary avatar:", err);
+      console.error("Failed to delete temporary Cloudinary avatar:", err);
     }
   };
 
   const uploadFile = async (file: File): Promise<UploadedImage> => {
     setError(null);
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      const message = "Please upload a JPG, PNG or WebP image.";
+      setError(message);
+      throw new Error(message);
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      const message = "Image must be smaller than 5 MB.";
+      setError(message);
+      throw new Error(message);
+    }
+
     setUploading(true);
 
     try {
-      await deletePreviousIfAny();
-
       const formData = new FormData();
       formData.append("file", file);
 
@@ -49,12 +61,23 @@ export function useArtistAvatarUpload({
       );
 
       if (!res.ok) {
-        throw new Error("Failed to upload avatar");
+        throw new Error("Failed to upload profile image");
       }
 
-      const data = await res.json(); // { url, publicId }
+      const data = await res.json();
 
-      const payload: UploadedImage = { url: data.url, publicId: data.publicId };
+      const payload: UploadedImage = {
+        url: data.url,
+        publicId: data.publicId,
+      };
+
+      const previousTemporaryPublicId = lastUploadedPublicIdRef.current;
+
+      // New upload succeeded, so it is now safe to remove
+      // the previous temporary upload.
+      if (previousTemporaryPublicId) {
+        await deleteTemporaryUpload(previousTemporaryPublicId);
+      }
 
       lastUploadedPublicIdRef.current = payload.publicId;
 
@@ -63,29 +86,19 @@ export function useArtistAvatarUpload({
       return payload;
     } catch (err: unknown) {
       const message =
-        err instanceof Error ? err.message : "Failed to upload avatar";
+        err instanceof Error ? err.message : "Failed to upload profile image";
+
       console.error(err);
       setError(message);
-      throw err; // IMPORTANT: let UI react to failure
+      throw err;
     } finally {
       setUploading(false);
     }
   };
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    // allow re-selecting same file
-    event.currentTarget.value = "";
-    if (!file) return;
-    await uploadFile(file);
-  };
-
   return {
     uploading,
     error,
-    uploadFile, // ✅ NEW
-    handleFileChange, // (legacy, optional)
+    uploadFile,
   };
 }

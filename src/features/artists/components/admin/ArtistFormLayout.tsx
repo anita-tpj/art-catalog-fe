@@ -85,20 +85,30 @@ export function ArtistFormLayout({
                 setValue={setValue}
                 imgUrl={"avatarUrl"}
                 imgPublicId={"avatarPublicId"}
-                label={"Avatar"}
-                buttonLabel={t("Upload avatar")}
+                label={`${t("Profile image")} *`}
+                buttonLabel={t("Upload image")}
+                helperText={t(
+                  "Recommended: square image, 1200 × 1200 px. JPG, PNG or WebP, max 5 MB.",
+                )}
                 variant="avatar"
                 onUpload={uploadFile}
                 uploading={uploading}
                 uploadError={error}
                 onClear={() => {
-                  setValue("avatarUrl", "" as any, { shouldDirty: true });
-                  setValue("avatarPublicId", "" as any, { shouldDirty: true });
+                  setValue("avatarUrl", "" as any, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+
+                  setValue("avatarPublicId", "" as any, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
                 }}
               />
               {/* Name */}
               <TextInputField
-                label={t("Name")}
+                label={`${t("Name")} *`}
                 placeholder={t("Type name")}
                 error={
                   errors.name?.message ? t(errors.name.message) : undefined
@@ -111,7 +121,7 @@ export function ArtistFormLayout({
                   <CountrySelector<CreateArtistDTO>
                     control={control}
                     name="country"
-                    label={t("Country")}
+                    label={`${t("Country")} *`}
                     placeholder={t("Select country")}
                     options={countryOptions}
                   />
@@ -121,7 +131,7 @@ export function ArtistFormLayout({
                   <EnumSelectField<CreateArtistDTO, ArtworkCategory>
                     control={control}
                     name="primaryCategory"
-                    label={t("Primary category")}
+                    label={`${t("Primary category")} *`}
                     placeholder={t("Select category")}
                     enumObject={ArtworkCategory}
                     labels={ArtworkCategoryLabels}
@@ -133,7 +143,7 @@ export function ArtistFormLayout({
             <div className="space-y-4">
               {/* Bio */}
               <TextareaField
-                label={t("Bio")}
+                label={`${t("Bio")} *`}
                 placeholder={t("Type bio")}
                 rows={4}
                 error={errors.bio?.message ? t(errors.bio.message) : undefined}
@@ -145,7 +155,7 @@ export function ArtistFormLayout({
                   <YearSelector<CreateArtistDTO>
                     control={control}
                     name="birthYear"
-                    label={t("Year of birth")}
+                    label={`${t("Year of birth")} *`}
                     placeholder={t("Select year")}
                   />
                 </div>
@@ -163,7 +173,7 @@ export function ArtistFormLayout({
                 {/* Public profile slug */}
                 <div className="space-y-1">
                   <label className="text-sm font-medium">
-                    {t("Public profile URL")}
+                    {t("Public profile URL")} *
                   </label>
 
                   <div className="flex items-center">

@@ -26,9 +26,17 @@ export default function LanguageSwitcher() {
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          className="rounded border border-zinc-600 px-1 py-1 text-xs text-zinc-600 dark:text-zinc-300"
+          aria-label="Change language"
+          className="flex h-8 w-8 items-center justify-center rounded hover:bg-zinc-100 dark:hover:bg-zinc-800"
         >
-          {i18n.language.toUpperCase()}
+          <ReactCountryFlag
+            countryCode={i18n.language.startsWith("sr") ? "RS" : "US"}
+            svg
+            style={{
+              width: "1.25em",
+              height: "1.25em",
+            }}
+          />
         </button>
 
         {open && (
@@ -36,7 +44,11 @@ export default function LanguageSwitcher() {
             <button
               type="button"
               onClick={() => changeLanguage("en")}
-              className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors ${
+                i18n.language.startsWith("en")
+                  ? "bg-zinc-100 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
+                  : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+              }`}
             >
               <ReactCountryFlag countryCode="US" svg />
               EN
@@ -45,7 +57,11 @@ export default function LanguageSwitcher() {
             <button
               type="button"
               onClick={() => changeLanguage("sr")}
-              className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors ${
+                i18n.language.startsWith("sr")
+                  ? "bg-zinc-100 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
+                  : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+              }`}
             >
               <ReactCountryFlag countryCode="RS" svg />
               SR
@@ -55,11 +71,15 @@ export default function LanguageSwitcher() {
       </div>
 
       {/* Desktop */}
-      <div className="hidden items-center gap-2 md:flex">
+      <div className="hidden items-center gap-1 md:flex">
         <button
           type="button"
           onClick={() => changeLanguage("en")}
-          className="flex items-center gap-2 rounded border border-zinc-600 px-2 py-1 text-sm text-zinc-600 dark:text-zinc-300"
+          className={`flex items-center gap-1.5 rounded px-2 py-1 text-sm transition-colors ${
+            i18n.language.startsWith("en")
+              ? "bg-zinc-100 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
+              : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"
+          }`}
         >
           <ReactCountryFlag countryCode="US" svg />
           EN
@@ -68,7 +88,11 @@ export default function LanguageSwitcher() {
         <button
           type="button"
           onClick={() => changeLanguage("sr")}
-          className="flex items-center gap-2 rounded border border-zinc-600 px-2 py-1 text-sm text-zinc-600 dark:text-zinc-300"
+          className={`flex items-center gap-1.5 rounded px-2 py-1 text-sm transition-colors ${
+            i18n.language.startsWith("sr")
+              ? "bg-zinc-100 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
+              : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"
+          }`}
         >
           <ReactCountryFlag countryCode="RS" svg />
           SR
