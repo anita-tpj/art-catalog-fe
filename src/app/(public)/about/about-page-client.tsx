@@ -13,13 +13,13 @@ export default function AboutPageClient() {
 
       <p className="text-zinc-600 dark:text-zinc-300">
         {t(
-          "ArtCatalog is a curated digital space for showcasing contemporary artworks and artists. It provides a clean and focused environment for discovering visual work and connecting with creators.",
+          "ArtCatalog is a digital space for showcasing contemporary artists and their work. Discover artworks, explore artist profiles, and connect directly with creators.",
         )}
       </p>
 
       <p className="text-zinc-600 dark:text-zinc-300">
         {t(
-          "The platform is designed with simplicity and clarity in mind — allowing artworks to speak for themselves while making exploration effortless.",
+          "Designed with simplicity and clarity in mind, ArtCatalog keeps the focus on the art and makes discovering new work effortless.",
         )}
       </p>
     </div>

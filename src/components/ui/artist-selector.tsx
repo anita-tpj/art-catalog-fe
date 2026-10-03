@@ -40,6 +40,10 @@ export function ArtistSelector<TFieldValues extends FieldValues>({
 
   const isDisabled = isLoading || isError || artists.length === 0;
 
+  const sortedArtists = [...artists].sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
+  );
+
   return (
     <div className="space-y-1">
       <Label>{label ?? t("Artist")}</Label>
@@ -60,7 +64,7 @@ export function ArtistSelector<TFieldValues extends FieldValues>({
               </SelectTrigger>
 
               <SelectContent>
-                {artists.map((artist: Artist) => (
+                {sortedArtists.map((artist: Artist) => (
                   <SelectItem key={artist.id} value={String(artist.id)}>
                     {artist.name}
                   </SelectItem>

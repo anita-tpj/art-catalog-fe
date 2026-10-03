@@ -7,7 +7,6 @@ import {
   ArtworkCategoryLabels,
   ArtworkMotiveLabels,
   ArtworkOrientationLabels,
-  ArtworkStandardSizeLabels,
   ArtworkStyleLabels,
   ArtworkTechniqueLabels,
 } from "@/features/artworks/types";
@@ -47,6 +46,7 @@ function toDetail(label: string, value: string | null): DetailItem | null {
 function getDetails(artwork: Artwork): DetailItem[] {
   return [
     toDetail("Category", ArtworkCategoryLabels[artwork.category]),
+    toDetail("Medium", artwork.medium),
     toDetail(
       "Technique",
       artwork.technique ? ArtworkTechniqueLabels[artwork.technique] : null,
@@ -62,10 +62,7 @@ function getDetails(artwork: Artwork): DetailItem[] {
         ? ArtworkOrientationLabels[artwork.orientation]
         : null,
     ),
-    toDetail(
-      "Size",
-      artwork.size ? ArtworkStandardSizeLabels[artwork.size] : null,
-    ),
+    toDetail("Size", artwork.size),
     toDetail("Framed", artwork.framed ? "Yes" : "No"),
   ].filter((x): x is DetailItem => Boolean(x));
 }
@@ -158,24 +155,23 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
       <div className="grid gap-8 lg:grid-cols-12">
         {/* LEFT */}
         <div className="lg:col-span-7">
-          <div className="relative overflow-hidden rounded-2xl border bg-muted">
-            <div className="relative w-full aspect-4/3">
-              {artwork.imageUrl ? (
-                <Image
-                  src={artwork.imageUrl}
-                  alt={artwork.title}
-                  fill
-                  className="object-cover"
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                />
-              ) : (
-                <div className="absolute inset-0 grid place-items-center text-sm text-muted-foreground">
-                  {t("No image")}
-                </div>
-              )}
+          {artwork.imageUrl ? (
+            <div className="flex justify-center">
+              <Image
+                src={artwork.imageUrl}
+                alt={artwork.title}
+                width={1200}
+                height={1200}
+                className="h-auto max-h-[75vh] w-auto max-w-full rounded-2xl border object-contain"
+                priority
+                sizes="(max-width: 1024px) 100vw, 60vw"
+              />
             </div>
-          </div>
+          ) : (
+            <div className="grid aspect-4/3 place-items-center rounded-2xl border bg-muted text-sm text-muted-foreground">
+              {t("No image")}
+            </div>
+          )}
           <div className="lg:hidden mt-4">
             <h1 className="text-xl font-semibold tracking-tight">
               {artwork.title}
@@ -235,7 +231,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
                     String(artwork.id),
                   )}&from=artwork`}
                 >
-                  {t("Contact about this artwork")}
+                  {t("Inquire about this artwork")}
                 </Link>
               </Button>
 
@@ -245,7 +241,7 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
                     href={`/${artwork.artist.slug}`}
                     className="inline-flex h-10 items-center gap-0.5 justify-center rounded-md border px-4 text-sm font-medium"
                   >
-                    {t("More from this artist")}
+                    {t("More works by this artist")}
                     <MdArrowForward />
                   </Link>
                 </Button>

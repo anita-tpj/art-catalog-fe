@@ -67,25 +67,14 @@ i18n.t("Fantasy / Sci-Fi");
 i18n.t("Geometric");
 i18n.t("Typography");
 i18n.t("Social / Political");
+i18n.t("Abstract");
+i18n.t("Architecture");
 
 /**
  * Orientation
  */
 i18n.t("Square");
 i18n.t("Panoramic");
-
-/**
- * Sizes
- */
-i18n.t("30 x 40 cm");
-i18n.t("40 x 50 cm");
-i18n.t("50 x 70 cm");
-i18n.t("60 x 80 cm");
-i18n.t("70 x 100 cm");
-i18n.t("A4 (21 x 29.7 cm)");
-i18n.t("A3 (29.7 x 42 cm)");
-i18n.t("A2 (42 x 59.4 cm)");
-i18n.t("Custom size");
 
 /**
  * Validation messages
@@ -111,6 +100,12 @@ i18n.t("Category is required");
 i18n.t("Artist is required");
 
 i18n.t("Title is required");
+
+i18n.t("Artwork image is required");
+i18n.t("Description is required");
+i18n.t("Year is required");
+i18n.t("Medium is too long");
+i18n.t("Size is too long");
 
 i18n.t("Draft");
 i18n.t("Published");

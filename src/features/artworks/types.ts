@@ -97,6 +97,8 @@ export const ArtworkStyleLabels: Record<ArtworkStyle, string> = {
 };
 
 export enum ArtworkMotive {
+  ABSTRACT = "ABSTRACT",
+  ARCHITECTURE = "ARCHITECTURE",
   PORTRAIT = "PORTRAIT",
   LANDSCAPE = "LANDSCAPE",
   STILL_LIFE = "STILL_LIFE",
@@ -113,6 +115,8 @@ export enum ArtworkMotive {
 }
 
 export const ArtworkMotiveLabels: Record<ArtworkMotive, string> = {
+  ARCHITECTURE: "Architecture",
+  ABSTRACT: "Abstract",
   PORTRAIT: "Portrait",
   LANDSCAPE: "Landscape",
   STILL_LIFE: "Still Life",
@@ -142,30 +146,6 @@ export const ArtworkOrientationLabels: Record<ArtworkOrientation, string> = {
   PANORAMIC: "Panoramic",
 };
 
-export enum ArtworkStandardSize {
-  SIZE_30x40 = "SIZE_30x40",
-  SIZE_40x50 = "SIZE_40x50",
-  SIZE_50x70 = "SIZE_50x70",
-  SIZE_60x80 = "SIZE_60x80",
-  SIZE_70x100 = "SIZE_70x100",
-  A4_21x29_7 = "A4_21x29_7",
-  A3_29_7x42 = "A3_29_7x42",
-  A2_42x59_4 = "A2_42x59_4",
-  CUSTOM = "CUSTOM",
-}
-
-export const ArtworkStandardSizeLabels: Record<ArtworkStandardSize, string> = {
-  SIZE_30x40: "30 x 40 cm",
-  SIZE_40x50: "40 x 50 cm",
-  SIZE_50x70: "50 x 70 cm",
-  SIZE_60x80: "60 x 80 cm",
-  SIZE_70x100: "70 x 100 cm",
-  A4_21x29_7: "A4 (21 x 29.7 cm)",
-  A3_29_7x42: "A3 (29.7 x 42 cm)",
-  A2_42x59_4: "A2 (42 x 59.4 cm)",
-  CUSTOM: "Custom size",
-};
-
 export enum ArtworkAvailability {
   AVAILABLE = "AVAILABLE",
   RESERVED = "RESERVED",
@@ -188,10 +168,11 @@ export interface Artwork {
   year: number | null;
 
   technique: ArtworkTechnique | null;
+  medium: string | null;
   style: ArtworkStyle | null;
   motive: ArtworkMotive | null;
   orientation: ArtworkOrientation | null;
-  size: ArtworkStandardSize | null;
+  size: string | null;
 
   framed: boolean;
   category: ArtworkCategory;
@@ -205,37 +186,55 @@ export interface Artwork {
 }
 
 export const CreateArtworkSchema = z.object({
-  title: z.string().min(1, "Title is required"),
+  title: z.string().trim().min(1, "Title is required"),
 
   year: z
-    .number()
+    .number({
+      error: "Year is required",
+    })
     .int()
     .min(DEFAULT_MIN_YEAR, {
       message: `Year must be greater than ${DEFAULT_MIN_YEAR}`,
     })
     .max(CURRENT_YEAR, {
       message: "Year cannot be in the future",
-    })
-    .optional(),
-  imageUrl: z.string().url("Must be a valid URL").optional(),
-  imagePublicId: z.string().optional(),
-  description: z.string().max(2000, "Description is too long").optional(),
+    }),
+
+  imageUrl: z
+    .string()
+    .min(1, "Artwork image is required")
+    .url("Must be a valid URL"),
+
+  imagePublicId: z.string().min(1, "Artwork image is required"),
+
+  description: z
+    .string()
+    .trim()
+    .min(1, "Description is required")
+    .max(2000, "Description is too long"),
+
   technique: z.nativeEnum(ArtworkTechnique).optional(),
+  medium: z.string().trim().max(200, "Medium is too long").optional(),
   style: z.nativeEnum(ArtworkStyle).optional(),
   motive: z.nativeEnum(ArtworkMotive).optional(),
   orientation: z.nativeEnum(ArtworkOrientation).optional(),
-  size: z.nativeEnum(ArtworkStandardSize).optional(),
+  size: z.string().trim().max(100, "Size is too long").optional(),
+
   framed: z.boolean(),
+
   artistId: z
     .number({
       error: "Artist is required",
     })
     .int()
     .positive({ message: "Artist is required" }),
+
   category: z.nativeEnum(ArtworkCategory, {
     error: "Category is required",
   }),
+
   status: z.nativeEnum(ItemStatus).default(ItemStatus.DRAFT),
+
   availability: z
     .nativeEnum(ArtworkAvailability)
     .default(ArtworkAvailability.AVAILABLE),

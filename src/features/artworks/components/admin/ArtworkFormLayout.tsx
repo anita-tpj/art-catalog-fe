@@ -26,8 +26,6 @@ import {
   ArtworkMotiveLabels,
   ArtworkOrientation,
   ArtworkOrientationLabels,
-  ArtworkStandardSize,
-  ArtworkStandardSizeLabels,
   ArtworkStyle,
   ArtworkStyleLabels,
   ArtworkTechnique,
@@ -100,7 +98,7 @@ export function ArtworkFormLayout({
             <div className="space-y-6 lg:pr-5">
               <div className="space-y-4">
                 <TextInputField
-                  label={t("Title")}
+                  label={`${t("Title")} *`}
                   placeholder={t("Type title")}
                   error={
                     errors.title?.message ? t(errors.title.message) : undefined
@@ -113,14 +111,14 @@ export function ArtworkFormLayout({
                     <ArtistSelector<CreateArtworkDTO>
                       control={control}
                       name="artistId"
-                      label={t("Artist")}
+                      label={`${t("Artist")} *`}
                     />
                   )}
 
                   <EnumSelectField<CreateArtworkDTO, ArtworkCategory>
                     control={control}
                     name="category"
-                    label={t("Category")}
+                    label={`${t("Category")} *`}
                     placeholder={t("Select category")}
                     enumObject={ArtworkCategory}
                     labels={ArtworkCategoryLabels}
@@ -134,6 +132,20 @@ export function ArtworkFormLayout({
                 </h2>
 
                 <div className="grid gap-4 lg:grid-cols-2">
+                  {show("medium") && (
+                    <TextInputField
+                      label={t("Medium")}
+                      placeholder={t(
+                        "e.g. Oil on canvas, bronze, porcelain, wool and cotton",
+                      )}
+                      error={
+                        errors.medium?.message
+                          ? t(errors.medium.message)
+                          : undefined
+                      }
+                      {...register("medium")}
+                    />
+                  )}
                   {show("technique") && (
                     <EnumSelectField<CreateArtworkDTO, ArtworkTechnique>
                       control={control}
@@ -143,6 +155,7 @@ export function ArtworkFormLayout({
                       placeholder={t("Select technique")}
                       enumObject={ArtworkTechnique}
                       labels={ArtworkTechniqueLabels}
+                      sortOptions
                     />
                   )}
 
@@ -154,6 +167,7 @@ export function ArtworkFormLayout({
                       placeholder={t("Select style")}
                       enumObject={ArtworkStyle}
                       labels={ArtworkStyleLabels}
+                      sortOptions
                     />
                   )}
 
@@ -165,6 +179,7 @@ export function ArtworkFormLayout({
                       placeholder={t("Select motive")}
                       enumObject={ArtworkMotive}
                       labels={ArtworkMotiveLabels}
+                      sortOptions
                     />
                   )}
 
@@ -180,13 +195,15 @@ export function ArtworkFormLayout({
                   )}
 
                   {show("size") && (
-                    <EnumSelectField<CreateArtworkDTO, ArtworkStandardSize>
-                      control={control}
-                      name="size"
+                    <TextInputField
                       label={t("Size")}
-                      placeholder={t("Select size")}
-                      enumObject={ArtworkStandardSize}
-                      labels={ArtworkStandardSizeLabels}
+                      placeholder={t("e.g. 50 × 70 cm or 30 × 30 × 45 cm")}
+                      error={
+                        errors.size?.message
+                          ? t(errors.size.message)
+                          : undefined
+                      }
+                      {...register("size")}
                     />
                   )}
 
@@ -210,16 +227,29 @@ export function ArtworkFormLayout({
                   setValue={setValue}
                   imgUrl={"imageUrl"}
                   imgPublicId={"imagePublicId"}
-                  label={t("Artwork image")}
+                  label={`${t("Artwork image")} *`}
                   buttonLabel={t("Upload image")}
+                  helperText={t(
+                    "Recommended: at least 1200 px on the longest side. JPG, PNG or WebP, max 5 MB.",
+                  )}
                   variant="preview"
                   previewHeight={160}
                   onUpload={uploadFile}
                   uploading={uploading}
                   uploadError={error}
+                  onClear={() => {
+                    setValue("imageUrl", "" as any, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                    setValue("imagePublicId", "" as any, {
+                      shouldDirty: true,
+                      shouldValidate: true,
+                    });
+                  }}
                 />
                 <TextareaField
-                  label={t("Description")}
+                  label={`${t("Description")} *`}
                   placeholder={t("Type description")}
                   rows={4}
                   error={
@@ -235,7 +265,7 @@ export function ArtworkFormLayout({
                   <YearSelector<CreateArtworkDTO>
                     control={control}
                     name="year"
-                    label={t("Year")}
+                    label={`${t("Year")} *`}
                     placeholder={t("Select year")}
                   />
                 </div>

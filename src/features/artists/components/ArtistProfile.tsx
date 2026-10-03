@@ -17,7 +17,7 @@ function getLifeSpan(artist: Artist) {
 
   if (!b && !d) return null;
   if (b && d) return `${b}–${d}`;
-  if (b && !d) return `${b}–`;
+  if (b) return String(b);
 
   return `–${d}`;
 }
@@ -85,7 +85,7 @@ export async function ArtistProfile({ artist }: ArtistProfileProps) {
         {/* Avatar */}
         <div className="lg:col-span-5">
           <div className="relative overflow-hidden rounded-2xl border bg-muted">
-            <div className="relative aspect-4/3">
+            <div className="relative aspect-square">
               {artist.avatarUrl ? (
                 <Image
                   src={artist.avatarUrl}
@@ -142,7 +142,7 @@ export async function ArtistProfile({ artist }: ArtistProfileProps) {
                   String(artist.id),
                 )}&from=artist`}
               >
-                {t("Contact about this artist")}
+                {t("Contact this artist")}
               </Link>
             </Button>
 
@@ -151,7 +151,7 @@ export async function ArtistProfile({ artist }: ArtistProfileProps) {
                 className="inline-flex h-10 items-center justify-center text-sm font-medium"
                 href={`/artworks?search=${encodeURIComponent(artist.name)}`}
               >
-                {t("View related artworks")}
+                {t("View this artist's work")}
               </Link>
             </Button> */}
           </div>

@@ -13,10 +13,11 @@ export const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={`
-      flex h-10 w-full items-center justify-between rounded-md
+      flex h-10 w-full min-w-0 items-center justify-between rounded-md
       border border-zinc-200 bg-white pl-3 pr-2 text-sm text-zinc-900 shadow-sm
       focus:outline-none focus:ring-2 focus:ring-zinc-400
       dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-zinc-500
+      [&>span]:min-w-0 [&>span]:flex-1 [&>span]:truncate [&>span]:text-left
       ${className}
     `}
     {...props}
@@ -24,7 +25,7 @@ export const SelectTrigger = React.forwardRef<
     {children}
 
     <svg
-      className="ml-1 h-4 w-4 opacity-60 text-zinc-500 dark:text-zinc-400"
+      className="ml-1 h-4 w-4 shrink-0 opacity-60 text-zinc-500 dark:text-zinc-400"
       viewBox="0 0 20 20"
       fill="currentColor"
       aria-hidden="true"

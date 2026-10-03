@@ -23,9 +23,16 @@ export function useArtworkCategoryOptions(): SelectOption[] {
     },
 
     ...Object.values(ArtworkCategory)
-      .sort((a, b) =>
-        t(ArtworkCategoryLabels[a]).localeCompare(t(ArtworkCategoryLabels[b])),
-      )
+      .sort((a, b) => {
+        if (a === ArtworkCategory.OTHER) return 1;
+        if (b === ArtworkCategory.OTHER) return -1;
+
+        return t(ArtworkCategoryLabels[a]).localeCompare(
+          t(ArtworkCategoryLabels[b]),
+          undefined,
+          { sensitivity: "base" },
+        );
+      })
       .map((value) => ({
         value,
         label: t(ArtworkCategoryLabels[value]),

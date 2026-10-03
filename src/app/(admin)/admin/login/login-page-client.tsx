@@ -77,7 +77,7 @@ export default function LoginPageClient() {
 
   return (
     <div className="mx-auto max-w-sm rounded-xl border bg-white p-6 shadow-sm">
-      <h1 className="text-xl font-semibold">{t("Admin login")}</h1>
+      <h1 className="text-xl font-semibold">{t("Admin sign in")}</h1>
 
       <div className="mt-4 space-y-3">
         <label className="block">

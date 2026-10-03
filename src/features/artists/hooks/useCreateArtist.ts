@@ -21,7 +21,7 @@ export function useCreateArtist() {
       router.push("/admin/artists");
     },
     onError: (error) => {
-      showErrorToast(error, t("Failed create artist"));
+      showErrorToast(error, t("Failed to create artist"));
     },
   });
 }

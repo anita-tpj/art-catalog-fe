@@ -88,7 +88,7 @@ export function InquiriesPageClient({
           <div>
             <h1 className="text-3xl font-semibold">{t("Inquiries")}</h1>
             <p className="text-sm text-muted-foreground">
-              {t("Admin inbox for contact inquiries.")}
+              {t("Inbox for incoming inquiries.")}
             </p>
           </div>
         </div>

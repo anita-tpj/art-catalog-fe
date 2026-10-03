@@ -26,6 +26,8 @@ type Props<TFieldValues extends FieldValues> = {
   label?: string;
   buttonLabel?: string;
 
+  helperText?: string;
+
   /** How to upload the file (domain provides this) */
   onUpload: (file: File) => Promise<UploadedImage>;
 
@@ -50,6 +52,7 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
   imgPublicId,
   label = "Image",
   buttonLabel = "Upload image",
+  helperText,
   onUpload,
   uploading,
   uploadError,
@@ -84,7 +87,7 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
     });
     setValue(imgPublicId, uploaded.publicId as any, {
       shouldDirty: true,
-      shouldValidate: false,
+      shouldValidate: true,
     });
   }
 
@@ -93,6 +96,9 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
   return (
     <div className="space-y-2">
       <Label htmlFor={inputId}>{label}</Label>
+      {helperText ? (
+        <p className="text-[11px] leading-4 text-zinc-400">{helperText}</p>
+      ) : null}
 
       <Controller
         name={imgUrl}
@@ -131,7 +137,7 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
               <input
                 id={inputId}
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp"
                 className="hidden"
                 onChange={handleFileChange}
               />
@@ -162,7 +168,7 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
               </div>
 
               {uploadError ? (
-                <p className="text-xs text-red-500">{uploadError}</p>
+                <p className="text-xs text-red-500">{t(uploadError)}</p>
               ) : null}
 
               {fieldState.error?.message && (

@@ -8,45 +8,105 @@ export function SiteHeader() {
   const { t } = useTranslation();
 
   return (
-    <header className="border-b border-zinc-200 bg-white/80 backdrop-blur dark:bg-zinc-900/80">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <Link
-          href="/"
-          className="text-base font-semibold tracking-tight md:text-lg"
-        >
-          {t("ArtCatalog")}
-        </Link>
+    <header className="border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80">
+      <div className="mx-auto max-w-6xl px-4">
+        {/* Mobile */}
+        <div className="md:hidden">
+          <div className="flex h-14 items-center justify-between">
+            <Link
+              href="/"
+              className="flex flex-col leading-none hover:opacity-80"
+            >
+              <span className="text-base font-semibold tracking-tight">
+                ArtCatalog
+              </span>
 
-        <nav className="flex items-center gap-3 text-sm text-zinc-600 dark:text-zinc-300 lg:gap-6">
+              <span className="mt-1 text-[8px] font-medium uppercase tracking-[0.15em] text-zinc-400">
+                Creative Atlas
+              </span>
+            </Link>
+
+            <LanguageSwitcher />
+          </div>
+
+          <nav className="flex h-9 items-center justify-between text-sm text-zinc-600 dark:text-zinc-300">
+            <Link
+              href="/artworks"
+              className="hover:text-black dark:hover:text-white"
+            >
+              {t("Gallery")}
+            </Link>
+
+            <Link
+              href="/artists"
+              className="hover:text-black dark:hover:text-white"
+            >
+              {t("Artists")}
+            </Link>
+
+            <Link
+              href="/about"
+              className="hover:text-black dark:hover:text-white"
+            >
+              {t("About")}
+            </Link>
+
+            <Link
+              href="/contact"
+              className="hover:text-black dark:hover:text-white"
+            >
+              {t("Contact")}
+            </Link>
+          </nav>
+        </div>
+
+        {/* Desktop */}
+        <div className="hidden h-14 items-center justify-between md:flex">
           <Link
-            href="/artworks"
-            className="hover:text-black dark:hover:text-white"
+            href="/"
+            className="flex flex-col leading-none hover:opacity-80"
           >
-            {t("Gallery")}
+            <span className="text-lg font-semibold tracking-tight">
+              ArtCatalog
+            </span>
+
+            <span className="mt-1 text-[8px] font-medium uppercase tracking-[0.15em] text-zinc-400">
+              Creative Atlas
+            </span>
           </Link>
 
-          <Link
-            href="/artists"
-            className="hover:text-black dark:hover:text-white"
-          >
-            {t("Artists")}
-          </Link>
+          <nav className="flex items-center gap-6 text-sm text-zinc-600 dark:text-zinc-300">
+            <Link
+              href="/artworks"
+              className="hover:text-black dark:hover:text-white"
+            >
+              {t("Gallery")}
+            </Link>
 
-          <Link
-            href="/about"
-            className="hover:text-black dark:hover:text-white"
-          >
-            {t("About")}
-          </Link>
+            <Link
+              href="/artists"
+              className="hover:text-black dark:hover:text-white"
+            >
+              {t("Artists")}
+            </Link>
 
-          <Link
-            href="/contact"
-            className="hover:text-black dark:hover:text-white"
-          >
-            {t("Contact")}
-          </Link>
-          <LanguageSwitcher />
-        </nav>
+            <Link
+              href="/about"
+              className="hover:text-black dark:hover:text-white"
+            >
+              {t("About")}
+            </Link>
+
+            <Link
+              href="/contact"
+              className="hover:text-black dark:hover:text-white"
+            >
+              {t("Contact")}
+            </Link>
+
+            <LanguageSwitcher />
+          </nav>
+        </div>
       </div>
     </header>
   );
