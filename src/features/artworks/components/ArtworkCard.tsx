@@ -43,7 +43,7 @@ export const ArtworkCard = ({ artwork }: ArtworkCardProps) => {
       </Link>
 
       <div className="space-y-2 p-4">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center justify-between gap-3">
           <Link
             href={`/artworks/${artwork.id}`}
             className="block focus:outline-none"

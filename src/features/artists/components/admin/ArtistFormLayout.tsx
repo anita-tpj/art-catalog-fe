@@ -178,7 +178,7 @@ export function ArtistFormLayout({
 
                   <div className="flex items-center">
                     <span className="shrink-0 text-sm text-zinc-500">
-                      creativeatlas.co/
+                      artcatalog.creativeatlas.co/
                     </span>
 
                     <input
