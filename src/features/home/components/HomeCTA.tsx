@@ -11,10 +11,10 @@ export function HomeCTA() {
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold tracking-tight">
-            {t("Interested in an artwork?")}
+            {t("Have a question?")}
           </h3>
           <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-300">
-            {t("Send a message and we'll get back to you.")}
+            {t("Get in touch with the Creative Atlas team.")}
           </p>
         </div>
 
