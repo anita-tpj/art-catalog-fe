@@ -176,7 +176,7 @@
   "No artworks available yet (or API not connected). Once you add artworks, they'll appear here automatically.": "Još nema dostupnih umetničkih dela (ili API nije povezan). Kada dodate dela, pojaviće se automatski.",
   "Interested in an artwork?": "Zainteresovani za umetničko delo?",
   "Send a message and we'll get back to you.": "Pošaljite poruku i javićemo vam se.",
-  "Curated collection": "Pažljivo odabrana kolekcija",
+  "Curated collection": "Odabrana kolekcija",
   "Explore a curated selection of artworks and artists. Discover new pieces and the creators behind them.": "Istražite pažljivo odabranu kolekciju umetničkih dela i umetnika. Otkrijte nova dela i autore iza njih.",
   "Explore gallery": "Istraži galeriju",
   "View artists": "Pogledaj umetnike",
@@ -366,6 +366,11 @@
   "Year is required": "Godina je obavezna",
   "Failed to upload profile image": "Otpremanje profilne fotografije nije uspelo.",
   "Have a question?": "Imate pitanje?",
-  "Get in touch with the Creative Atlas team.": "Kontaktirajte Creative Atlas tim."
+  "Get in touch with the Creative Atlas team.": "Kontaktirajte Creative Atlas tim.",
+  "Explore artworks across styles and categories. Discover new pieces and contemporary visual work.": "Istražite umetnička dela različitih stilova i kategorija. Otkrijte nove radove i savremenu vizuelnu umetnost.",
+  "Discover artists featured in ArtCatalog and explore their work across categories and styles.": "Upoznajte umetnike predstavljene u ArtCatalogu i istražite njihove radove različitih kategorija i stilova.",
+  "Explore this artwork and discover more works by the artist.": "Istražite ovo umetničko delo i otkrijte druge radove istog umetnika.",
+  "Get in touch with ArtCatalog for inquiries, collaborations, or questions about artworks and artists.": "Kontaktirajte ArtCatalog za upite, saradnju ili pitanja o umetničkim delima i umetnicima.",
+  "Learn about ArtCatalog — a curated platform dedicated to showcasing contemporary artworks and artists.": "Saznajte više o ArtCatalogu, platformi posvećenoj predstavljanju savremenih umetničkih dela i umetnika."
 }
 

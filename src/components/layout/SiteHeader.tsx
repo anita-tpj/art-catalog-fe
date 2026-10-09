@@ -1,11 +1,9 @@
 "use client";
 
 import LanguageSwitcher from "@/components/ui/language-switcher";
+import { URLS } from "@/config/urls";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-
-const ART_CATALOG_URL =
-  process.env.NEXT_PUBLIC_ART_CATALOG_URL || "http://localhost:3000";
 
 export function SiteHeader() {
   const { t } = useTranslation();
@@ -17,7 +15,7 @@ export function SiteHeader() {
         <div className="md:hidden">
           <div className="flex h-14 items-center justify-between">
             <Link
-              href={ART_CATALOG_URL}
+              href={URLS.artCatalog}
               className="flex flex-col leading-none hover:opacity-80"
             >
               <span className="text-base font-semibold tracking-tight">
@@ -34,28 +32,28 @@ export function SiteHeader() {
 
           <nav className="flex h-9 items-center justify-between text-sm text-zinc-600 dark:text-zinc-300">
             <Link
-              href={`${ART_CATALOG_URL}/artworks`}
+              href={`${URLS.artCatalog}/artworks`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Gallery")}
             </Link>
 
             <Link
-              href={`${ART_CATALOG_URL}/artists`}
+              href={`${URLS.artCatalog}/artists`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Artists")}
             </Link>
 
             <Link
-              href={`${ART_CATALOG_URL}/about`}
+              href={`${URLS.artCatalog}/about`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("About")}
             </Link>
 
             <Link
-              href={`${ART_CATALOG_URL}/contact`}
+              href={`${URLS.artCatalog}/contact`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Contact")}
@@ -66,7 +64,7 @@ export function SiteHeader() {
         {/* Desktop */}
         <div className="hidden h-14 items-center justify-between md:flex">
           <Link
-            href={ART_CATALOG_URL}
+            href={URLS.artCatalog}
             className="flex flex-col leading-none hover:opacity-80"
           >
             <span className="text-lg font-semibold tracking-tight">
@@ -80,28 +78,28 @@ export function SiteHeader() {
 
           <nav className="flex items-center gap-6 text-sm text-zinc-600 dark:text-zinc-300">
             <Link
-              href={`${ART_CATALOG_URL}/artworks`}
+              href={`${URLS.artCatalog}/artworks`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Gallery")}
             </Link>
 
             <Link
-              href={`${ART_CATALOG_URL}/artists`}
+              href={`${URLS.artCatalog}/artists`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Artists")}
             </Link>
 
             <Link
-              href={`${ART_CATALOG_URL}/about`}
+              href={`${URLS.artCatalog}/about`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("About")}
             </Link>
 
             <Link
-              href={`${ART_CATALOG_URL}/contact`}
+              href={`${URLS.artCatalog}/contact`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Contact")}

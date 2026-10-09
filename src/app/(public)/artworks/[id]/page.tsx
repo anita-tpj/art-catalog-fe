@@ -1,6 +1,7 @@
 // app/artworks/[id]/page.tsx
 import { Button } from "@/components/ui";
 import { CATEGORY_FIELD_CONFIG } from "@/config/artwork-category-field-config";
+import { URLS } from "@/config/urls";
 import {
   Artwork,
   ArtworkAvailability,
@@ -14,6 +15,8 @@ import {
 import { getTranslation } from "@/i18n/server";
 import { getById } from "@/lib/api-client";
 import { parseIdOrNotFound } from "@/lib/utils";
+import { ItemStatus, ItemVisibility } from "@/types/item";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -103,28 +106,62 @@ function AvailabilityBadge({
   );
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { t } = await getTranslation();
   const { id: idParam } = await params;
+
   const id = Number(idParam);
-  if (!Number.isFinite(id)) return { title: "Artwork not found" };
+
+  if (!Number.isSafeInteger(id) || id <= 0) {
+    return {
+      title: t("Artwork not found"),
+      robots: { index: false, follow: false },
+    };
+  }
 
   try {
     const artwork = await getById<Artwork>("/api/artworks/public", id, {
       revalidate,
     });
-    const title = `${artwork.title} — ${artwork.artist?.name ?? "Unknown artist"} | ArtCatalog`;
+
+    const artistName = artwork.artist?.name ?? t("Unknown artist");
+    const title = `${artwork.title} — ${artistName} | ArtCatalog`;
+
+    const description =
+      artwork.description?.trim() ||
+      t("Explore this artwork and discover more works by the artist.");
+
+    const canonical = `${URLS.artCatalog}/artworks/${artwork.id}`;
+
+    const isPublic =
+      artwork.status === ItemStatus.PUBLISHED &&
+      artwork.artist?.status === ItemStatus.PUBLISHED &&
+      artwork.artist?.visibility === ItemVisibility.PUBLIC;
 
     return {
       title,
-      description: artwork.description ?? undefined,
+      description,
+      alternates: {
+        canonical,
+      },
       openGraph: {
         title,
-        description: artwork.description ?? undefined,
+        description,
+        url: canonical,
         images: artwork.imageUrl ? [{ url: artwork.imageUrl }] : undefined,
+      },
+      robots: {
+        index: isPublic,
+        follow: isPublic,
       },
     };
   } catch {
-    return { title: "Artwork not found" };
+    return {
+      title: t("Artwork not found"),
+      robots: { index: false, follow: false },
+    };
   }
 }
 
@@ -241,10 +278,10 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
                 </Link>
               </Button>
 
-              {artwork.artistId ? (
+              {artwork.artist?.slug ? (
                 <Button asChild variant="outline">
                   <Link
-                    href={`/${artwork.artist.slug}`}
+                    href={`${URLS.creativeAtlas}/${artwork.artist.slug}`}
                     className="inline-flex h-10 items-center gap-0.5 justify-center rounded-md border px-4 text-sm font-medium"
                   >
                     {t("More works by this artist")}

@@ -1,15 +1,26 @@
-// app/contact/page.tsx
+
+import { URLS } from "@/config/urls";
+import { getTranslation } from "@/i18n/server";
+import type { Metadata } from "next";
 import { ContactPageClient } from "./contact-page-client";
 
 type PageProps = {
   searchParams: Promise<Record<string, string | undefined>>;
 };
 
-export const metadata = {
-  title: "Contact | ArtCatalog",
-  description:
-    "Get in touch with ArtCatalog for inquiries, collaborations, or questions about artworks and artists.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getTranslation();
+
+  return {
+    title: `${t("Contact")} | ArtCatalog`,
+    description: t(
+      "Get in touch with ArtCatalog for inquiries, collaborations, or questions about artworks and artists.",
+    ),
+    alternates: {
+      canonical: `${URLS.artCatalog}/contact`,
+    },
+  };
+}
 
 export default async function ContactPage({ searchParams }: PageProps) {
   const sp = await searchParams;

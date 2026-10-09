@@ -1,5 +1,5 @@
 import { CURRENT_YEAR, DEFAULT_MIN_YEAR } from "@/lib/year-options";
-import { ItemStatus } from "@/types/item";
+import { ItemStatus, ItemVisibility } from "@/types/item";
 import { z } from "zod";
 
 export enum ArtworkCategory {
@@ -182,6 +182,8 @@ export interface Artwork {
   artist: {
     name: string;
     slug: string | null;
+    status: ItemStatus;
+    visibility: ItemVisibility;
   };
 }
 
