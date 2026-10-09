@@ -37,7 +37,7 @@ export function ArtworksPageClient({
   const pathname = usePathname();
   const sp = useSearchParams();
 
-  const DEFAULT_PAGE_SIZE = 6;
+  const DEFAULT_PAGE_SIZE = 12;
 
   const { page, pageSize, changePage, changePageSize } = usePaginationState({
     page: initialPage,
