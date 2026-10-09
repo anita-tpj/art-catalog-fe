@@ -42,7 +42,7 @@ export default async function ArtworksPage({ searchParams }: PageProps) {
   const initialSearch = sp.search ?? "";
   const initialCategory = sp.category ?? ALL_CATEGORIES_VALUE;
   const initialPage = toPositiveInt(sp.page, 1);
-  const initialPageSize = toPositiveInt(sp.pageSize, 6);
+  const initialPageSize = toPositiveInt(sp.pageSize, 12);
   const initialArtist = sp.artist?.trim() || undefined;
 
   return (
