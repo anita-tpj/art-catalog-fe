@@ -1,7 +1,7 @@
 "use client";
 
 import LanguageSwitcher from "@/components/ui/language-switcher";
-import { URLS } from "@/config/urls";
+import { URLS } from "@/lib/config";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
