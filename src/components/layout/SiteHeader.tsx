@@ -66,7 +66,7 @@ export function SiteHeader() {
         {/* Desktop */}
         <div className="hidden h-14 items-center justify-between md:flex">
           <Link
-            href="/"
+            href={ART_CATALOG_URL}
             className="flex flex-col leading-none hover:opacity-80"
           >
             <span className="text-lg font-semibold tracking-tight">
@@ -80,28 +80,28 @@ export function SiteHeader() {
 
           <nav className="flex items-center gap-6 text-sm text-zinc-600 dark:text-zinc-300">
             <Link
-              href="/artworks"
+              href={`${ART_CATALOG_URL}/artworks`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Gallery")}
             </Link>
 
             <Link
-              href="/artists"
+              href={`${ART_CATALOG_URL}/artists`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Artists")}
             </Link>
 
             <Link
-              href="/about"
+              href={`${ART_CATALOG_URL}/about`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("About")}
             </Link>
 
             <Link
-              href="/contact"
+              href={`${ART_CATALOG_URL}/contact`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Contact")}
