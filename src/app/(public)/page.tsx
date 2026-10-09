@@ -1,9 +1,11 @@
+import { URLS } from "@/config/urls";
 import { FeaturedArtists } from "@/features/home/components/FeaturedArtists";
 import { FeaturedArtworks } from "@/features/home/components/FeaturedArtworks";
 import { HomeCTA } from "@/features/home/components/HomeCTA";
 import { HomeHero } from "@/features/home/components/HomeHero";
+import { getTranslation } from "@/i18n/server";
 import { API_BASE_URL } from "@/lib/config";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 type Artwork = {
   id: string;
@@ -41,17 +43,11 @@ async function fetchJson<T>(path: string, params?: Record<string, string>) {
 }
 
 async function getFeaturedArtworks(): Promise<Artwork[]> {
-  // NOTE: Adjust param names to match your API (limit/take/pageSize).
-  // Common patterns:
-  // - /artworks?limit=12
-  // - /artworks?take=12
-  // - /artworks?perPage=12
   try {
     const data = await fetchJson<any>("/api/artworks/public", {
       pageSize: "12",
     });
 
-    // Supports either array response or { items: [] } response
     return Array.isArray(data) ? data : (data.items ?? []);
   } catch {
     return [];
@@ -63,29 +59,40 @@ async function getFeaturedArtists(): Promise<Artist[]> {
     const data = await fetchJson<any>("/api/artists/public", {
       pageSize: "6",
     });
+
     return Array.isArray(data) ? data : (data.items ?? []);
   } catch {
     return [];
   }
 }
 
-export const metadata: Metadata = {
-  title: "ArtCatalog",
-  description:
-    "Explore contemporary artworks and discover artists in a curated online gallery.",
-  openGraph: {
-    title: "ArtCatalog",
-    description:
-      "Explore contemporary artworks and discover artists in a curated online gallery.",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "ArtCatalog",
-    description:
-      "Explore contemporary artworks and discover artists in a curated online gallery.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getTranslation();
+
+  const title = "ArtCatalog";
+  const description = t(
+    "Explore a curated selection of artworks and artists. Discover new pieces and the creators behind them.",
+  );
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `${URLS.artCatalog}/`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${URLS.artCatalog}/`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 export default async function HomePage() {
   const [artworks, artists] = await Promise.all([

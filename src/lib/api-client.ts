@@ -124,9 +124,11 @@ function buildInit(
   };
 
   // Next.js server fetch options (harmless on client)
-  if (opts?.revalidate || opts?.tags) {
+  if (opts?.revalidate !== undefined || opts?.tags) {
     (init as any).next = {
-      ...(opts?.revalidate ? { revalidate: opts.revalidate } : {}),
+      ...(opts?.revalidate !== undefined
+        ? { revalidate: opts.revalidate }
+        : {}),
       ...(opts?.tags ? { tags: opts.tags } : {}),
     };
   }
