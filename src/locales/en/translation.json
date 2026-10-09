@@ -371,5 +371,9 @@
   "Discover artists featured in ArtCatalog and explore their work across categories and styles.": "Discover artists featured in ArtCatalog and explore their work across categories and styles.",
   "Explore this artwork and discover more works by the artist.": "Explore this artwork and discover more works by the artist.",
   "Get in touch with ArtCatalog for inquiries, collaborations, or questions about artworks and artists.": "Get in touch with ArtCatalog for inquiries, collaborations, or questions about artworks and artists.",
-  "Learn about ArtCatalog — a curated platform dedicated to showcasing contemporary artworks and artists.": "Learn about ArtCatalog — a curated platform dedicated to showcasing contemporary artworks and artists."
+  "Learn about ArtCatalog — a curated platform dedicated to showcasing contemporary artworks and artists.": "Learn about ArtCatalog — a curated platform dedicated to showcasing contemporary artworks and artists.",
+  "Artwork: \"{{title}}\" (ID {{id}})": "Artwork: \"{{title}}\" (ID {{id}})",
+  "Artist: {{name}}": "Artist: {{name}}",
+  "Artwork ID {{id}}": "Artwork ID {{id}}",
+  "Artist ID {{id}}": "Artist ID {{id}}"
 }
