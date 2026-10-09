@@ -1,7 +1,7 @@
-import { URLS } from "@/config/urls";
 import type { Artist } from "@/features/artists/types";
 import type { Artwork } from "@/features/artworks/types";
 import { get } from "@/lib/api-client";
+import { URLS } from "@/lib/config";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";

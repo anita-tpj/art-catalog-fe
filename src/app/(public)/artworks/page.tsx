@@ -1,10 +1,9 @@
-
-import { URLS } from "@/config/urls";
 import { ALL_CATEGORIES_VALUE } from "@/features/listing/services/artwork-category-options";
+import { getTranslation } from "@/i18n/server";
+import { URLS } from "@/lib/config";
 import { humanizeEnum, toPositiveInt } from "@/lib/utils";
 import type { Metadata } from "next";
 import { ArtworksPageClient } from "./artworks-page-client";
-import { getTranslation } from "@/i18n/server";
 
 type PageProps = {
   searchParams: Promise<Record<string, string | undefined>>;

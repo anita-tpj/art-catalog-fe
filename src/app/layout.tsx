@@ -1,3 +1,4 @@
+import { SEO_INDEXING_ENABLED } from "@/lib/config";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
@@ -10,8 +11,8 @@ export const metadata: Metadata = {
   title: "ArtCatalog",
   description: "Art catalog and admin panel for managing artworks.",
   robots: {
-    index: false,
-    follow: false,
+    index: SEO_INDEXING_ENABLED,
+    follow: SEO_INDEXING_ENABLED,
   },
 };
 

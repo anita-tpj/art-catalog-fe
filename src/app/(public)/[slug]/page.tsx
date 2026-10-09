@@ -1,8 +1,8 @@
-import { URLS } from "@/config/urls";
 import { ArtistProfile } from "@/features/artists/components/ArtistProfile";
 import { Artist } from "@/features/artists/types";
 import { getTranslation } from "@/i18n/server";
 import { get } from "@/lib/api-client";
+import { SEO_INDEXING_ENABLED, URLS } from "@/lib/config";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -51,8 +51,8 @@ export async function generateMetadata({
         url: canonical,
       },
       robots: {
-        index: isPublic,
-        follow: isPublic,
+        index: SEO_INDEXING_ENABLED && isPublic,
+        follow: SEO_INDEXING_ENABLED && isPublic,
       },
     };
   } catch {

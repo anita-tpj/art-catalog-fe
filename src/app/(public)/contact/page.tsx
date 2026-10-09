@@ -1,6 +1,5 @@
-
-import { URLS } from "@/config/urls";
 import { getTranslation } from "@/i18n/server";
+import { URLS } from "@/lib/config";
 import type { Metadata } from "next";
 import { ContactPageClient } from "./contact-page-client";
 

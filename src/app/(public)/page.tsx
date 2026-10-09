@@ -1,10 +1,9 @@
-import { URLS } from "@/config/urls";
 import { FeaturedArtists } from "@/features/home/components/FeaturedArtists";
 import { FeaturedArtworks } from "@/features/home/components/FeaturedArtworks";
 import { HomeCTA } from "@/features/home/components/HomeCTA";
 import { HomeHero } from "@/features/home/components/HomeHero";
 import { getTranslation } from "@/i18n/server";
-import { API_BASE_URL } from "@/lib/config";
+import { API_BASE_URL, URLS } from "@/lib/config";
 import type { Metadata } from "next";
 
 type Artwork = {

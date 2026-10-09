@@ -1,7 +1,6 @@
 // app/artworks/[id]/page.tsx
 import { Button } from "@/components/ui";
 import { CATEGORY_FIELD_CONFIG } from "@/config/artwork-category-field-config";
-import { URLS } from "@/config/urls";
 import {
   Artwork,
   ArtworkAvailability,
@@ -14,6 +13,7 @@ import {
 } from "@/features/artworks/types";
 import { getTranslation } from "@/i18n/server";
 import { getById } from "@/lib/api-client";
+import { SEO_INDEXING_ENABLED, URLS } from "@/lib/config";
 import { parseIdOrNotFound } from "@/lib/utils";
 import { ItemStatus, ItemVisibility } from "@/types/item";
 import type { Metadata } from "next";
@@ -153,8 +153,8 @@ export async function generateMetadata({
         images: artwork.imageUrl ? [{ url: artwork.imageUrl }] : undefined,
       },
       robots: {
-        index: isPublic,
-        follow: isPublic,
+        index: SEO_INDEXING_ENABLED && isPublic,
+        follow: SEO_INDEXING_ENABLED && isPublic,
       },
     };
   } catch {
