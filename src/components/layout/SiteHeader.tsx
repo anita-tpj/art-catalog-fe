@@ -4,6 +4,9 @@ import LanguageSwitcher from "@/components/ui/language-switcher";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
+const ART_CATALOG_URL =
+  process.env.NEXT_PUBLIC_ART_CATALOG_URL || "http://localhost:3000";
+
 export function SiteHeader() {
   const { t } = useTranslation();
 
@@ -14,7 +17,7 @@ export function SiteHeader() {
         <div className="md:hidden">
           <div className="flex h-14 items-center justify-between">
             <Link
-              href="/"
+              href={ART_CATALOG_URL}
               className="flex flex-col leading-none hover:opacity-80"
             >
               <span className="text-base font-semibold tracking-tight">
@@ -31,28 +34,28 @@ export function SiteHeader() {
 
           <nav className="flex h-9 items-center justify-between text-sm text-zinc-600 dark:text-zinc-300">
             <Link
-              href="/artworks"
+              href={`${ART_CATALOG_URL}/artworks`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Gallery")}
             </Link>
 
             <Link
-              href="/artists"
+              href={`${ART_CATALOG_URL}/artists`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Artists")}
             </Link>
 
             <Link
-              href="/about"
+              href={`${ART_CATALOG_URL}/about`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("About")}
             </Link>
 
             <Link
-              href="/contact"
+              href={`${ART_CATALOG_URL}/contact`}
               className="hover:text-black dark:hover:text-white"
             >
               {t("Contact")}
