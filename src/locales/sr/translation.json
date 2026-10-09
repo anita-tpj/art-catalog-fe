@@ -371,6 +371,10 @@
   "Discover artists featured in ArtCatalog and explore their work across categories and styles.": "Upoznajte umetnike predstavljene u ArtCatalogu i istražite njihove radove različitih kategorija i stilova.",
   "Explore this artwork and discover more works by the artist.": "Istražite ovo umetničko delo i otkrijte druge radove istog umetnika.",
   "Get in touch with ArtCatalog for inquiries, collaborations, or questions about artworks and artists.": "Kontaktirajte ArtCatalog za upite, saradnju ili pitanja o umetničkim delima i umetnicima.",
-  "Learn about ArtCatalog — a curated platform dedicated to showcasing contemporary artworks and artists.": "Saznajte više o ArtCatalogu, platformi posvećenoj predstavljanju savremenih umetničkih dela i umetnika."
+  "Learn about ArtCatalog — a curated platform dedicated to showcasing contemporary artworks and artists.": "Saznajte više o ArtCatalogu, platformi posvećenoj predstavljanju savremenih umetničkih dela i umetnika.",
+  "Artwork: \"{{title}}\" (ID {{id}})": "Umetničko delo: „{{title}}” (ID {{id}})",
+  "Artist: {{name}}": "Umetnik: {{name}}",
+  "Artwork ID {{id}}": "ID umetničkog dela: {{id}}",
+  "Artist ID {{id}}": "ID umetnika: {{id}}"
 }
 

@@ -57,23 +57,32 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
 
   const contextLine = useMemo(() => {
     if (artworkId && artwork) {
-      return `Artwork: "${artwork.title}" (ID ${artworkId})`;
+      return t('Artwork: "{{title}}" (ID {{id}})', {
+        title: artwork.title,
+        id: artworkId,
+      });
     }
 
     if (artistId && artist) {
-      return `Artist: ${artist.name}`;
+      return t("Artist: {{name}}", {
+        name: artist.name,
+      });
     }
 
     if (artworkId) {
-      return `Artwork ID ${artworkId}`;
+      return t("Artwork ID {{id}}", {
+        id: artworkId,
+      });
     }
 
     if (artistId) {
-      return `Artist ID ${artistId}`;
+      return t("Artist ID {{id}}", {
+        id: artistId,
+      });
     }
 
     return null;
-  }, [artworkId, artistId, artwork, artist]);
+  }, [artworkId, artistId, artwork, artist, t]);
 
   const messagePlaceholder =
     artworkId && artwork
