@@ -383,6 +383,9 @@
   "Reproduction": "Reprodukcija",
   "Copyright confirmation": "Potvrda autorskih prava",
   "I confirm that I am the creator of this artwork or have the necessary rights and permissions to publish it on ArtCatalog.": "Potvrđujem da sam autor ovog umetničkog dela ili da imam potrebna prava i dozvole za njegovo objavljivanje na platformi ArtCatalog.",
-  "You must confirm that you have the rights to publish this artwork.": "Morate potvrditi da imate pravo da objavite ovo umetničko delo."
+  "You must confirm that you have the rights to publish this artwork.": "Morate potvrditi da imate pravo da objavite ovo umetničko delo.",
+  "Featured artwork — Show on homepage": "Istaknuto umetničko delo — Prikaži na početnoj stranici",
+  "Featured artist — Show on homepage": "Istaknuti umetnik — Prikaži na početnoj stranici",
+  "No featured artworks available yet.": "Trenutno nema istaknutih umetničkih dela."
 }
 

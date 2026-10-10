@@ -42,6 +42,7 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
       primaryCategory: artist.primaryCategory ?? undefined,
       status: artist.status,
       visibility: artist.visibility,
+      isFeatured: artist.isFeatured ?? false,
       slug: artist.slug ?? undefined,
     });
   }, [artist, reset]);

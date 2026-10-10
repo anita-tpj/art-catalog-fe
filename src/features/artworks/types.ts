@@ -198,6 +198,7 @@ export interface Artwork {
     status: ItemStatus;
     visibility: ItemVisibility;
   };
+  isFeatured: boolean;
 }
 
 export const CreateArtworkSchema = z.object({
@@ -251,6 +252,8 @@ export const CreateArtworkSchema = z.object({
   }),
 
   status: z.nativeEnum(ItemStatus).default(ItemStatus.DRAFT),
+
+  isFeatured: z.boolean().optional(),
 
   availability: z
     .nativeEnum(ArtworkAvailability)

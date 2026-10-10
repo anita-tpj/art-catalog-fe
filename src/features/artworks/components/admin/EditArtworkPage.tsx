@@ -49,6 +49,7 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
       status: artwork.status,
       availability: artwork.availability,
       copyrightConfirmed: true,
+      isFeatured: artwork.isFeatured ?? false,
     });
   }, [artwork, reset]);
   if (isLoading && !artwork) {

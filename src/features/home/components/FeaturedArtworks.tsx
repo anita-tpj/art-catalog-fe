@@ -38,9 +38,7 @@ export function FeaturedArtworks({ artworks }: { artworks: Artwork[] }) {
 
       {artworks.length === 0 ? (
         <div className="rounded-xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/40 dark:text-zinc-300">
-          {t(
-            "No artworks available yet (or API not connected). Once you add artworks, they'll appear here automatically.",
-          )}
+          {t("No artworks available yet.")}
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
