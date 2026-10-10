@@ -3,6 +3,7 @@ import { Artist } from "@/features/artists/types";
 import { getTranslation } from "@/i18n/server";
 import { get } from "@/lib/api-client";
 import { SEO_INDEXING_ENABLED, URLS } from "@/lib/config";
+import { ItemVisibility } from "@/types/item";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -77,5 +78,13 @@ export default async function ArtistSlugPage({ params }: PageProps) {
     notFound();
   }
 
-  return <ArtistProfile artist={artist} />;
+  return (
+    <>
+      {artist.visibility === ItemVisibility.PRIVATE && (
+        <span data-private-artist hidden />
+      )}
+
+      <ArtistProfile artist={artist} />
+    </>
+  );
 }
