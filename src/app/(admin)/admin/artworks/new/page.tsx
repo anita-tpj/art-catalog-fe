@@ -40,6 +40,7 @@ export default function NewArtworkPage() {
       status: ItemStatus.DRAFT,
       availability: ArtworkAvailability.AVAILABLE,
       copyrightConfirmed: false,
+      isFeatured: false,
     },
   });
 

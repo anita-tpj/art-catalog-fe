@@ -94,7 +94,17 @@ export function ArtworkFormLayout({
 
       <Card className="border border-dashed border-zinc-300 p-4 text-sm dark:border-zinc-700">
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit((values) => {
+            if (!isAdmin) {
+              const data = { ...values };
+              delete data.isFeatured;
+              onSubmit(data);
+              return;
+            }
+
+            onSubmit(values);
+          })}
+        
           className="space-y-6"
           noValidate
         >
@@ -300,6 +310,16 @@ export function ArtworkFormLayout({
                     labels={ItemStatusLabels}
                   />
                 </div>
+                {isAdmin && (
+                  <label className="flex items-center gap-3 text-sm cursor-pointer pt-3">
+                    <input
+                      type="checkbox"
+                      {...register("isFeatured")}
+                      className="h-4 w-4 shrink-0 accent-primary"
+                    />
+                    <span>{t("Featured artwork — Show on homepage")}</span>
+                  </label>
+                )}
               </div>
             </div>
           </div>

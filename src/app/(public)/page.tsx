@@ -43,24 +43,42 @@ async function fetchJson<T>(path: string, params?: Record<string, string>) {
 
 async function getFeaturedArtworks(): Promise<Artwork[]> {
   try {
-    const data = await fetchJson<any>("/api/artworks/public", {
-      pageSize: "12",
-    });
+    const featured = await fetchJson<Artwork[]>(
+      "/api/artworks/public/featured",
+    );
+
+    if (featured.length > 0) {
+      return featured;
+    }
+
+    const data = await fetchJson<{ items: Artwork[] } | Artwork[]>(
+      "/api/artworks/public",
+      { pageSize: "12" },
+    );
 
     return Array.isArray(data) ? data : (data.items ?? []);
-  } catch {
+  } catch (error) {
+    console.error("Failed to fetch artworks:", error);
     return [];
   }
 }
 
 async function getFeaturedArtists(): Promise<Artist[]> {
   try {
-    const data = await fetchJson<any>("/api/artists/public", {
-      pageSize: "6",
-    });
+    const featured = await fetchJson<Artist[]>("/api/artists/public/featured");
+
+    if (featured.length > 0) {
+      return featured;
+    }
+
+    const data = await fetchJson<{ items: Artist[] } | Artist[]>(
+      "/api/artists/public",
+      { pageSize: "6" },
+    );
 
     return Array.isArray(data) ? data : (data.items ?? []);
-  } catch {
+  } catch (error) {
+    console.error("Failed to fetch artists:", error);
     return [];
   }
 }

@@ -18,6 +18,7 @@ import {
 import { useCountryOptions } from "@/hooks/useCountries";
 
 import { ImageUploadField } from "@/components/ui";
+import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import {
   ItemStatus,
   ItemStatusLabels,
@@ -62,6 +63,9 @@ export function ArtistFormLayout({
   const { uploading, error, uploadFile } = useArtistAvatarUpload();
   const { t } = useTranslation();
 
+  const { data: adminData } = useAdminMe();
+  const isAdmin = adminData?.user.role === "ADMIN";
+
   return (
     <section className="space-y-4">
       <div>
@@ -73,7 +77,16 @@ export function ArtistFormLayout({
 
       <Card className="border border-dashed border-zinc-300 p-4 text-sm dark:border-zinc-700">
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit((values) => {
+            if (!isAdmin) {
+              const data = { ...values };
+              delete data.isFeatured;
+              onSubmit(data);
+              return;
+            }
+
+            onSubmit(values);
+          })}
           className="space-y-6"
           noValidate
         >
@@ -228,6 +241,16 @@ export function ArtistFormLayout({
                     />
                   </div>
                 </div>
+                {isAdmin && (
+                  <label className="flex items-center gap-3 pt-3 text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      {...register("isFeatured")}
+                      className="h-4 w-4 shrink-0 accent-primary"
+                    />
+                    <span>{t("Featured artist — Show on homepage")}</span>
+                  </label>
+                )}
               </div>
             </div>
           </div>

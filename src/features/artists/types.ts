@@ -16,6 +16,7 @@ export interface Artist {
   artworksCount: number | null;
   status: ItemStatus;
   visibility: ItemVisibility;
+  isFeatured: boolean;
   slug: string | null;
   slugLocked: boolean;
   artworks?: Artwork[];
@@ -65,6 +66,8 @@ export const createArtistSchema = z.object({
   status: z.nativeEnum(ItemStatus).default(ItemStatus.DRAFT),
 
   visibility: z.nativeEnum(ItemVisibility).default(ItemVisibility.PRIVATE),
+
+  isFeatured: z.boolean().optional(),
 
   slug: z
     .string()

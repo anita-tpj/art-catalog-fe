@@ -25,6 +25,7 @@ const NewArtistPage = () => {
       primaryCategory: undefined,
       status: ItemStatus.DRAFT,
       visibility: ItemVisibility.PRIVATE,
+      isFeatured: false,
       slug: undefined,
     },
   });
