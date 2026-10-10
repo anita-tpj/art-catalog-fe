@@ -375,6 +375,14 @@
   "Artwork: \"{{title}}\" (ID {{id}})": "Umetničko delo: „{{title}}” (ID {{id}})",
   "Artist: {{name}}": "Umetnik: {{name}}",
   "Artwork ID {{id}}": "ID umetničkog dela: {{id}}",
-  "Artist ID {{id}}": "ID umetnika: {{id}}"
+  "Artist ID {{id}}": "ID umetnika: {{id}}",
+  "Artwork origin": "Poreklo umetničkog dela",
+  "Select artwork origin": "Izaberite poreklo dela",
+  "Original Work": "Originalno delo",
+  "Based on Reference": "Prema referenci",
+  "Reproduction": "Reprodukcija",
+  "Copyright confirmation": "Potvrda autorskih prava",
+  "I confirm that I am the creator of this artwork or have the necessary rights and permissions to publish it on ArtCatalog.": "Potvrđujem da sam autor ovog umetničkog dela ili da imam potrebna prava i dozvole za njegovo objavljivanje na platformi ArtCatalog.",
+  "You must confirm that you have the rights to publish this artwork.": "Morate potvrditi da imate pravo da objavite ovo umetničko delo."
 }
 

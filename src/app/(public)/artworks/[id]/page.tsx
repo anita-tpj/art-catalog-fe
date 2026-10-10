@@ -8,6 +8,7 @@ import {
   ArtworkCategoryLabels,
   ArtworkMotiveLabels,
   ArtworkOrientationLabels,
+  ArtworkOriginLabels,
   ArtworkStyleLabels,
   ArtworkTechniqueLabels,
 } from "@/features/artworks/types";
@@ -52,6 +53,10 @@ function getDetails(artwork: Artwork): DetailItem[] {
 
   return [
     toDetail("Category", ArtworkCategoryLabels[artwork.category]),
+    toDetail(
+      "Artwork origin",
+      artwork.origin ? ArtworkOriginLabels[artwork.origin] : null,
+    ),
     toDetail("Medium", artwork.medium),
     toDetail(
       "Technique",
