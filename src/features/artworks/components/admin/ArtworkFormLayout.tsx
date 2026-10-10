@@ -26,6 +26,8 @@ import {
   ArtworkMotiveLabels,
   ArtworkOrientation,
   ArtworkOrientationLabels,
+  ArtworkOrigin,
+  ArtworkOriginLabels,
   ArtworkStyle,
   ArtworkStyleLabels,
   ArtworkTechnique,
@@ -49,6 +51,7 @@ interface ArtworkFormLayoutProps {
   submitLabel: string;
   isBusy?: boolean;
   apiError?: string;
+  isEdit?: boolean;
 }
 
 export function ArtworkFormLayout({
@@ -59,6 +62,7 @@ export function ArtworkFormLayout({
   submitLabel,
   isBusy = false,
   apiError,
+  isEdit = false,
 }: ArtworkFormLayoutProps) {
   const {
     register,
@@ -130,6 +134,17 @@ export function ArtworkFormLayout({
                 <h2 className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                   {t("Artistic details")}
                 </h2>
+
+                <div className="max-w-sm">
+                  <EnumSelectField<CreateArtworkDTO, ArtworkOrigin>
+                    control={control}
+                    name="origin"
+                    label={`${t("Artwork origin")} *`}
+                    placeholder={t("Select artwork origin")}
+                    enumObject={ArtworkOrigin}
+                    labels={ArtworkOriginLabels}
+                  />
+                </div>
 
                 <div className="grid gap-4 lg:grid-cols-2">
                   {show("medium") && (
@@ -288,6 +303,30 @@ export function ArtworkFormLayout({
               </div>
             </div>
           </div>
+
+          {!isEdit && (
+            <div className="space-y-2 border-t border-zinc-300 pt-4 dark:border-zinc-700">
+              <label className="flex items-start gap-3 text-sm cursor-pointer">
+                <input
+                  type="checkbox"
+                  {...register("copyrightConfirmed")}
+                  className="mt-1 h-4 w-4 shrink-0 accent-primary"
+                />
+                <span>
+                  {t(
+                    "I confirm that I am the creator of this artwork or have the necessary rights and permissions to publish it on ArtCatalog.",
+                  )}
+                  {" *"}
+                </span>
+              </label>
+
+              {errors.copyrightConfirmed?.message && (
+                <p className="text-xs text-red-500">
+                  {t(errors.copyrightConfirmed.message)}
+                </p>
+              )}
+            </div>
+          )}
 
           {apiError && (
             <p className="text-xs text-red-500">

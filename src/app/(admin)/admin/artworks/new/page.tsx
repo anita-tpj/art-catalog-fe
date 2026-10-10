@@ -29,6 +29,7 @@ export default function NewArtworkPage() {
       imagePublicId: undefined,
       description: "",
       category: undefined,
+      origin: undefined,
       technique: undefined,
       style: undefined,
       motive: undefined,
@@ -38,6 +39,7 @@ export default function NewArtworkPage() {
       artistId: undefined as unknown as number,
       status: ItemStatus.DRAFT,
       availability: ArtworkAvailability.AVAILABLE,
+      copyrightConfirmed: false,
     },
   });
 

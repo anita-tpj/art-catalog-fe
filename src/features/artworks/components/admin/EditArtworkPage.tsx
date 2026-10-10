@@ -39,6 +39,7 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
       description: artwork.description ?? "",
       artistId: artwork.artistId,
       category: artwork.category,
+      origin: artwork.origin,
       technique: artwork.technique ?? undefined,
       style: artwork.style ?? undefined,
       motive: artwork.motive ?? undefined,
@@ -47,6 +48,7 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
       framed: artwork.framed,
       status: artwork.status,
       availability: artwork.availability,
+      copyrightConfirmed: true,
     });
   }, [artwork, reset]);
   if (isLoading && !artwork) {
@@ -77,6 +79,7 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
       submitLabel={isBusy ? t("Updating...") : t("Update artwork")}
       isBusy={isBusy}
       apiError={apiError}
+      isEdit
     />
   );
 };

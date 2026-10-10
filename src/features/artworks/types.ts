@@ -159,6 +159,18 @@ export const ArtworkAvailabilityLabels: Record<ArtworkAvailability, string> = {
   [ArtworkAvailability.NOT_FOR_SALE]: "Not for sale",
 };
 
+export enum ArtworkOrigin {
+  ORIGINAL = "ORIGINAL",
+  BASED_ON_REFERENCE = "BASED_ON_REFERENCE",
+  REPRODUCTION = "REPRODUCTION",
+}
+
+export const ArtworkOriginLabels: Record<ArtworkOrigin, string> = {
+  [ArtworkOrigin.ORIGINAL]: "Original Work",
+  [ArtworkOrigin.BASED_ON_REFERENCE]: "Based on Reference",
+  [ArtworkOrigin.REPRODUCTION]: "Reproduction",
+};
+
 export interface Artwork {
   id: number;
   title: string;
@@ -166,6 +178,7 @@ export interface Artwork {
   imageUrl: string | null;
   imagePublicId: string | null;
   year: number | null;
+  origin: ArtworkOrigin;
 
   technique: ArtworkTechnique | null;
   medium: string | null;
@@ -215,6 +228,8 @@ export const CreateArtworkSchema = z.object({
     .min(1, "Description is required")
     .max(2000, "Description is too long"),
 
+  origin: z.nativeEnum(ArtworkOrigin),
+
   technique: z.nativeEnum(ArtworkTechnique).optional(),
   medium: z.string().trim().max(200, "Medium is too long").optional(),
   style: z.nativeEnum(ArtworkStyle).optional(),
@@ -240,9 +255,15 @@ export const CreateArtworkSchema = z.object({
   availability: z
     .nativeEnum(ArtworkAvailability)
     .default(ArtworkAvailability.AVAILABLE),
+  copyrightConfirmed: z.boolean().refine((value) => value === true, {
+    message:
+      "You must confirm that you have the rights to publish this artwork.",
+  }),
 });
 
-export const UpdateArtworkSchema = CreateArtworkSchema.partial();
+export const UpdateArtworkSchema = CreateArtworkSchema.omit({
+  copyrightConfirmed: true,
+}).partial();
 
 export type CreateArtworkDTO = z.infer<typeof CreateArtworkSchema>;
 export type UpdateArtworkDTO = z.infer<typeof UpdateArtworkSchema>;
