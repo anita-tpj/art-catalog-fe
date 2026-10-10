@@ -3,10 +3,23 @@
 import LanguageSwitcher from "@/components/ui/language-switcher";
 import { URLS } from "@/lib/config";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
 export function SiteHeader() {
   const { t } = useTranslation();
+
+  const pathname = usePathname();
+
+  const isActive = (path: string) =>
+    pathname === path || pathname.startsWith(`${path}/`);
+
+  const navLinkClass = (path: string) =>
+    `transition-colors ${
+      isActive(path)
+        ? "text-black dark:text-white"
+        : "hover:text-black dark:hover:text-white"
+    }`;
 
   return (
     <header className="border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80">
@@ -29,32 +42,31 @@ export function SiteHeader() {
 
             <LanguageSwitcher />
           </div>
-
-          <nav className="flex h-9 items-center justify-between text-sm text-zinc-600 dark:text-zinc-300">
+          <nav className="site-header-navigation flex h-9 items-center justify-between text-sm text-zinc-600 dark:text-zinc-300">
             <Link
               href={`${URLS.artCatalog}/artworks`}
-              className="hover:text-black dark:hover:text-white"
+              className={navLinkClass("/artworks")}
             >
               {t("Gallery")}
             </Link>
 
             <Link
               href={`${URLS.artCatalog}/artists`}
-              className="hover:text-black dark:hover:text-white"
+              className={navLinkClass("/artists")}
             >
               {t("Artists")}
             </Link>
 
             <Link
               href={`${URLS.artCatalog}/about`}
-              className="hover:text-black dark:hover:text-white"
+              className={navLinkClass("/about")}
             >
               {t("About")}
             </Link>
 
             <Link
               href={`${URLS.artCatalog}/contact`}
-              className="hover:text-black dark:hover:text-white"
+              className={navLinkClass("/contact")}
             >
               {t("Contact")}
             </Link>
@@ -75,38 +87,38 @@ export function SiteHeader() {
               Creative Atlas
             </span>
           </Link>
+          <div className="flex items-center gap-6 text-sm text-zinc-600 dark:text-zinc-300">
+            <nav className="site-header-navigation flex items-center gap-6">
+              <Link
+                href={`${URLS.artCatalog}/artworks`}
+                className={navLinkClass("/artworks")}
+              >
+                {t("Gallery")}
+              </Link>
 
-          <nav className="flex items-center gap-6 text-sm text-zinc-600 dark:text-zinc-300">
-            <Link
-              href={`${URLS.artCatalog}/artworks`}
-              className="hover:text-black dark:hover:text-white"
-            >
-              {t("Gallery")}
-            </Link>
+              <Link
+                href={`${URLS.artCatalog}/artists`}
+                className={navLinkClass("/artists")}
+              >
+                {t("Artists")}
+              </Link>
 
-            <Link
-              href={`${URLS.artCatalog}/artists`}
-              className="hover:text-black dark:hover:text-white"
-            >
-              {t("Artists")}
-            </Link>
+              <Link
+                href={`${URLS.artCatalog}/about`}
+                className={navLinkClass("/about")}
+              >
+                {t("About")}
+              </Link>
 
-            <Link
-              href={`${URLS.artCatalog}/about`}
-              className="hover:text-black dark:hover:text-white"
-            >
-              {t("About")}
-            </Link>
-
-            <Link
-              href={`${URLS.artCatalog}/contact`}
-              className="hover:text-black dark:hover:text-white"
-            >
-              {t("Contact")}
-            </Link>
-
+              <Link
+                href={`${URLS.artCatalog}/contact`}
+                className={navLinkClass("/contact")}
+              >
+                {t("Contact")}
+              </Link>
+            </nav>
             <LanguageSwitcher />
-          </nav>
+          </div>
         </div>
       </div>
     </header>
