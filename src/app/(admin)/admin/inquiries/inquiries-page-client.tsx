@@ -1,21 +1,27 @@
 "use client";
 
-import Link from "next/link";
-
-import { ErrorState, PageSizeSelector, Pagination } from "@/components/ui";
-
-import { Button } from "@/components/ui";
+import {
+  Button,
+  ConfirmDialog,
+  ErrorState,
+  PageSizeSelector,
+  Pagination,
+} from "@/components/ui";
+import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import {
   InquiriesToolbar,
   useInquiriesUrlState,
   useInquiryStats,
   usePaginatedInquiries,
 } from "@/features/inquiries";
+import { useDeleteInquiry } from "@/features/inquiries/hooks/useInquiries";
 import { useUpdateInquiryStatus } from "@/features/inquiries/hooks/useUpdateInquiryStatus";
+import Link from "next/link";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { MdArrowForward, MdOutlineArchive } from "react-icons/md";
 import { PiEnvelopeSimpleOpen } from "react-icons/pi";
+import { TbTrashX } from "react-icons/tb";
 
 type Props = {
   initialSearch: string;
@@ -38,10 +44,8 @@ export function InquiriesPageClient({
     status,
     apiStatus,
     debouncedSearch,
-
     page,
     pageSize,
-
     onStatusChange,
     onClearSearch,
     onClearFilters,
@@ -54,7 +58,11 @@ export function InquiriesPageClient({
     initialPageSize,
     defaultPageSize: DEFAULT_PAGE_SIZE,
   });
+
   const { t } = useTranslation();
+
+  const { data: adminData } = useAdminMe();
+  const isAdmin = adminData?.user.role === "ADMIN";
 
   const { data, isLoading, isError, error, refetch } = usePaginatedInquiries({
     page,
@@ -71,6 +79,25 @@ export function InquiriesPageClient({
 
   const { mutateAsync: updateStatus, isPending: isUpdating } =
     useUpdateInquiryStatus();
+
+  const deleteInquiry = useDeleteInquiry();
+
+  const handleDeleteInquiry = (id: number) => {
+    deleteInquiry.mutate(id, {
+      onSuccess: () => {
+        toast.success(t("Inquiry deleted successfully."));
+
+        // If this was the last inquiry on the current page,
+        // navigate to the previous page.
+        if (items.length === 1 && page > 1) {
+          onPageChange(page - 1);
+        }
+      },
+      onError: () => {
+        toast.error(t("Failed to delete inquiry."));
+      },
+    });
+  };
 
   const emptyMessage =
     status === "NEW"
@@ -92,6 +119,7 @@ export function InquiriesPageClient({
             </p>
           </div>
         </div>
+
         <InquiriesToolbar
           status={status}
           onStatusChange={onStatusChange}
@@ -156,6 +184,7 @@ export function InquiriesPageClient({
                       </span>
 
                       <span className="text-sm font-medium">{i.name}</span>
+
                       <span className="text-xs text-muted-foreground">
                         {i.email}
                       </span>
@@ -197,6 +226,22 @@ export function InquiriesPageClient({
                       >
                         <MdOutlineArchive size="20" />
                       </Button>
+                    )}
+
+                    {isAdmin && (
+                      <ConfirmDialog
+                        title={t("Delete inquiry")}
+                        description={t(
+                          "This action cannot be undone. This will permanently delete the inquiry.",
+                        )}
+                        onConfirm={() => handleDeleteInquiry(i.id)}
+                        isLoading={deleteInquiry.isPending}
+                      >
+                        <TbTrashX
+                          size={21}
+                          className="cursor-pointer text-red-600 hover:text-red-700"
+                        />
+                      </ConfirmDialog>
                     )}
 
                     <Link title={t("Open")} href={`/admin/inquiries/${i.id}`}>

@@ -55,7 +55,7 @@ export function ConfirmDialog({
           <div className="mt-4 flex items-center justify-end gap-2">
             <AlertDialog.Cancel asChild>
               <Button variant="outline" size="sm">
-                {cancelLabel}
+                {t(cancelLabel)}
               </Button>
             </AlertDialog.Cancel>
 
@@ -66,7 +66,7 @@ export function ConfirmDialog({
                 onClick={onConfirm}
               >
                 {isLoading && <Spinner size="sm" className="mr-2" />}
-                {isLoading ? t("Deleting...") : confirmLabel}
+                {isLoading ? t("Deleting...") : t(confirmLabel)}
               </Button>
             </AlertDialog.Action>
           </div>

@@ -42,7 +42,14 @@ const NewArtistPage = () => {
   return (
     <ArtistFormLayout
       form={form}
-      onSubmit={(data) => createArtist.mutate(data)}
+      onSubmit={(data) =>
+        createArtist.mutate({
+          ...createArtistSchema.parse(data),
+          status: ItemStatus.DRAFT,
+          visibility: ItemVisibility.PRIVATE,
+          isFeatured: false,
+        })
+      }
       title={t("Create artist")}
       subtitle={t("Add a new artist to the catalog.")}
       submitLabel={isBusy ? t("Saving...") : t("Save artist")}

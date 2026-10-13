@@ -16,6 +16,7 @@ export type AdminInvitationDto = {
 export type AcceptAdminInvitationDto = {
   token: string;
   password: string;
+  termsAccepted: boolean;
 };
 
 export type AcceptAdminInvitationResponse = AdminUserDto;

@@ -5,6 +5,7 @@ import { URLS } from "@/lib/config";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { SiteLogo } from "./SiteLogo";
 
 export function SiteHeader() {
   const { t } = useTranslation();
@@ -27,19 +28,7 @@ export function SiteHeader() {
         {/* Mobile */}
         <div className="md:hidden">
           <div className="flex h-14 items-center justify-between">
-            <Link
-              href={URLS.artCatalog}
-              className="flex flex-col leading-none hover:opacity-80"
-            >
-              <span className="text-base font-semibold tracking-tight">
-                ArtCatalog
-              </span>
-
-              <span className="mt-1 text-[8px] font-medium uppercase tracking-[0.15em] text-zinc-400">
-                Creative Atlas
-              </span>
-            </Link>
-
+            <SiteLogo />
             <LanguageSwitcher />
           </div>
           <nav className="site-header-navigation flex h-9 items-center justify-between text-sm text-zinc-600 dark:text-zinc-300">

@@ -9,6 +9,7 @@ import { Resolver, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { CreateArtistDTO, createArtistSchema } from "../../types";
 import { ArtistCmsAccess } from "./ArtistCmsAccess";
+import { ArtistPublicationSettings } from "./ArtistPublicationSettings";
 
 interface EditArtistPageProps {
   id: number;
@@ -66,22 +67,26 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
     ? (updateArtist.error as Error).message
     : undefined;
 
-  return (
-    <div className="space-y-6">
-      <ArtistFormLayout
-        form={form}
-        onSubmit={(data) => updateArtist.mutate({ id, data })}
-        title={t("Edit artist")}
-        subtitle={t("Update artist details.")}
-        submitLabel={isBusy ? t("Updating...") : t("Update artist")}
-        isBusy={isBusy}
-        apiError={apiError}
-        slugLocked={artist.slugLocked}
-      />
+  
+return (
+  <div className="space-y-6">
+    <ArtistFormLayout
+      form={form}
+      onSubmit={(data) => updateArtist.mutate({ id, data })}
+      title={t("Edit artist")}
+      subtitle={t("Update artist details.")}
+      submitLabel={isBusy ? t("Updating...") : t("Update artist")}
+      isBusy={isBusy}
+      apiError={apiError}
+      slugLocked={artist.slugLocked}
+    />
 
-      <ArtistCmsAccess artistId={id} />
-    </div>
-  );
+    <ArtistPublicationSettings artist={artist} />
+
+    <ArtistCmsAccess artistId={id} />
+  </div>
+);
+
 };
 
 export default EditArtistPage;

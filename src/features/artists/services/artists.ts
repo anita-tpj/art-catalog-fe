@@ -1,4 +1,4 @@
-import { del, get, getById, post, put } from "@/lib/api-client";
+import { del, get, getById, patch, post, put } from "@/lib/api-client";
 import { PaginatedRequest, PaginatedResult } from "@/types/api";
 import {
   Artist,
@@ -6,6 +6,7 @@ import {
   ArtistCmsInvitation,
   CreateArtistCmsInvitationDTO,
   CreateArtistDTO,
+  UpdateArtistDTO,
 } from "../types";
 
 function buildPaginatedParams({
@@ -45,10 +46,10 @@ export const artistsService = {
   create: (data: CreateArtistDTO) =>
     post<Artist, CreateArtistDTO>("/api/artists", data),
 
-  update: (id: number, data: CreateArtistDTO) =>
-    put<Artist, CreateArtistDTO>("/api/artists", id, data),
+update: (id: number, data: UpdateArtistDTO) =>
+  put<Artist, UpdateArtistDTO>("/api/artists", id, data),
 
-  remove: (id: number) => del<Artist>("/api/artists", id),
+  remove: (id: number) => del<void>("/api/artists", id),
 
   getCmsAccess: (id: number) =>
     get<ArtistCmsAccess>(`/api/artists/${id}/cms-access`),
@@ -63,6 +64,15 @@ export const artistsService = {
 
   revokeCmsInvitation: (artistId: number, invitationId: string) =>
     del<void>(`/api/artists/${artistId}/cms-invitations/${invitationId}`),
+
+  deactivateCmsAccount: (userId: string) =>
+    patch<void>(`/api/admin/users/${encodeURIComponent(userId)}/deactivate`),
+
+  activateCmsAccount: (userId: string) =>
+    patch<void>(`/api/admin/users/${encodeURIComponent(userId)}/activate`),
+
+  deleteCmsAccount: (userId: string) =>
+    del<void>(`/api/admin/users/${encodeURIComponent(userId)}`),
 
   // Public
   getAllPublished: () => get<Artist[]>("/api/artists/public/all"),

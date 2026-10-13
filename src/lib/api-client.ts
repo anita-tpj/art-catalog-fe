@@ -201,6 +201,23 @@ export async function put<TResponse, TBody = unknown>(
   }
 }
 
+export async function patch<TResponse>(
+  path: string,
+  opts?: FetchOpts,
+): Promise<TResponse> {
+  try {
+    const res = await fetch(
+      `${API_BASE_URL}${path}`,
+      buildInit("PATCH", opts),
+    );
+
+    return await handleResponse<TResponse>(res);
+  } catch (error) {
+    maybeRedirectOn401(error);
+    throw error;
+  }
+}
+
 export async function del<T>(
   path: string,
   id?: number | string,

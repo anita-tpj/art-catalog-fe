@@ -1,4 +1,8 @@
+import enPrivacy from "@/locales/en/privacy.json";
+import enTerms from "@/locales/en/terms.json";
 import en from "@/locales/en/translation.json";
+import srPrivacy from "@/locales/sr/privacy.json";
+import srTerms from "@/locales/sr/terms.json";
 import sr from "@/locales/sr/translation.json";
 import { cookies } from "next/headers";
 
@@ -25,6 +29,36 @@ export async function getTranslation() {
     lang,
     t: (key: string) => {
       const value = dictionary[key as keyof typeof dictionary];
+      return typeof value === "string" && value.length ? value : key;
+    },
+  };
+}
+
+export async function getTermsTranslation() {
+  const { lang } = await getTranslation();
+
+  const dictionary = lang === "sr" ? srTerms : enTerms;
+
+  return {
+    lang,
+    t: (key: string) => {
+      const value = dictionary[key as keyof typeof dictionary];
+
+      return typeof value === "string" && value.length ? value : key;
+    },
+  };
+}
+
+export async function getPrivacyTranslation() {
+  const { lang } = await getTranslation();
+
+  const dictionary = lang === "sr" ? srPrivacy : enPrivacy;
+
+  return {
+    lang,
+    t: (key: string) => {
+      const value = dictionary[key as keyof typeof dictionary];
+
       return typeof value === "string" && value.length ? value : key;
     },
   };

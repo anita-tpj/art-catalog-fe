@@ -6,14 +6,13 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { artistsService } from "../services/artists";
-import { Artist } from "../types";
 
 export function useRemoveArtist() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation();
 
-  return useMutation<Artist, Error, number>({
+  return useMutation<void, Error, number>({
     mutationFn: artistsService.remove,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["artists"] });

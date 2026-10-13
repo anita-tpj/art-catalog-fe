@@ -1,5 +1,6 @@
 "use client";
 
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { AdminMobileNav } from "@/components/shell/AdminMobileNav";
 import { AdminSidebar } from "@/components/shell/AdminSidebar";
 import { AdminTopBar } from "@/components/shell/AdminTopBar";
@@ -64,10 +65,9 @@ export default function AdminLayout({ children }: PropsWithChildren) {
         </div>
       ) : (
         // Authenticated admin shell
-        <div className="min-h-screen">
+        <>
           <AdminTopBar />
-
-          <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+          <main className="mx-auto flex-1 w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
             <div className="grid min-w-0 gap-6 md:grid-cols-[240px_1fr]">
               <div className="md:hidden min-w-0 overflow-x-visible">
                 <AdminMobileNav />
@@ -84,7 +84,8 @@ export default function AdminLayout({ children }: PropsWithChildren) {
               </div>
             </div>
           </main>
-        </div>
+          <SiteFooter />
+        </>
       )}
     </AdminGuard>
   );

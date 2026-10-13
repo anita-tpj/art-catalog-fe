@@ -18,6 +18,7 @@ export default function AcceptInvitationPageClient() {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isAccepted, setIsAccepted] = useState(false);
 
@@ -33,6 +34,7 @@ export default function AcceptInvitationPageClient() {
       acceptAdminInvitation({
         token,
         password,
+        termsAccepted,
       }),
 
     onSuccess: () => {
@@ -60,6 +62,11 @@ export default function AcceptInvitationPageClient() {
 
     if (password !== confirmPassword) {
       setFormError(t("Passwords do not match"));
+      return;
+    }
+
+    if (!termsAccepted) {
+      setFormError(t("You must accept the Terms of Use"));
       return;
     }
 
@@ -171,6 +178,42 @@ export default function AcceptInvitationPageClient() {
             />
           </label>
 
+          <div className="flex items-start gap-2">
+            <input
+              id="terms-accepted"
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={(event) => setTermsAccepted(event.target.checked)}
+              required
+              className="mt-1 h-4 w-4 shrink-0 rounded border-zinc-300"
+            />
+
+            <label
+              htmlFor="terms-accepted"
+              className="text-sm leading-6 text-zinc-600"
+            >
+              {t("I have read and agree to the")}{" "}
+              <Link
+                href="/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-zinc-900 underline underline-offset-2 hover:text-zinc-600"
+              >
+                {t("Terms of Use")}
+              </Link>{" "}
+              {t("and acknowledge the")}{" "}
+              <Link
+                href="/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-zinc-900 underline underline-offset-2 hover:text-zinc-600"
+              >
+                {t("Privacy Policy")}
+              </Link>
+              .
+            </label>
+          </div>
+
           {formError && <p className="text-sm text-red-600">{formError}</p>}
 
           <button
@@ -189,11 +232,7 @@ export default function AcceptInvitationPageClient() {
 }
 
 function PageContainer({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-10">
-      {children}
-    </div>
-  );
+  return <>{children}</>;
 }
 
 function MessageCard({

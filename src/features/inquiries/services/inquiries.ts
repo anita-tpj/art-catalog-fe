@@ -1,4 +1,4 @@
-import { get, getById, post, put } from "@/lib/api-client";
+import { del, get, getById, post, put } from "@/lib/api-client";
 import { PaginatedResult } from "@/types/api";
 import {
   CreateInquiryDTO,
@@ -27,5 +27,6 @@ export const inquiriesService = {
 
   update: (id: number, status: InquiryStatus) =>
     put<Inquiry, { status: InquiryStatus }>("/api/inquiries", id, { status }),
+  remove: (id: number) => del<void>("/api/inquiries", id),
   getStats: () => get<InquiryStats>("/api/inquiries/stats"),
 };

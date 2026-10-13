@@ -3,8 +3,8 @@ import Link from "next/link";
 
 interface EmptyStateProps {
   message: string;
-  actionHref: string;
-  actionLabel: string;
+  actionHref?: string;
+  actionLabel?: string;
 }
 
 export function EmptyState({
@@ -16,9 +16,11 @@ export function EmptyState({
     <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
       <p className="text-sm text-zinc-500">{message}</p>
 
-      <Link href={actionHref}>
-        <Button>{actionLabel}</Button>
-      </Link>
+      {actionHref && actionLabel && (
+        <Link href={actionHref}>
+          <Button>{actionLabel}</Button>
+        </Link>
+      )}
     </div>
   );
 }
