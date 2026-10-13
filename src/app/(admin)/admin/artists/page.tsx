@@ -20,6 +20,7 @@ import { TbTrashX } from "react-icons/tb";
 
 import { AdminResponsiveList } from "@/components/shell/AdminResponsiveList";
 import { SearchEmptyState, SearchInput } from "@/components/ui";
+import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { usePaginatedArtists } from "@/features/artists/hooks/useArtists";
 import { useRemoveArtist } from "@/features/artists/hooks/useRemoveArtist";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
@@ -27,6 +28,9 @@ import { usePaginationState } from "@/hooks/usePaginationState";
 
 export default function AdminArtistsPage() {
   const { t } = useTranslation();
+  const { data: adminData } = useAdminMe();
+  const isAdmin = adminData?.user.role === "ADMIN";
+  const canEdit = isAdmin || adminData?.user.role === "EDITOR";
   const { page, pageSize, changePage, changePageSize } = usePaginationState(10);
 
   const [search, setSearch] = useState("");
@@ -73,14 +77,16 @@ export default function AdminArtistsPage() {
             {t("Artists")}
           </h1>
 
-          <Button asChild>
-            <Link href="/admin/artists/new">
-              <div className="flex items-center gap-1">
-                <MdOutlineAdd size={22} />
-                <span>{t("New Artist")}</span>
-              </div>
-            </Link>
-          </Button>
+          {isAdmin && (
+            <Button asChild>
+              <Link href="/admin/artists/new">
+                <div className="flex items-center gap-1">
+                  <MdOutlineAdd size={22} />
+                  <span>{t("New Artist")}</span>
+                </div>
+              </Link>
+            </Button>
+          )}
         </div>
 
         <SearchInput
@@ -98,8 +104,12 @@ export default function AdminArtistsPage() {
       ) : isEmptyDb ? (
         <EmptyState
           message={t("No artists available yet.")}
-          actionHref="/admin/artists/new"
-          actionLabel={t("Create Artist")}
+          {...(isAdmin
+            ? {
+                actionHref: "/admin/artists/new",
+                actionLabel: t("Create Artist"),
+              }
+            : {})}
         />
       ) : isSearchEmpty ? (
         <SearchEmptyState query={debouncedSearch} entityLabel="artists" />
@@ -162,26 +172,30 @@ export default function AdminArtistsPage() {
                         {/* Actions */}
                         <td className="px-4 py-2">
                           <div className="flex items-center justify-end gap-3">
-                            <Link href={`/admin/artists/${artist.id}/edit`}>
-                              <FiEdit
-                                size={18}
-                                className="cursor-pointer text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-50"
-                              />
-                            </Link>
+                            {canEdit && (
+                              <Link href={`/admin/artists/${artist.id}/edit`}>
+                                <FiEdit
+                                  size={18}
+                                  className="cursor-pointer text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-50"
+                                />
+                              </Link>
+                            )}
 
-                            <ConfirmDialog
-                              title={t("Delete artist")}
-                              description={t(
-                                "This action cannot be undone. This will permanently delete the artist.",
-                              )}
-                              onConfirm={() => removeArtist.mutate(artist.id)}
-                              isLoading={removeArtist.isPending}
-                            >
-                              <TbTrashX
-                                size={21}
-                                className="cursor-pointer text-red-600 hover:text-red-700"
-                              />
-                            </ConfirmDialog>
+                            {isAdmin && (
+                              <ConfirmDialog
+                                title={t("Delete artist")}
+                                description={t(
+                                  "This action cannot be undone. The artist can only be deleted if they have no artworks, CMS accounts, or invitations. Existing inquiries will be preserved.",
+                                )}
+                                onConfirm={() => removeArtist.mutate(artist.id)}
+                                isLoading={removeArtist.isPending}
+                              >
+                                <TbTrashX
+                                  size={21}
+                                  className="cursor-pointer text-red-600 hover:text-red-700"
+                                />
+                              </ConfirmDialog>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -222,26 +236,30 @@ export default function AdminArtistsPage() {
 
                       {/* Actions */}
                       <div className="flex items-center gap-2">
-                        <Link href={`/admin/artists/${artist.id}/edit`}>
-                          <FiEdit
-                            size={18}
-                            className="cursor-pointer text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-50"
-                          />
-                        </Link>
+                        {canEdit && (
+                          <Link href={`/admin/artists/${artist.id}/edit`}>
+                            <FiEdit
+                              size={18}
+                              className="cursor-pointer text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-50"
+                            />
+                          </Link>
+                        )}
 
-                        <ConfirmDialog
-                          title={t("Delete artist")}
-                          description={t(
-                            "This action cannot be undone. This will permanently delete the artist.",
-                          )}
-                          onConfirm={() => removeArtist.mutate(artist.id)}
-                          isLoading={removeArtist.isPending}
-                        >
-                          <TbTrashX
-                            size={21}
-                            className="cursor-pointer text-red-600 hover:text-red-700"
-                          />
-                        </ConfirmDialog>
+                        {isAdmin && (
+                          <ConfirmDialog
+                            title={t("Delete artist")}
+                            description={t(
+                              "This action cannot be undone. The artist can only be deleted if they have no artworks, CMS accounts, or invitations. Existing inquiries will be preserved.",
+                            )}
+                            onConfirm={() => removeArtist.mutate(artist.id)}
+                            isLoading={removeArtist.isPending}
+                          >
+                            <TbTrashX
+                              size={21}
+                              className="cursor-pointer text-red-600 hover:text-red-700"
+                            />
+                          </ConfirmDialog>
+                        )}
                       </div>
                     </div>
                   </Card>

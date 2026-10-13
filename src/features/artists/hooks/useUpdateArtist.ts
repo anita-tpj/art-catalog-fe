@@ -6,19 +6,29 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { artistsService } from "../services/artists";
-import { Artist, CreateArtistDTO } from "../types";
+import { Artist, UpdateArtistDTO } from "../types";
 
-export function useUpdateArtist() {
+interface UseUpdateArtistOptions {
+  redirectOnSuccess?: boolean;
+}
+
+export function useUpdateArtist({
+  redirectOnSuccess = true,
+}: UseUpdateArtistOptions = {}) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation();
 
-  return useMutation<Artist, Error, { id: number; data: CreateArtistDTO }>({
+  return useMutation<Artist, Error, { id: number; data: UpdateArtistDTO }>({
     mutationFn: ({ id, data }) => artistsService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["artists"] });
+
       toast.success(t("Artist updated"));
-      router.push("/admin/artists");
+
+      if (redirectOnSuccess) {
+        router.push("/admin/artists");
+      }
     },
     onError: (error) => {
       showErrorToast(error, t("Failed to update artist"));

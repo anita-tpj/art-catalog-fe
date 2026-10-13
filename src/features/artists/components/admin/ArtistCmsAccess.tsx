@@ -1,10 +1,12 @@
 "use client";
 
-import { Button, Card, Spinner } from "@/components/ui";
+import { Button, Card, ConfirmDialog, Spinner } from "@/components/ui";
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useArtistCmsAccess } from "../../hooks/useArtistCmsAccess";
+import { useArtistCmsAccountActions } from "../../hooks/useArtistCmsAccountActions";
 import { useCreateArtistCmsInvitation } from "../../hooks/useCreateArtistCmsInvitation";
 import { useRevokeArtistCmsInvitation } from "../../hooks/useRevokeArtistCmsInvitation";
 
@@ -26,7 +28,45 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
   const createInvitation = useCreateArtistCmsInvitation(artistId);
   const revokeInvitation = useRevokeArtistCmsInvitation(artistId);
 
+  const { deactivate, activate, remove } = useArtistCmsAccountActions(artistId);
+
   const [email, setEmail] = useState("");
+
+  const isAccountActionPending =
+    deactivate.isPending || activate.isPending || remove.isPending;
+
+  const handleDeactivate = (userId: string) => {
+    deactivate.mutate(userId, {
+      onSuccess: () => {
+        toast.success(t("CMS account deactivated successfully."));
+      },
+      onError: () => {
+        toast.error(t("Failed to deactivate CMS account."));
+      },
+    });
+  };
+
+  const handleActivate = (userId: string) => {
+    activate.mutate(userId, {
+      onSuccess: () => {
+        toast.success(t("CMS account activated successfully."));
+      },
+      onError: () => {
+        toast.error(t("Failed to activate CMS account."));
+      },
+    });
+  };
+
+  const handleDelete = (userId: string) => {
+    remove.mutate(userId, {
+      onSuccess: () => {
+        toast.success(t("CMS account deleted successfully."));
+      },
+      onError: () => {
+        toast.error(t("Failed to delete CMS account."));
+      },
+    });
+  };
 
   if (isAdminLoading || !isAdmin) {
     return null;
@@ -55,7 +95,7 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
             {access.accounts.map((account) => (
               <div
                 key={account.id}
-                className="flex items-center justify-between gap-4 rounded-md border border-zinc-200 p-3 dark:border-zinc-700"
+                className="flex flex-wrap items-center justify-between gap-4 rounded-md border border-zinc-200 p-3 dark:border-zinc-700"
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">
@@ -67,9 +107,66 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
                   </p>
                 </div>
 
-                <span className="shrink-0 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-                  {account.isActive ? t("Active") : t("Inactive")}
-                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
+                      account.isActive
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                    }`}
+                  >
+                    {account.isActive ? t("Active") : t("Inactive")}
+                  </span>
+
+                  {account.role !== "ADMIN" && (
+                    <>
+                      {account.isActive ? (
+                        <ConfirmDialog
+                          title={t("Deactivate CMS account")}
+                          description={t(
+                            "This user will lose CMS access immediately and will need to log in again if reactivated.",
+                          )}
+                          confirmLabel="Deactivate"
+                          onConfirm={() => handleDeactivate(account.id)}
+                        >
+                          <Button
+                            type="button"
+                            variant="outline"
+                            disabled={isAccountActionPending}
+                          >
+                            {t("Deactivate")}
+                          </Button>
+                        </ConfirmDialog>
+                      ) : (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          disabled={isAccountActionPending}
+                          onClick={() => handleActivate(account.id)}
+                        >
+                          {t("Activate")}
+                        </Button>
+                      )}
+
+                      <ConfirmDialog
+                        title={t("Delete CMS account")}
+                        description={t(
+                          "This permanently deletes the CMS account, but keeps the artist profile and artworks.",
+                        )}
+                        confirmLabel="Delete"
+                        onConfirm={() => handleDelete(account.id)}
+                      >
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          disabled={isAccountActionPending}
+                        >
+                          {t("Delete")}
+                        </Button>
+                      </ConfirmDialog>
+                    </>
+                  )}
+                </div>
               </div>
             ))}
           </div>
