@@ -29,3 +29,29 @@ export function adminLogin(email: string, password: string) {
 export function adminLogout() {
   return post<void, {}>("/api/auth/logout", {});
 }
+
+
+export type ForgotPasswordResponse = {
+  message: string;
+};
+
+export type ResetPasswordResponse = {
+  message: string;
+};
+
+export function adminForgotPassword(email: string) {
+  return post<ForgotPasswordResponse, { email: string }>(
+    "/api/auth/forgot-password",
+    { email },
+  );
+}
+
+export function adminResetPassword(token: string, password: string) {
+  return post<
+    ResetPasswordResponse,
+    { token: string; password: string }
+  >("/api/auth/reset-password", {
+    token,
+    password,
+  });
+}
