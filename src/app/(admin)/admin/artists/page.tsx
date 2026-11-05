@@ -185,7 +185,7 @@ export default function AdminArtistsPage() {
                               <ConfirmDialog
                                 title={t("Delete artist")}
                                 description={t(
-                                  "This action cannot be undone. The artist can only be deleted if they have no artworks, CMS accounts, or invitations. Existing inquiries will be preserved.",
+                                  "This action cannot be undone. The artist can only be deleted if they have no artworks, CMS accounts, or invitations. All inquiries associated with this artist will also be permanently deleted.",
                                 )}
                                 onConfirm={() => removeArtist.mutate(artist.id)}
                                 isLoading={removeArtist.isPending}
@@ -249,7 +249,7 @@ export default function AdminArtistsPage() {
                           <ConfirmDialog
                             title={t("Delete artist")}
                             description={t(
-                              "This action cannot be undone. The artist can only be deleted if they have no artworks, CMS accounts, or invitations. Existing inquiries will be preserved.",
+                              "This action cannot be undone. The artist can only be deleted if they have no artworks, CMS accounts, or invitations. All inquiries associated with this artist will also be permanently deleted.",
                             )}
                             onConfirm={() => removeArtist.mutate(artist.id)}
                             isLoading={removeArtist.isPending}
