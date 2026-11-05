@@ -6,6 +6,7 @@ import { AdminSidebar } from "@/components/shell/AdminSidebar";
 import { AdminTopBar } from "@/components/shell/AdminTopBar";
 import { isPublicAdminRoute } from "@/features/admin/config/adminRoutes";
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
+import { ArtistOnboarding } from "@/features/artists/components/admin/ArtistOnboarding";
 import { usePathname, useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect } from "react";
 import AdminGuard from "../../../features/admin/components/AdminGuard";
@@ -79,6 +80,10 @@ export default function AdminLayout({ children }: PropsWithChildren) {
               <div className="min-w-0">
                 {/* On mobile, avoid extra "card inside card" framing */}
                 <div className="space-y-4 md:rounded-2xl md:border md:border-zinc-200 md:bg-white md:p-5 md:shadow-sm md:dark:border-zinc-800 md:dark:bg-zinc-900/40">
+                  {user?.role === "EDITOR" && (
+                    <ArtistOnboarding userId={user.id} />
+                  )}
+
                   {children}
                 </div>
               </div>
