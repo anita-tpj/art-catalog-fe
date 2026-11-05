@@ -6,6 +6,7 @@ import {
   adminLogin,
 } from "@/features/admin/services/admin-auth.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -102,6 +103,15 @@ export default function LoginPageClient() {
             autoComplete="current-password"
           />
         </label>
+
+        <div className="text-right">
+          <Link
+            href="/admin/forgot-password"
+            className="text-sm text-zinc-600 hover:text-zinc-900 hover:underline"
+          >
+            {t("Forgot password?")}
+          </Link>
+        </div>
 
         {loginMutation.isError && (
           <p className="text-sm text-red-600">
