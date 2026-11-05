@@ -428,5 +428,17 @@
   "If an account exists with this email, you will receive a password reset link.": "If an account exists with this email, you will receive a password reset link.",
   "Unable to process your request. Please try again later.": "Unable to process your request. Please try again later.",
   "Unable to reset password. The link may have expired.": "Unable to reset password. The link may have expired.",
-  "Your password has been updated successfully.": "Your password has been updated successfully."
+  "Your password has been updated successfully.": "Your password has been updated successfully.",
+  "Help": "Help",
+  "Welcome to Creative Atlas!": "Welcome to Creative Atlas!",
+  "This is your space to showcase your creative work. Complete your profile and add the artworks you want to share.": "This is your space to showcase your creative work. Complete your profile and add the artworks you want to share.",
+  "Your profile": "Your profile",
+  "Add your photo, biography and profile details.": "Add your photo, biography and profile details.",
+  "Your artworks": "Your artworks",
+  "Add and manage the artworks you want to showcase.": "Add and manage the artworks you want to showcase.",
+  "Publishing": "Publishing",
+  "Saving your changes does not publish them automatically. An administrator controls what becomes publicly visible.": "Saving your changes does not publish them automatically. An administrator controls what becomes publicly visible.",
+  "Got it, let's start!": "Got it, let's start!",
+  "My Profile": "My Profile",
+  "Inbox": "Inbox"
 }

@@ -428,5 +428,17 @@
   "If an account exists with this email, you will receive a password reset link.": "Ako nalog sa ovom email adresom postoji, dobićete link za resetovanje lozinke.",
   "Unable to process your request. Please try again later.": "Zahtev nije moguće obraditi. Pokušajte ponovo kasnije.",
   "Unable to reset password. The link may have expired.": "Lozinku nije moguće resetovati. Link je možda istekao.",
-  "Your password has been updated successfully.": "Lozinka je uspešno promenjena."
+  "Your password has been updated successfully.": "Lozinka je uspešno promenjena.",
+  "Help": "Pomoć",
+  "Welcome to Creative Atlas!": "Dobro došli u Creative Atlas!",
+  "This is your space to showcase your creative work. Complete your profile and add the artworks you want to share.": "Ovo je vaš prostor za predstavljanje umetničkog rada. Dopunite svoj profil i dodajte umetnička dela koja želite da predstavite.",
+  "Your profile": "Vaš profil",
+  "Add your photo, biography and profile details.": "Dodajte fotografiju, biografiju i osnovne podatke o sebi.",
+  "Your artworks": "Vaša umetnička dela",
+  "Add and manage the artworks you want to showcase.": "Dodajte i uređujte umetnička dela koja želite da predstavite.",
+  "Publishing": "Objavljivanje",
+  "Saving your changes does not publish them automatically. An administrator controls what becomes publicly visible.": "Čuvanje izmena ne znači automatsko objavljivanje. Administrator odlučuje kada će vaš profil i umetnička dela biti javno dostupni.",
+  "Got it, let's start!": "Razumem, krenimo!",
+  "My Profile": "Moj profil",
+  "Inbox": "Primljene poruke"
 }

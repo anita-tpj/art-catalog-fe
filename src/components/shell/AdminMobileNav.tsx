@@ -4,19 +4,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
 
+import { getAdminNav } from "@/features/admin/config/adminNav";
 import { useAdminLogout } from "@/features/admin/hooks/useAdminLogout";
+import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 import { useInquiryStats } from "@/features/inquiries/hooks/useInquiryStats";
 import { cn, getSectionRoot } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
-import { getAdminNav } from "@/features/admin/config/adminNav";
-import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
 
 export function AdminMobileNav() {
   const pathname = usePathname();
   const { data: adminData } = useAdminMe();
   const { data } = useInquiryStats();
   const logout = useAdminLogout();
-
 
   const adminNav = getAdminNav(adminData?.user);
 
@@ -26,6 +25,12 @@ export function AdminMobileNav() {
   const [canScrollLeft, setCanScrollLeft] = React.useState(false);
   const [canScrollRight, setCanScrollRight] = React.useState(false);
   const { t } = useTranslation();
+
+  const isEditor = adminData?.user?.role === "EDITOR";
+
+  const openOnboarding = () => {
+    window.dispatchEvent(new Event("creative-atlas:open-onboarding"));
+  };
 
   const updateFades = React.useCallback(() => {
     const el = scrollerRef.current;
@@ -124,6 +129,19 @@ export function AdminMobileNav() {
                   </Link>
                 );
               })}
+
+              {isEditor && (
+                <button
+                  type="button"
+                  onClick={openOnboarding}
+                  className={cn(
+                    "shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium border",
+                    "bg-zinc-100 text-zinc-700 border-zinc-200 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-700",
+                  )}
+                >
+                  {t("Help")}
+                </button>
+              )}
 
               <button
                 type="button"
