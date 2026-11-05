@@ -440,5 +440,6 @@
   "Saving your changes does not publish them automatically. An administrator controls what becomes publicly visible.": "Saving your changes does not publish them automatically. An administrator controls what becomes publicly visible.",
   "Got it, let's start!": "Got it, let's start!",
   "My Profile": "My Profile",
-  "Inbox": "Inbox"
+  "Inbox": "Inbox",
+  "This action cannot be undone. The artist can only be deleted if they have no artworks, CMS accounts, or invitations. All inquiries associated with this artist will also be permanently deleted.": "This action cannot be undone. The artist can only be deleted if they have no artworks, CMS accounts, or invitations. All inquiries associated with this artist will also be permanently deleted."
 }

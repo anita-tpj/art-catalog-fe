@@ -440,5 +440,6 @@
   "Saving your changes does not publish them automatically. An administrator controls what becomes publicly visible.": "Čuvanje izmena ne znači automatsko objavljivanje. Administrator odlučuje kada će vaš profil i umetnička dela biti javno dostupni.",
   "Got it, let's start!": "Razumem, krenimo!",
   "My Profile": "Moj profil",
-  "Inbox": "Primljene poruke"
+  "Inbox": "Primljene poruke",
+  "This action cannot be undone. The artist can only be deleted if they have no artworks, CMS accounts, or invitations. All inquiries associated with this artist will also be permanently deleted.": "Ova radnja se ne može poništiti. Umetnik može biti obrisan samo ako nema umetničkih dela, CMS naloga ili pozivnica. Svi upiti povezani sa ovim umetnikom takođe će biti trajno obrisani."
 }
