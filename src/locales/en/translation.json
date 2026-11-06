@@ -465,6 +465,9 @@
   "From: {{name}} <{{email}}>": "From: {{name}} <{{email}}>",
   "Failed to load CMS access.": "Failed to load CMS access.",
   "Session expired. Please sign in again.": "Session expired. Please sign in again.","Failed to upload image": "Failed to upload image.",
+  "Publication settings": "Publication settings",
+  "Manage artist publication and visibility.": "Manage artist publication and visibility.",
+  "Save settings": "Save settings",
   "errors": {
     "ARTIST_NOT_FOUND": "Artist not found.",
     "ARTIST_HAS_ARTWORKS": "Cannot delete this artist because they have artworks. Remove the artworks first.",
