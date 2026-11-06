@@ -1,7 +1,7 @@
-
 "use client";
 
 import { adminForgotPassword } from "@/features/admin/services/admin-auth.api";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
@@ -24,9 +24,7 @@ export default function ForgotPasswordPageClient() {
 
   return (
     <div className="mx-auto max-w-sm rounded-xl border bg-white p-6 shadow-sm">
-      <h1 className="text-xl font-semibold">
-        {t("Forgot password?")}
-      </h1>
+      <h1 className="text-xl font-semibold">{t("Forgot password?")}</h1>
 
       {forgotPasswordMutation.isSuccess ? (
         <div className="mt-4 space-y-4">
@@ -52,9 +50,7 @@ export default function ForgotPasswordPageClient() {
           </p>
 
           <label className="block">
-            <span className="text-sm text-zinc-600">
-              {t("Email")}
-            </span>
+            <span className="text-sm text-zinc-600">{t("Email")}</span>
 
             <input
               type="email"
@@ -68,11 +64,13 @@ export default function ForgotPasswordPageClient() {
           </label>
 
           {forgotPasswordMutation.isError && (
-            <p className="text-sm text-red-600">
-              {t("Unable to process your request. Please try again later.")}
+            <p className="text-sm text-red-600" role="alert">
+              {getErrorMessage(
+                forgotPasswordMutation.error,
+                t("Unable to process your request. Please try again later."),
+              )}
             </p>
           )}
-
           <button
             type="submit"
             disabled={forgotPasswordMutation.isPending}

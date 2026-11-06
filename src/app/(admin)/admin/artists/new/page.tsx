@@ -35,9 +35,7 @@ const NewArtistPage = () => {
   } = form;
 
   const isBusy = isSubmitting || createArtist.isPending;
-  const apiError = createArtist.error
-    ? t((createArtist.error as Error).message)
-    : undefined;
+  const apiError = createArtist.error;
 
   return (
     <ArtistFormLayout

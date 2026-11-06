@@ -5,6 +5,7 @@ import {
   AdminUserDto,
   adminLogin,
 } from "@/features/admin/services/admin-auth.api";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -114,8 +115,8 @@ export default function LoginPageClient() {
         </div>
 
         {loginMutation.isError && (
-          <p className="text-sm text-red-600">
-            {(loginMutation.error as Error)?.message ?? t("Login failed")}
+          <p className="text-sm text-red-600" role="alert">
+            {getErrorMessage(loginMutation.error, t("Login failed"))}
           </p>
         )}
 

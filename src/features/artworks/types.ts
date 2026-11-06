@@ -210,18 +210,20 @@ export const CreateArtworkSchema = z.object({
     })
     .int()
     .min(DEFAULT_MIN_YEAR, {
-      message: `Year must be greater than ${DEFAULT_MIN_YEAR}`,
+      message: "Year is too early",
     })
     .max(CURRENT_YEAR, {
       message: "Year cannot be in the future",
     }),
 
   imageUrl: z
-    .string()
+    .string({ error: "Artwork image is required" })
     .min(1, "Artwork image is required")
     .url("Must be a valid URL"),
 
-  imagePublicId: z.string().min(1, "Artwork image is required"),
+  imagePublicId: z
+    .string({ error: "Artwork image is required" })
+    .min(1, "Artwork image is required"),
 
   description: z
     .string()
@@ -229,7 +231,9 @@ export const CreateArtworkSchema = z.object({
     .min(1, "Description is required")
     .max(2000, "Description is too long"),
 
-  origin: z.nativeEnum(ArtworkOrigin),
+  origin: z.nativeEnum(ArtworkOrigin, {
+    error: "Artwork origin is required",
+  }),
 
   technique: z.nativeEnum(ArtworkTechnique).optional(),
   medium: z.string().trim().max(200, "Medium is too long").optional(),

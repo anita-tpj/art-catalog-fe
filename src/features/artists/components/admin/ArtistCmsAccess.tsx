@@ -2,6 +2,8 @@
 
 import { Button, Card, ConfirmDialog, Spinner } from "@/components/ui";
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
+import { getErrorMessage } from "@/lib/getErrorMessage";
+import { showErrorToast } from "@/lib/toast";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -20,10 +22,12 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
 
   const isAdmin = adminData?.user.role === "ADMIN";
 
-  const { data: access, isLoading: isAccessLoading } = useArtistCmsAccess(
-    artistId,
-    isAdmin,
-  );
+  const {
+    data: access,
+    isLoading: isAccessLoading,
+    isError: isAccessError,
+    error: accessError,
+  } = useArtistCmsAccess(artistId, isAdmin);
 
   const createInvitation = useCreateArtistCmsInvitation(artistId);
   const revokeInvitation = useRevokeArtistCmsInvitation(artistId);
@@ -40,8 +44,8 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
       onSuccess: () => {
         toast.success(t("CMS account deactivated successfully."));
       },
-      onError: () => {
-        toast.error(t("Failed to deactivate CMS account."));
+      onError: (error) => {
+        showErrorToast(error, t("Failed to deactivate CMS account."));
       },
     });
   };
@@ -51,8 +55,8 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
       onSuccess: () => {
         toast.success(t("CMS account activated successfully."));
       },
-      onError: () => {
-        toast.error(t("Failed to activate CMS account."));
+      onError: (error) => {
+        showErrorToast(error, t("Failed to activate CMS account."));
       },
     });
   };
@@ -62,8 +66,8 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
       onSuccess: () => {
         toast.success(t("CMS account deleted successfully."));
       },
-      onError: () => {
-        toast.error(t("Failed to delete CMS account."));
+      onError: (error) => {
+        showErrorToast(error, t("Failed to delete CMS account."));
       },
     });
   };
@@ -90,7 +94,13 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
           </div>
         )}
 
-        {!isAccessLoading && access?.status === "ACTIVE" && (
+        {isAccessError && (
+          <p className="text-sm text-red-600" role="alert">
+            {getErrorMessage(accessError, t("Failed to load CMS access."))}
+          </p>
+        )}
+
+        {!isAccessLoading && !isAccessError && access?.status === "ACTIVE" && (
           <div className="space-y-3">
             {access.accounts.map((account) => (
               <div
@@ -173,6 +183,7 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
         )}
 
         {!isAccessLoading &&
+          !isAccessError &&
           access?.status === "PENDING" &&
           access.invitation && (
             <div className="rounded-md border border-amber-200 bg-amber-50 p-3">
@@ -205,7 +216,7 @@ export function ArtistCmsAccess({ artistId }: ArtistCmsAccessProps) {
             </div>
           )}
 
-        {!isAccessLoading && access?.status === "NONE" && (
+        {!isAccessLoading && !isAccessError && access?.status === "NONE" && (
           <form
             className="space-y-3"
             onSubmit={(event) => {

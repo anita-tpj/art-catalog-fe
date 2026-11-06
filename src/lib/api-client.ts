@@ -1,6 +1,7 @@
 // lib/api-client.ts
 
 import { isPublicAdminRoute } from "@/features/admin/config/adminRoutes";
+import i18n from "@/i18n";
 import { toast } from "react-hot-toast";
 import { API_BASE_URL } from "./config";
 
@@ -17,13 +18,14 @@ type FetchOpts = {
  * Error type carrying HTTP status.
  * Enables global auth handling (401 redirect).
  */
-class ApiError extends Error {
-  status: number;
-
-  constructor(message: string, status: number) {
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number,
+    public readonly code?: string,
+  ) {
     super(message);
     this.name = "ApiError";
-    this.status = status;
   }
 }
 
@@ -71,7 +73,7 @@ function maybeRedirectOn401(error: unknown) {
   isRedirectingForAuth = true;
 
   // Notify user
-  toast.error("Session expired. Please sign in again.");
+  toast.error(i18n.t("Session expired. Please sign in again."));
 
   // Attempt backend logout (non-blocking)
   void bestEffortLogout();
@@ -86,22 +88,29 @@ function maybeRedirectOn401(error: unknown) {
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
     let message = `Request failed with status ${res.status}`;
+    let code: string | undefined;
 
     try {
-      const errorData = await res.json();
-      if (
-        errorData &&
-        typeof errorData === "object" &&
-        "message" in errorData
-      ) {
-        message = String((errorData as any).message);
-      }
-    } catch {}
+      const errorData: unknown = await res.json();
 
-    throw new ApiError(message, res.status);
+      if (errorData && typeof errorData === "object") {
+        if ("message" in errorData && typeof errorData.message === "string") {
+          message = errorData.message;
+        }
+
+        if ("code" in errorData && typeof errorData.code === "string") {
+          code = errorData.code;
+        }
+      }
+    } catch {
+      // Response may not contain valid JSON.
+    }
+
+    throw new ApiError(message, res.status, code);
   }
 
   if (res.status === 204) return undefined as T;
+
   return (await res.json()) as T;
 }
 
@@ -206,10 +215,7 @@ export async function patch<TResponse>(
   opts?: FetchOpts,
 ): Promise<TResponse> {
   try {
-    const res = await fetch(
-      `${API_BASE_URL}${path}`,
-      buildInit("PATCH", opts),
-    );
+    const res = await fetch(`${API_BASE_URL}${path}`, buildInit("PATCH", opts));
 
     return await handleResponse<TResponse>(res);
   } catch (error) {

@@ -7,14 +7,14 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { artworksService } from "../services/artworks";
-import { Artwork, CreateArtworkDTO } from "../types";
+import { Artwork, UpdateArtworkDTO } from "../types";
 
 export function useUpdateArtwork() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { t } = useTranslation();
 
-  return useMutation<Artwork, Error, { id: number; data: CreateArtworkDTO }>({
+  return useMutation<Artwork, Error, { id: number; data: UpdateArtworkDTO }>({
     mutationFn: ({ id, data }) => artworksService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["artworks"] });

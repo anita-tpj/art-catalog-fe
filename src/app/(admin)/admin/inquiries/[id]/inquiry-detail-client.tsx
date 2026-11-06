@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui";
 import { useUpdateInquiryStatus } from "@/features/inquiries/hooks/useUpdateInquiryStatus";
 import { Inquiry, InquiryStatus } from "@/features/inquiries/types";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -20,29 +21,34 @@ type Props = {
   initialInquiry: Inquiry;
 };
 
-function formatRegarding(i: Inquiry) {
-  if (i.artwork) return `Artwork: ${i.artwork.title}`;
-  if (i.artist) return `Artist: ${i.artist.name}`;
-  if (i.artworkId) return `Artwork ID: ${i.artworkId}`;
-  if (i.artistId) return `Artist ID: ${i.artistId}`;
-  return "—";
-}
-
-function buildMailto(inquiry: Inquiry, regarding: string, created: string) {
+function buildMailto(
+  inquiry: Inquiry,
+  regarding: string,
+  created: string,
+  t: (key: string, options?: Record<string, string>) => string,
+) {
   const subject = encodeURIComponent(
-    `Re: ArtCatalog inquiry${
-      regarding && regarding !== "—" ? ` — ${regarding}` : ""
-    }`,
+    t("Re: ArtCatalog inquiry{{regarding}}", {
+      regarding: regarding && regarding !== "—" ? ` — ${regarding}` : "",
+    }),
   );
 
   const body = encodeURIComponent(
-    `Hi ${inquiry.name},\n\n` +
-      `Thanks for reaching out!\n\n` +
-      `---\n` +
-      `Original inquiry (${created})\n` +
-      `Regarding: ${regarding}\n` +
-      `From: ${inquiry.name} <${inquiry.email}>\n\n` +
-      `${inquiry.message}\n`,
+    t("Hi {{name}},", { name: inquiry.name }) +
+      "\n\n" +
+      t("Thanks for reaching out!") +
+      "\n\n---\n" +
+      t("Original inquiry ({{created}})", { created }) +
+      "\n" +
+      t("Regarding: {{regarding}}", { regarding }) +
+      "\n" +
+      t("From: {{name}} <{{email}}>", {
+        name: inquiry.name,
+        email: inquiry.email,
+      }) +
+      "\n\n" +
+      inquiry.message +
+      "\n",
   );
 
   return `mailto:${inquiry.email}?subject=${subject}&body=${body}`;
@@ -57,7 +63,33 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
 
   const { mutateAsync: updateStatus, isPending } = useUpdateInquiryStatus();
 
-  const regarding = useMemo(() => formatRegarding(inquiry), [inquiry]);
+  const regarding = useMemo(() => {
+    if (inquiry.artwork) {
+      return t("Artwork: {{title}}", {
+        title: inquiry.artwork.title,
+      });
+    }
+
+    if (inquiry.artist) {
+      return t("Artist: {{name}}", {
+        name: inquiry.artist.name,
+      });
+    }
+
+    if (inquiry.artworkId) {
+      return t("Artwork ID {{id}}", {
+        id: inquiry.artworkId,
+      });
+    }
+
+    if (inquiry.artistId) {
+      return t("Artist ID {{id}}", {
+        id: inquiry.artistId,
+      });
+    }
+
+    return "—";
+  }, [inquiry, t]);
 
   const created = useMemo(() => {
     try {
@@ -79,21 +111,28 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
 
   // Auto mark READ only once when opening a NEW inquiry
   useEffect(() => {
-    if (didAutoMarkRead.current || initialInquiry.status !== "NEW") return;
+    if (didAutoMarkRead.current || initialInquiry.status !== "NEW") {
+      return;
+    }
 
     didAutoMarkRead.current = true;
 
-    updateStatus({ id: initialInquiry.id, status: "READ" })
-      .then(() =>
+    updateStatus({
+      id: initialInquiry.id,
+      status: "READ",
+    })
+      .then(() => {
         setInquiry((prev) => ({
           ...prev,
           status: "READ",
-        })),
-      )
-      .catch(() => {
+        }));
+      })
+      .catch((error) => {
         didAutoMarkRead.current = false;
+
+        toast.error(getErrorMessage(error, t("Failed to update inquiry.")));
       });
-  }, [initialInquiry.id, initialInquiry.status, updateStatus]);
+  }, [initialInquiry.id, initialInquiry.status, updateStatus, t]);
 
   return (
     <div>
@@ -109,6 +148,7 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
               </span>
 
               <div className="text-sm font-medium">{inquiry.name}</div>
+
               <div className="text-xs text-muted-foreground">
                 {inquiry.email}
               </div>
@@ -117,7 +157,7 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
               <div className="flex gap-2 justify-end ml-auto">
                 {/* Reply */}
                 <a
-                  href={buildMailto(inquiry, regarding, created)}
+                  href={buildMailto(inquiry, regarding, created, t)}
                   className="inline-flex"
                   title={t("Reply")}
                 >
@@ -149,11 +189,20 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                   variant="link"
                   size="xs"
                   title={t("Mark unread")}
+                  disabled={isPending || inquiry.status === "NEW"}
                   onClick={async () => {
-                    await setStatus("NEW");
-                    router.push("/admin/inquiries");
-                    router.refresh();
-                    toast.success(t("Marked as unread"));
+                    try {
+                      await setStatus("NEW");
+
+                      router.push("/admin/inquiries");
+                      router.refresh();
+
+                      toast.success(t("Marked as unread"));
+                    } catch (error) {
+                      toast.error(
+                        getErrorMessage(error, t("Failed to update inquiry.")),
+                      );
+                    }
                   }}
                 >
                   <MdOutlineMarkEmailUnread size="20" />
@@ -167,10 +216,18 @@ export function InquiryDetailClient({ initialInquiry }: Props) {
                   title={t("Archive")}
                   disabled={isPending || inquiry.status === "ARCHIVED"}
                   onClick={async () => {
-                    await setStatus("ARCHIVED");
-                    router.push("/admin/inquiries");
-                    router.refresh();
-                    toast.success(t("Marked as archived"));
+                    try {
+                      await setStatus("ARCHIVED");
+
+                      router.push("/admin/inquiries");
+                      router.refresh();
+
+                      toast.success(t("Marked as archived"));
+                    } catch (error) {
+                      toast.error(
+                        getErrorMessage(error, t("Failed to update inquiry.")),
+                      );
+                    }
                   }}
                 >
                   <MdOutlineArchive size="20" />

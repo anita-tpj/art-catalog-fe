@@ -14,6 +14,7 @@ import { artistsService } from "@/features/artists";
 import { artworksService } from "@/features/artworks";
 import { contactService } from "@/features/contact/services/contact";
 import { inquiriesService } from "@/features/inquiries";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 
 type Props = {
   artworkId?: number;
@@ -133,12 +134,9 @@ export function ContactPageClient({ artworkId, artistId }: Props) {
 
       setIsSuccess(true);
     } catch (err) {
-      const msg =
-        err instanceof Error
-          ? err.message
-          : t("Something went wrong. Please try again.");
-
-      setSubmitError(msg);
+      setSubmitError(
+        getErrorMessage(err, t("Something went wrong. Please try again.")),
+      );
     }
   });
 

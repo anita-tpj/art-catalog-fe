@@ -59,9 +59,7 @@ export default function NewArtworkPage() {
   } = form;
 
   const isBusy = isSubmitting || createArtwork.isPending;
-  const apiError = createArtwork.error
-    ? (createArtwork.error as Error).message
-    : undefined;
+  const apiError = createArtwork.error;
 
   return (
     <ArtworkFormLayout
