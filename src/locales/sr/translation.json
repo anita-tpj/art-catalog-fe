@@ -465,7 +465,10 @@
   "Failed to load CMS access.": "Nije moguće učitati CMS pristup.",
   "Session expired. Please sign in again.": "Sesija je istekla. Prijavite se ponovo.",
   "Failed to upload image": "Otpremanje slike nije uspelo.",
-"errors": {
+  "Publication settings": "Podešavanja objavljivanja",
+  "Manage artist publication and visibility.": "Upravljajte objavljivanjem i vidljivošću profila umetnika.",
+  "Save settings": "Sačuvaj podešavanja",
+  "errors": {
     "ARTIST_NOT_FOUND": "Umetnik nije pronađen.",
     "ARTIST_HAS_ARTWORKS": "Umetnik ne može biti obrisan jer ima radove. Prvo obrišite radove.",
     "ARTIST_HAS_CMS_ACCOUNTS": "Umetnik ne može biti obrisan jer ima CMS naloge. Prvo uklonite CMS naloge.",
