@@ -190,15 +190,17 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
 
   return (
     <>
-      <div className="mb-6">
-        <Link
-          href="/artworks"
-          className="text-sm underline underline-offset-4 flex items-center gap-0.5"
-        >
-          <MdArrowBack />
-          {t("Back to artworks")}
-        </Link>
-      </div>
+      {artwork.artist?.visibility === ItemVisibility.PUBLIC && (
+        <div className="mb-6">
+          <Link
+            href="/artworks"
+            className="text-sm underline underline-offset-4 flex items-center gap-0.5"
+          >
+            <MdArrowBack />
+            {t("Back to artworks")}
+          </Link>
+        </div>
+      )}
 
       <div className="grid gap-8 lg:grid-cols-12">
         {/* LEFT */}
