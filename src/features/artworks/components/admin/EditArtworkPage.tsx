@@ -67,9 +67,7 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
   }
 
   const isBusy = isSubmitting || updateArtwork.isPending;
-  const apiError = updateArtwork.error
-    ? (updateArtwork.error as Error).message
-    : undefined;
+  const apiError = updateArtwork.error;
 
   return (
     <ArtworkFormLayout

@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -16,6 +17,7 @@ import {
 } from "@/features/inquiries";
 import { useDeleteInquiry } from "@/features/inquiries/hooks/useInquiries";
 import { useUpdateInquiryStatus } from "@/features/inquiries/hooks/useUpdateInquiryStatus";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -64,18 +66,21 @@ export function InquiriesPageClient({
   const { data: adminData } = useAdminMe();
   const isAdmin = adminData?.user.role === "ADMIN";
 
-  const { data, isLoading, isError, error, refetch } = usePaginatedInquiries({
-    page,
-    pageSize,
-    search: debouncedSearch || undefined,
-    status: apiStatus,
-  });
+  const { data, isLoading, isError, error, refetch } =
+    usePaginatedInquiries({
+      page,
+      pageSize,
+      search: debouncedSearch || undefined,
+      status: apiStatus,
+    });
 
   const { data: stats } = useInquiryStats();
 
   const items = data?.items ?? [];
   const total = data?.meta.total ?? 0;
-  const totalPages = data ? Math.ceil(total / data.meta.pageSize) : 0;
+  const totalPages = data
+    ? Math.ceil(total / data.meta.pageSize)
+    : 0;
 
   const { mutateAsync: updateStatus, isPending: isUpdating } =
     useUpdateInquiryStatus();
@@ -93,8 +98,10 @@ export function InquiriesPageClient({
           onPageChange(page - 1);
         }
       },
-      onError: () => {
-        toast.error(t("Failed to delete inquiry."));
+      onError: (error) => {
+        toast.error(
+          getErrorMessage(error, t("Failed to delete inquiry.")),
+        );
       },
     });
   };
@@ -113,7 +120,9 @@ export function InquiriesPageClient({
       <div className="mb-2 space-y-2">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-semibold">{t("Inquiries")}</h1>
+            <h1 className="text-3xl font-semibold">
+              {t("Inquiries")}
+            </h1>
             <p className="text-sm text-muted-foreground">
               {t("Inbox for incoming inquiries.")}
             </p>
@@ -137,9 +146,7 @@ export function InquiriesPageClient({
       ) : isError ? (
         <ErrorState
           title={t("Couldn't load inquiries")}
-          message={
-            error instanceof Error ? t(error.message) : t("Please try again.")
-          }
+          message={getErrorMessage(error, t("Please try again."))}
           onRetry={() => refetch()}
         />
       ) : items.length === 0 ? (
@@ -150,16 +157,26 @@ export function InquiriesPageClient({
         <div className="mt-6 space-y-3">
           {items.map((i) => {
             const regarding = i.artwork
-              ? `Artwork: ${i.artwork.title}`
+              ? t("Artwork: {{title}}", {
+                  title: i.artwork.title,
+                })
               : i.artist
-                ? `Artist: ${i.artist.name}`
+                ? t("Artist: {{name}}", {
+                    name: i.artist.name,
+                  })
                 : i.artworkId
-                  ? `Artwork ID: ${i.artworkId}`
+                  ? t("Artwork ID {{id}}", {
+                      id: i.artworkId,
+                    })
                   : i.artistId
-                    ? `Artist ID: ${i.artistId}`
+                    ? t("Artist ID {{id}}", {
+                        id: i.artistId,
+                      })
                     : "—";
 
-            const created = new Date(i.createdAt).toLocaleString();
+            const created = new Date(
+              i.createdAt,
+            ).toLocaleString();
 
             return (
               <div
@@ -183,7 +200,9 @@ export function InquiriesPageClient({
                         {t(i.status)}
                       </span>
 
-                      <span className="text-sm font-medium">{i.name}</span>
+                      <span className="text-sm font-medium">
+                        {i.name}
+                      </span>
 
                       <span className="text-xs text-muted-foreground">
                         {i.email}
@@ -205,9 +224,22 @@ export function InquiriesPageClient({
                         variant="link"
                         disabled={isUpdating}
                         title={t("Mark as read")}
-                        onClick={() => {
-                          updateStatus({ id: i.id, status: "READ" });
-                          toast.success(t("Marked as read"));
+                        onClick={async () => {
+                          try {
+                            await updateStatus({
+                              id: i.id,
+                              status: "READ",
+                            });
+
+                            toast.success(t("Marked as read"));
+                          } catch (error) {
+                            toast.error(
+                              getErrorMessage(
+                                error,
+                                t("Failed to update inquiry."),
+                              ),
+                            );
+                          }
                         }}
                       >
                         <PiEnvelopeSimpleOpen size="20" />
@@ -219,9 +251,22 @@ export function InquiriesPageClient({
                         variant="link"
                         disabled={isUpdating}
                         title={t("Mark as archived")}
-                        onClick={() => {
-                          updateStatus({ id: i.id, status: "ARCHIVED" });
-                          toast.success(t("Marked as archived"));
+                        onClick={async () => {
+                          try {
+                            await updateStatus({
+                              id: i.id,
+                              status: "ARCHIVED",
+                            });
+
+                            toast.success(t("Marked as archived"));
+                          } catch (error) {
+                            toast.error(
+                              getErrorMessage(
+                                error,
+                                t("Failed to update inquiry."),
+                              ),
+                            );
+                          }
                         }}
                       >
                         <MdOutlineArchive size="20" />
@@ -234,7 +279,9 @@ export function InquiriesPageClient({
                         description={t(
                           "This action cannot be undone. This will permanently delete the inquiry.",
                         )}
-                        onConfirm={() => handleDeleteInquiry(i.id)}
+                        onConfirm={() =>
+                          handleDeleteInquiry(i.id)
+                        }
                         isLoading={deleteInquiry.isPending}
                       >
                         <TbTrashX
@@ -244,7 +291,10 @@ export function InquiriesPageClient({
                       </ConfirmDialog>
                     )}
 
-                    <Link title={t("Open")} href={`/admin/inquiries/${i.id}`}>
+                    <Link
+                      title={t("Open")}
+                      href={`/admin/inquiries/${i.id}`}
+                    >
                       <MdArrowForward size="20" />
                     </Link>
                   </div>

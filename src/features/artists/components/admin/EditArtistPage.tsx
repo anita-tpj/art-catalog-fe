@@ -63,30 +63,26 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
   }
 
   const isBusy = isSubmitting || updateArtist.isPending;
-  const apiError = updateArtist.error
-    ? (updateArtist.error as Error).message
-    : undefined;
+  const apiError = updateArtist.error;
 
-  
-return (
-  <div className="space-y-6">
-    <ArtistFormLayout
-      form={form}
-      onSubmit={(data) => updateArtist.mutate({ id, data })}
-      title={t("Edit artist")}
-      subtitle={t("Update artist details.")}
-      submitLabel={isBusy ? t("Updating...") : t("Update artist")}
-      isBusy={isBusy}
-      apiError={apiError}
-      slugLocked={artist.slugLocked}
-    />
+  return (
+    <div className="space-y-6">
+      <ArtistFormLayout
+        form={form}
+        onSubmit={(data) => updateArtist.mutate({ id, data })}
+        title={t("Edit artist")}
+        subtitle={t("Update artist details.")}
+        submitLabel={isBusy ? t("Updating...") : t("Update artist")}
+        isBusy={isBusy}
+        apiError={apiError}
+        slugLocked={artist.slugLocked}
+      />
 
-    <ArtistPublicationSettings artist={artist} />
+      <ArtistPublicationSettings artist={artist} />
 
-    <ArtistCmsAccess artistId={id} />
-  </div>
-);
-
+      <ArtistCmsAccess artistId={id} />
+    </div>
+  );
 };
 
 export default EditArtistPage;

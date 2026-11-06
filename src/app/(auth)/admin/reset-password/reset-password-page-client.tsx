@@ -1,6 +1,7 @@
 "use client";
 
 import { adminResetPassword } from "@/features/admin/services/admin-auth.api";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -115,8 +116,11 @@ export default function ResetPasswordPageClient() {
 
           {resetMutation.isError && (
             <div className="space-y-2">
-              <p className="text-sm text-red-600">
-                {t("Unable to reset password. The link may have expired.")}
+              <p className="text-sm text-red-600" role="alert">
+                {getErrorMessage(
+                  resetMutation.error,
+                  t("Unable to reset password. The link may have expired."),
+                )}
               </p>
 
               <Link

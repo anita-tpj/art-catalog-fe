@@ -1,5 +1,7 @@
 "use client";
 
+import { ApiError } from "@/lib/api-client";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import { useRef, useState } from "react";
 
 export type UploadedImage = { url: string; publicId: string };
@@ -9,7 +11,7 @@ interface UseArtworkImageUploadOptions {
 }
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 export function useArtworkImageUpload({
   onUploaded,
@@ -17,15 +19,25 @@ export function useArtworkImageUpload({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Tracks only temporary uploads made during the current form session.
+  // Tracks temporary uploads made during the current form session.
   const lastUploadedPublicIdRef = useRef<string | null>(null);
 
   const deleteTemporaryUpload = async (publicId: string) => {
     try {
-      await fetch(
+      const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/uploads/artwork-image?publicId=${encodeURIComponent(publicId)}`,
-        { method: "DELETE" },
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
       );
+
+      if (!res.ok) {
+        console.error(
+          "Failed to delete temporary Cloudinary image:",
+          res.status,
+        );
+      }
     } catch (err) {
       console.error("Failed to delete temporary Cloudinary image:", err);
     }
@@ -34,21 +46,17 @@ export function useArtworkImageUpload({
   const uploadFile = async (file: File): Promise<UploadedImage> => {
     setError(null);
 
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      const message = "Please upload a JPG, PNG or WebP image.";
-      setError(message);
-      throw new Error(message);
-    }
-
-    if (file.size > MAX_FILE_SIZE) {
-      const message = "Image must be smaller than 5 MB.";
-      setError(message);
-      throw new Error(message);
-    }
-
-    setUploading(true);
-
     try {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        throw new ApiError("Invalid file type", 400, "INVALID_FILE_TYPE");
+      }
+
+      if (file.size > MAX_FILE_SIZE) {
+        throw new ApiError("File too large", 413, "FILE_TOO_LARGE");
+      }
+
+      setUploading(true);
+
       const formData = new FormData();
       formData.append("file", file);
 
@@ -57,11 +65,18 @@ export function useArtworkImageUpload({
         {
           method: "POST",
           body: formData,
+          credentials: "include",
         },
       );
 
       if (!res.ok) {
-        throw new Error("Failed to upload image");
+        const response = await res.json().catch(() => null);
+
+        throw new ApiError(
+          response?.message ?? "Failed to upload image",
+          res.status,
+          response?.code,
+        );
       }
 
       const data = await res.json();
@@ -83,11 +98,10 @@ export function useArtworkImageUpload({
 
       return payload;
     } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : "Failed to upload image";
+      console.error("Artwork image upload failed:", err);
 
-      console.error(err);
-      setError(message);
+      setError(getErrorMessage(err, "Failed to upload image"));
+
       throw err;
     } finally {
       setUploading(false);

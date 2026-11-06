@@ -17,13 +17,14 @@ type FetchOpts = {
  * Error type carrying HTTP status.
  * Enables global auth handling (401 redirect).
  */
-class ApiError extends Error {
-  status: number;
-
-  constructor(message: string, status: number) {
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number,
+    public readonly code?: string,
+  ) {
     super(message);
     this.name = "ApiError";
-    this.status = status;
   }
 }
 
@@ -51,14 +52,14 @@ let isRedirectingForAuth = false;
  * Handle expired/invalid session globally.
  * Shows toast, logs out, and redirects to login.
  */
-function maybeRedirectOn401(error: unknown) {
+async function maybeRedirectOn401(error: unknown) {
   if (typeof window === "undefined") return;
 
   const status =
     error instanceof ApiError
       ? error.status
-      : typeof (error as any)?.status === "number"
-        ? (error as any).status
+      : typeof (error as { status?: unknown })?.status === "number"
+        ? (error as { status: number }).status
         : undefined;
 
   if (status !== 401) return;
@@ -66,14 +67,23 @@ function maybeRedirectOn401(error: unknown) {
   // Public admin routes do not require an authenticated session.
   if (isPublicAdminRoute(window.location.pathname)) return;
 
-  // Prevent multiple redirects & duplicate toasts
+  // Prevent multiple redirects & duplicate toasts.
   if (isRedirectingForAuth) return;
   isRedirectingForAuth = true;
 
-  // Notify user
-  toast.error("Session expired. Please sign in again.");
+  // Load translations only in the browser.
+  let message = "Session expired. Please sign in again.";
 
-  // Attempt backend logout (non-blocking)
+  try {
+    const { default: i18n } = await import("@/i18n");
+    message = i18n.t("Session expired. Please sign in again.");
+  } catch {
+    // Use English fallback if translations cannot be loaded.
+  }
+
+  toast.error(message);
+
+  // Attempt backend logout (non-blocking).
   void bestEffortLogout();
 
   const next = encodeURIComponent(
@@ -86,22 +96,29 @@ function maybeRedirectOn401(error: unknown) {
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
     let message = `Request failed with status ${res.status}`;
+    let code: string | undefined;
 
     try {
-      const errorData = await res.json();
-      if (
-        errorData &&
-        typeof errorData === "object" &&
-        "message" in errorData
-      ) {
-        message = String((errorData as any).message);
-      }
-    } catch {}
+      const errorData: unknown = await res.json();
 
-    throw new ApiError(message, res.status);
+      if (errorData && typeof errorData === "object") {
+        if ("message" in errorData && typeof errorData.message === "string") {
+          message = errorData.message;
+        }
+
+        if ("code" in errorData && typeof errorData.code === "string") {
+          code = errorData.code;
+        }
+      }
+    } catch {
+      // Response may not contain valid JSON.
+    }
+
+    throw new ApiError(message, res.status, code);
   }
 
   if (res.status === 204) return undefined as T;
+
   return (await res.json()) as T;
 }
 
@@ -144,7 +161,7 @@ export async function get<T>(path: string, opts?: FetchOpts): Promise<T> {
     );
     return await handleResponse<T>(res);
   } catch (error) {
-    maybeRedirectOn401(error);
+    void maybeRedirectOn401(error);
     throw error;
   }
 }
@@ -161,7 +178,7 @@ export async function getById<T>(
     );
     return await handleResponse<T>(res);
   } catch (error) {
-    maybeRedirectOn401(error);
+    void maybeRedirectOn401(error);
     throw error;
   }
 }
@@ -178,7 +195,7 @@ export async function post<TResponse, TBody = unknown>(
     );
     return await handleResponse<TResponse>(res);
   } catch (error) {
-    maybeRedirectOn401(error);
+    void maybeRedirectOn401(error);
     throw error;
   }
 }
@@ -196,7 +213,7 @@ export async function put<TResponse, TBody = unknown>(
     );
     return await handleResponse<TResponse>(res);
   } catch (error) {
-    maybeRedirectOn401(error);
+    void maybeRedirectOn401(error);
     throw error;
   }
 }
@@ -206,14 +223,11 @@ export async function patch<TResponse>(
   opts?: FetchOpts,
 ): Promise<TResponse> {
   try {
-    const res = await fetch(
-      `${API_BASE_URL}${path}`,
-      buildInit("PATCH", opts),
-    );
+    const res = await fetch(`${API_BASE_URL}${path}`, buildInit("PATCH", opts));
 
     return await handleResponse<TResponse>(res);
   } catch (error) {
-    maybeRedirectOn401(error);
+    void maybeRedirectOn401(error);
     throw error;
   }
 }
@@ -230,7 +244,7 @@ export async function del<T>(
 
     return await handleResponse<T>(res);
   } catch (error) {
-    maybeRedirectOn401(error);
+    void maybeRedirectOn401(error);
     throw error;
   }
 }

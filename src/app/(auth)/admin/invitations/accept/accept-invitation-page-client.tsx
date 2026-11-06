@@ -4,6 +4,7 @@ import {
   acceptAdminInvitation,
   getAdminInvitation,
 } from "@/features/admin/services/admin-invitation.api";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -43,11 +44,7 @@ export default function AcceptInvitationPageClient() {
     },
 
     onError: (error) => {
-      setFormError(
-        error instanceof Error
-          ? error.message
-          : t("Failed to create CMS account"),
-      );
+      setFormError(getErrorMessage(error, t("Failed to create CMS account")));
     },
   });
 
@@ -100,9 +97,18 @@ export default function AcceptInvitationPageClient() {
       <PageContainer>
         <MessageCard
           title={t("Invitation unavailable")}
-          message={t(
-            "This invitation is invalid, expired, or has already been used.",
-          )}
+          message={
+            invitationQuery.isError
+              ? getErrorMessage(
+                  invitationQuery.error,
+                  t(
+                    "This invitation is invalid, expired, or has already been used.",
+                  ),
+                )
+              : t(
+                  "This invitation is invalid, expired, or has already been used.",
+                )
+          }
         />
       </PageContainer>
     );
@@ -214,7 +220,11 @@ export default function AcceptInvitationPageClient() {
             </label>
           </div>
 
-          {formError && <p className="text-sm text-red-600">{formError}</p>}
+          {formError && (
+            <p className="text-sm text-red-600" role="alert">
+              {formError}
+            </p>
+          )}
 
           <button
             type="submit"

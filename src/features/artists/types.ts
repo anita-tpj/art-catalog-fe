@@ -23,11 +23,21 @@ export interface Artist {
 }
 
 export const createArtistSchema = z.object({
-  name: z.string().trim().min(1, "Name is required"),
+  name: z
+    .string({ error: "Name is required" })
+    .trim()
+    .min(1, "Name is required"),
 
-  bio: z.string().trim().min(1, "Bio is required").max(2000, "Bio is too long"),
+  bio: z
+    .string({ error: "Bio is required" })
+    .trim()
+    .min(1, "Bio is required")
+    .max(2000, "Bio is too long"),
 
-  country: z.string().trim().min(1, "Country is required"),
+  country: z
+    .string({ error: "Country is required" })
+    .trim()
+    .min(1, "Country is required"),
 
   birthYear: z
     .number({
@@ -53,11 +63,13 @@ export const createArtistSchema = z.object({
     .optional(),
 
   avatarUrl: z
-    .string()
+    .string({ error: "Profile image is required" })
     .min(1, "Profile image is required")
     .url("Must be a valid URL"),
 
-  avatarPublicId: z.string().min(1, "Profile image is required"),
+  avatarPublicId: z
+    .string({ error: "Profile image is required" })
+    .min(1, "Profile image is required"),
 
   primaryCategory: z.nativeEnum(ArtworkCategory, {
     error: "Category is required",

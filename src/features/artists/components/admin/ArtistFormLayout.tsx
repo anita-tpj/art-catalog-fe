@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -6,18 +5,19 @@ import {
   CancelButton,
   Card,
   CountrySelector,
+  EnumSelectField,
+  ImageUploadField,
   Spinner,
   TextareaField,
   TextInputField,
   YearSelector,
-  ImageUploadField,
-  EnumSelectField,
 } from "@/components/ui";
 import {
   ArtworkCategory,
   ArtworkCategoryLabels,
 } from "@/features/artworks/types";
 import { useCountryOptions } from "@/hooks/useCountries";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useArtistAvatarUpload } from "../../hooks/useArtistAvatarUpload";
@@ -35,7 +35,7 @@ interface ArtistFormLayoutProps {
   subtitle?: string;
   submitLabel: string;
   isBusy?: boolean;
-  apiError?: string;
+  apiError?: unknown;
   slugLocked?: boolean;
 }
 
@@ -66,21 +66,14 @@ export function ArtistFormLayout({
       <div>
         <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
         {subtitle && (
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            {subtitle}
-          </p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">{subtitle}</p>
         )}
       </div>
 
       <Card className="border border-dashed border-zinc-300 p-4 text-sm dark:border-zinc-700">
         <form
           onSubmit={handleSubmit((values) => {
-            const {
-              status,
-              visibility,
-              isFeatured,
-              ...editableData
-            } = values;
+            const { status, visibility, isFeatured, ...editableData } = values;
 
             onSubmit(editableData);
           })}
@@ -122,9 +115,7 @@ export function ArtistFormLayout({
                 label={`${t("Name")} *`}
                 placeholder={t("Type name")}
                 error={
-                  errors.name?.message
-                    ? t(errors.name.message)
-                    : undefined
+                  errors.name?.message ? t(errors.name.message) : undefined
                 }
                 {...register("name")}
               />
@@ -161,11 +152,7 @@ export function ArtistFormLayout({
                 label={`${t("Bio")} *`}
                 placeholder={t("Type bio")}
                 rows={4}
-                error={
-                  errors.bio?.message
-                    ? t(errors.bio.message)
-                    : undefined
-                }
+                error={errors.bio?.message ? t(errors.bio.message) : undefined}
                 {...register("bio")}
               />
 
@@ -232,9 +219,9 @@ export function ArtistFormLayout({
             </div>
           </div>
 
-          {apiError && (
+          {apiError != null && (
             <p className="text-xs text-red-500">
-              {apiError || t("Failed to save artist.")}
+              {getErrorMessage(apiError, t("Failed to save artist."))}
             </p>
           )}
 

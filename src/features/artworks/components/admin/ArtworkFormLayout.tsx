@@ -39,6 +39,7 @@ import { ItemStatus, ItemStatusLabels } from "@/types/item";
 
 import { ImageUploadField } from "@/components/ui";
 import { useAdminMe } from "@/features/admin/hooks/useAdminMe";
+import { getErrorMessage } from "@/lib/getErrorMessage";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useArtworkImageUpload } from "../../hooks/useArtworkImageUpload";
@@ -50,7 +51,7 @@ interface ArtworkFormLayoutProps {
   subtitle?: string;
   submitLabel: string;
   isBusy?: boolean;
-  apiError?: string;
+  apiError?: unknown;
   isEdit?: boolean;
 }
 
@@ -104,7 +105,6 @@ export function ArtworkFormLayout({
 
             onSubmit(values);
           })}
-        
           className="space-y-6"
           noValidate
         >
@@ -348,9 +348,9 @@ export function ArtworkFormLayout({
             </div>
           )}
 
-          {apiError && (
+          {apiError != null && (
             <p className="text-xs text-red-500">
-              {apiError || t("Failed to save artwork.")}
+              {getErrorMessage(apiError, t("Failed to save artwork."))}
             </p>
           )}
 

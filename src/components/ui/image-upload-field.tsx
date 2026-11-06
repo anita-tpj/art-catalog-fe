@@ -79,16 +79,21 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
     e.currentTarget.value = "";
     if (!file) return;
 
-    const uploaded = await onUpload(file);
+    try {
+      const uploaded = await onUpload(file);
 
-    setValue(imgUrl, uploaded.url as any, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-    setValue(imgPublicId, uploaded.publicId as any, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
+      setValue(imgUrl, uploaded.url as any, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+
+      setValue(imgPublicId, uploaded.publicId as any, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    } catch {
+      // Upload hook handles and exposes the error.
+    }
   }
 
   const isAvatar = variant === "avatar";
@@ -168,7 +173,7 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
               </div>
 
               {uploadError ? (
-                <p className="text-xs text-red-500">{t(uploadError)}</p>
+                <p className="text-xs text-red-500">{uploadError}</p>
               ) : null}
 
               {fieldState.error?.message && (

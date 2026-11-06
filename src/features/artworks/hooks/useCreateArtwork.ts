@@ -18,7 +18,7 @@ export function useCreateArtwork() {
     mutationFn: artworksService.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["artworks"] });
-      toast.success(t("Artwork updated"));
+      toast.success(t("Artwork created"));
       router.push("/admin/artworks");
     },
     onError: (error) => {
