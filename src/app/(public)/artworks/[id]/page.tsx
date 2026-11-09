@@ -190,6 +190,10 @@ export default async function ArtworkDetailPage({ params }: PageProps) {
 
   return (
     <>
+      {artwork.artist?.visibility === ItemVisibility.PRIVATE && (
+        <span data-private-artist hidden />
+      )}
+
       {artwork.artist?.visibility === ItemVisibility.PUBLIC && (
         <div className="mb-6">
           <Link
