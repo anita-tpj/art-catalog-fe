@@ -262,16 +262,6 @@ export function ArtworkFormLayout({
                   onUpload={uploadFile}
                   uploading={uploading}
                   uploadError={error}
-                  onClear={() => {
-                    setValue("imageUrl", "" as any, {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-                    setValue("imagePublicId", "" as any, {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-                  }}
                 />
                 <TextareaField
                   label={`${t("Description")} *`}
