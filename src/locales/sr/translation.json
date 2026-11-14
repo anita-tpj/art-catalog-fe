@@ -468,6 +468,7 @@
   "Publication settings": "Podešavanja objavljivanja",
   "Manage artist publication and visibility.": "Upravljajte objavljivanjem i vidljivošću profila umetnika.",
   "Save settings": "Sačuvaj podešavanja",
+  "Change image": "Promeni sliku",
   "errors": {
     "ARTIST_NOT_FOUND": "Umetnik nije pronađen.",
     "ARTIST_HAS_ARTWORKS": "Umetnik ne može biti obrisan jer ima radove. Prvo obrišite radove.",

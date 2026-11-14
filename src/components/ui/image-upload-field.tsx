@@ -39,10 +39,6 @@ type Props<TFieldValues extends FieldValues> = {
   variant?: "avatar" | "preview";
   avatarSize?: number; // px
   previewHeight?: number; // px
-
-  /** Optional: clear support */
-  onClear?: () => void;
-  clearLabel?: string;
 };
 
 export function ImageUploadField<TFieldValues extends FieldValues>({
@@ -60,9 +56,6 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
   variant = "preview",
   avatarSize = 64,
   previewHeight = 160,
-
-  onClear,
-  clearLabel = "Remove",
 }: Props<TFieldValues>) {
   const { t } = useTranslation();
   const reactId = useId();
@@ -155,21 +148,12 @@ export function ImageUploadField<TFieldValues extends FieldValues>({
                   onClick={() => document.getElementById(inputId)?.click()}
                   disabled={!!uploading}
                 >
-                  {uploading ? t("Uploading...") : buttonLabel}
+                  {uploading
+                    ? t("Uploading...")
+                    : imageUrl
+                      ? t("Change image")
+                      : buttonLabel}
                 </Button>
-
-                {onClear && imageUrl ? (
-                  <Button
-                    type="button"
-                    size="xs"
-                    variant="outline"
-                    className="text-xs"
-                    onClick={onClear}
-                    disabled={!!uploading}
-                  >
-                    {clearLabel}
-                  </Button>
-                ) : null}
               </div>
 
               {uploadError ? (

@@ -468,6 +468,7 @@
   "Publication settings": "Publication settings",
   "Manage artist publication and visibility.": "Manage artist publication and visibility.",
   "Save settings": "Save settings",
+  "Change image": "Change image",
   "errors": {
     "ARTIST_NOT_FOUND": "Artist not found.",
     "ARTIST_HAS_ARTWORKS": "Cannot delete this artist because they have artworks. Remove the artworks first.",

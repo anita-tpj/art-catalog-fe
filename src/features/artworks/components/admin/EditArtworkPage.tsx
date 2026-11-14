@@ -72,7 +72,17 @@ export const EditArtworkPage = ({ id }: EditArtworkPageProps) => {
   return (
     <ArtworkFormLayout
       form={form}
-      onSubmit={(data) => updateArtwork.mutate({ id, data })}
+      onSubmit={(data) => {
+        const { imageUrl, imagePublicId, ...rest } = data;
+
+        const imageChanged = imagePublicId !== artwork.imagePublicId;
+
+        const payload = imageChanged
+          ? { ...rest, imageUrl, imagePublicId }
+          : rest;
+
+        updateArtwork.mutate({ id, data: payload });
+      }}
       title={t("Edit artwork")}
       subtitle={t("Update artwork details and image.")}
       submitLabel={isBusy ? t("Updating...") : t("Update artwork")}

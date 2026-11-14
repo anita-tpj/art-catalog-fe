@@ -69,7 +69,17 @@ export const EditArtistPage = ({ id }: EditArtistPageProps) => {
     <div className="space-y-6">
       <ArtistFormLayout
         form={form}
-        onSubmit={(data) => updateArtist.mutate({ id, data })}
+        onSubmit={(data) => {
+          const { avatarUrl, avatarPublicId, ...rest } = data;
+
+          const avatarChanged = avatarPublicId !== artist.avatarPublicId;
+
+          const payload = avatarChanged
+            ? { ...rest, avatarUrl, avatarPublicId }
+            : rest;
+
+          updateArtist.mutate({ id, data: payload });
+        }}
         title={t("Edit artist")}
         subtitle={t("Update artist details.")}
         submitLabel={isBusy ? t("Updating...") : t("Update artist")}

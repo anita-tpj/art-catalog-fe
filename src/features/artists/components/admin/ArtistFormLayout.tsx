@@ -97,17 +97,6 @@ export function ArtistFormLayout({
                 onUpload={uploadFile}
                 uploading={uploading}
                 uploadError={error}
-                onClear={() => {
-                  setValue("avatarUrl", "", {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  });
-
-                  setValue("avatarPublicId", "", {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  });
-                }}
               />
 
               {/* Name */}
